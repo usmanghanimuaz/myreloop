@@ -1,0 +1,216 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { MapPin, Pencil, Plus, Search, Send, Trash2, PackageOpen } from "lucide-react";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
+import { Card, EmptyState, Notice, OriginBadge, PageHeader, StatusBadge, formatDate } from "@/components/reloop/shared";
+import { looksLikeContactDetails } from "@/lib/reloop/schema";
+import { actions, useAppState } from "@/lib/reloop/store";
+import { CATEGORIES, CATEGORY_LABEL, CONDITION_LABEL, type Category, type Listing, type ListingStatus } from "@/lib/reloop/types";
+
+export const Route = createFileRoute("/exchange")({
+  head: () => ({
+    meta: [
+      { title: "Reuse Exchange — ReLoop" },
+      { name: "description", content: "Browse, list and request reusable materials from neighbours in your general area." },
+      { property: "og:title", content: "Reuse Exchange — ReLoop" },
+      { property: "og:description", content: "A local board for passing on reusable materials." },
+    ],
+  }),
+  component: Exchange,
+});
+
+function Exchange() {
+  const state = useAppState();
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState<Category | "all">("all");
+  const [status, setStatus] = useState<ListingStatus | "all">("all");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<Listing | undefined>();
+  const [viewId, setViewId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<Listing | null>(null);
+
+  const interestCount = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const i of state.interests) m.set(i.listingId, (m.get(i.listingId) ?? 0) + 1);
+    return m;
+  }, [state.interests]);
+
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    return state.listings.filter(
+      (l) =>
+        (cat === "all" || l.category === cat) &&
+        (status === "all" || l.status === status) &&
+        (!term || `${l.title} ${l.description} ${l.area} ${CATEGORY_LABEL[l.category]}`.toLowerCase().includes(term)),
+    );
+  }, [state.listings, q, cat, status]);
+
+  const viewing = state.listings.find((l) => l.id === viewId) ?? null;
+
+  return (
+    <div className="animate-rise">
+      <PageHeader eyebrow="Community Reuse Exchange" title="Reuse Exchange" description="Pass on what you don't need. Interest requests are local demo interactions — they don't contact anyone.">
+        <Button onClick={() => { setEditing(undefined); setFormOpen(true); }}><Plus /> List an item</Button>
+      </PageHeader>
+
+      <Card className="mb-6 grid gap-3 p-4 md:grid-cols-[1fr_auto_auto]">
+        <div className="relative">
+          <Label htmlFor="search" className="sr-only">Search listings</Label>
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input id="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by keyword or area" className="pl-9" />
+        </div>
+        <div>
+          <Label htmlFor="cat" className="sr-only">Category</Label>
+          <select id="cat" className="field" value={cat} onChange={(e) => setCat(e.target.value as Category | "all")}>
+            <option value="all">All materials</option>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
+          </select>
+        </div>
+        <div>
+          <Label htmlFor="status" className="sr-only">Availability</Label>
+          <select id="status" className="field" value={status} onChange={(e) => setStatus(e.target.value as ListingStatus | "all")}>
+            <option value="all">Any availability</option>
+            <option value="available">Available</option>
+            <option value="reserved">Reserved</option>
+            <option value="exchanged">Exchanged</option>
+          </select>
+        </div>
+      </Card>
+
+      <p className="mb-3 text-sm text-muted-foreground" aria-live="polite">{filtered.length} listing{filtered.length === 1 ? "" : "s"}</p>
+
+      {filtered.length === 0 ? (
+        <EmptyState icon={<PackageOpen className="size-6" />} title={state.listings.length ? "No listings match" : "No listings yet"}>
+          {state.listings.length ? "Try a different keyword or clear the filters." : "Be the first to list something reusable."}
+        </EmptyState>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((l) => (
+            <li key={l.id}>
+              <button onClick={() => setViewId(l.id)} className="group h-full w-full rounded-2xl border bg-card p-5 text-left shadow-card transition hover:-translate-y-0.5 hover:border-primary/40">
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-primary">{CATEGORY_LABEL[l.category]}</span>
+                  <StatusBadge status={l.status} />
+                </div>
+                <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}</p>
+                <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="size-3.5" /> {l.area}</p>
+                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                  <OriginBadge origin={l.origin} />
+                  <span>{interestCount.get(l.id) ?? 0} interested · {formatDate(l.createdAt)}</span>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <ListingDetail
+        listing={viewing}
+        interest={viewing ? interestCount.get(viewing.id) ?? 0 : 0}
+        onClose={() => setViewId(null)}
+        onEdit={(l) => { setEditing(l); setFormOpen(true); }}
+        onDelete={(l) => setDeleting(l)}
+      />
+      <ListingFormDialog open={formOpen} onOpenChange={setFormOpen} listing={editing} />
+
+      <AlertDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete “{deleting?.title}”?</AlertDialogTitle>
+            <AlertDialogDescription>This removes the listing, its interest requests and any impact recorded from exchanging it. This can't be undone.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (deleting) actions.deleteListing(deleting.id);
+                setDeleting(null);
+                setViewId(null);
+                toast.success("Listing deleted");
+              }}
+            >Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
+
+function ListingDetail({ listing, interest, onClose, onEdit, onDelete }: {
+  listing: Listing | null; interest: number; onClose: () => void; onEdit: (l: Listing) => void; onDelete: (l: Listing) => void;
+}) {
+  const [note, setNote] = useState("");
+  const [err, setErr] = useState("");
+  const own = listing?.origin === "user";
+  return (
+    <Dialog open={!!listing} onOpenChange={(o) => { if (!o) { onClose(); setNote(""); setErr(""); } }}>
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+        {listing && (
+          <>
+            <DialogHeader>
+              <div className="flex items-center gap-2"><StatusBadge status={listing.status} /><OriginBadge origin={listing.origin} /></div>
+              <DialogTitle className="font-display text-2xl">{listing.title}</DialogTitle>
+              <DialogDescription>{CATEGORY_LABEL[listing.category]} · {listing.quantity} {listing.unit} · {CONDITION_LABEL[listing.condition]}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-2 text-sm">
+              {listing.description && <p>{listing.description}</p>}
+              <p className="flex items-center gap-1 text-muted-foreground"><MapPin className="size-4" /> {listing.area}</p>
+              <p className="text-muted-foreground">Listed {formatDate(listing.createdAt)} · {interest} interest request{interest === 1 ? "" : "s"}</p>
+            </div>
+
+            {own && (
+              <div className="space-y-3 rounded-xl border bg-background p-4">
+                <p className="text-sm font-medium">Manage your listing</p>
+                <div className="flex flex-wrap gap-2">
+                  {(["available", "reserved", "exchanged"] as const).map((s) => (
+                    <Button key={s} size="sm" variant={listing.status === s ? "default" : "outline"} aria-pressed={listing.status === s}
+                      onClick={() => { actions.setListingStatus(listing.id, s); toast.success(`Marked as ${s}`, s === "exchanged" ? { description: `${listing.quantity} ${listing.unit} recorded as reused.` } : undefined); }}>
+                      {s === "available" ? "Available" : s === "reserved" ? "Mark reserved" : "Mark exchanged"}
+                    </Button>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => onEdit(listing)}><Pencil /> Edit</Button>
+                  <Button size="sm" variant="outline" className="text-destructive" onClick={() => onDelete(listing)}><Trash2 /> Delete</Button>
+                </div>
+              </div>
+            )}
+
+            {listing.status !== "exchanged" ? (
+              <form
+                className="space-y-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (looksLikeContactDetails(note)) return setErr("Please don't include emails or phone numbers.");
+                  if (note.length > 200) return setErr("Keep the note under 200 characters.");
+                  actions.sendInterest(listing.id, note);
+                  setNote(""); setErr("");
+                  toast.success("Demo interest request recorded", { description: "No one was contacted — this is stored on your device only." });
+                }}
+              >
+                <Label htmlFor="note">Send interest (simulated)</Label>
+                <Textarea id="note" rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional: how you'd use it" aria-invalid={!!err || undefined} />
+                {err && <p className="text-xs text-destructive">{err}</p>}
+                <Button type="submit" size="sm"><Send /> Send interest</Button>
+              </form>
+            ) : (
+              <Notice>This item has been exchanged.</Notice>
+            )}
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

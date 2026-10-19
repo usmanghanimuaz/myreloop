@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActionsRouteImport } from './routes/actions'
+import { Route as ExchangeRouteImport } from './routes/exchange'
+import { Route as FinderRouteImport } from './routes/finder'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActionsRoute = ActionsRouteImport.update({
+  id: '/actions',
+  path: '/actions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExchangeRoute = ExchangeRouteImport.update({
+  id: '/exchange',
+  path: '/exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinderRoute = FinderRouteImport.update({
+  id: '/finder',
+  path: '/finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/actions': typeof ActionsRoute
+  '/exchange': typeof ExchangeRoute
+  '/finder': typeof FinderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/actions': typeof ActionsRoute
+  '/exchange': typeof ExchangeRoute
+  '/finder': typeof FinderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/actions': typeof ActionsRoute
+  '/exchange': typeof ExchangeRoute
+  '/finder': typeof FinderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/actions' | '/exchange' | '/finder'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/actions' | '/exchange' | '/finder'
+  id: '__root__' | '/' | '/actions' | '/exchange' | '/finder'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActionsRoute: typeof ActionsRoute
+  ExchangeRoute: typeof ExchangeRoute
+  FinderRoute: typeof FinderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/actions': {
+      id: '/actions'
+      path: '/actions'
+      fullPath: '/actions'
+      preLoaderRoute: typeof ActionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exchange': {
+      id: '/exchange'
+      path: '/exchange'
+      fullPath: '/exchange'
+      preLoaderRoute: typeof ExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finder': {
+      id: '/finder'
+      path: '/finder'
+      fullPath: '/finder'
+      preLoaderRoute: typeof FinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActionsRoute: ActionsRoute,
+  ExchangeRoute: ExchangeRoute,
+  FinderRoute: FinderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
