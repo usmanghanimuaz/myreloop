@@ -36,7 +36,8 @@ export function ListingFormDialog({
         ? { ...listing, quantity: String(listing.quantity) }
         : { ...blank, ...prefill },
     );
-  }, [open, listing, prefill]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, listing?.id]);
 
   const set = (k: keyof Draft) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setDraft((d) => ({ ...d, [k]: e.target.value }));
