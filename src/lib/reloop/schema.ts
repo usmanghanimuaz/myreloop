@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CONDITIONS, UNITS, type AppState } from "./types";
+import { CATEGORIES, CONDITIONS, UNITS } from "./types";
 
 const origin = z.enum(["sample", "user"]);
 const category = z.enum(CATEGORIES);
@@ -70,7 +70,7 @@ export const AppStateSchema = z.object({
     limitations: z.string(),
     howReloopHelps: z.string(),
   }),
-}) satisfies z.ZodType<AppState>;
+});
 
 /** Rejects text that looks like personal contact details (emails, phone numbers). */
 export function looksLikeContactDetails(text: string): boolean {

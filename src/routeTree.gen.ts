@@ -10,13 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as ActionsRouteImport } from './routes/actions'
 import { Route as ExchangeRouteImport } from './routes/exchange'
 import { Route as FinderRouteImport } from './routes/finder'
+import { Route as ImpactRouteImport } from './routes/impact'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActionsRoute = ActionsRouteImport.update({
@@ -34,39 +41,59 @@ const FinderRoute = FinderRouteImport.update({
   path: '/finder',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/impact': typeof ImpactRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/impact': typeof ImpactRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/impact': typeof ImpactRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/actions' | '/exchange' | '/finder'
+  fullPaths: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/actions' | '/exchange' | '/finder'
-  id: '__root__' | '/' | '/actions' | '/exchange' | '/finder'
+  to: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/actions'
+    | '/exchange'
+    | '/finder'
+    | '/impact'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ActionsRoute: typeof ActionsRoute
   ExchangeRoute: typeof ExchangeRoute
   FinderRoute: typeof FinderRoute
+  ImpactRoute: typeof ImpactRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/actions': {
@@ -99,14 +133,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ActionsRoute: ActionsRoute,
   ExchangeRoute: ExchangeRoute,
   FinderRoute: FinderRoute,
+  ImpactRoute: ImpactRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
