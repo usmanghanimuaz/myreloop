@@ -21,9 +21,9 @@ export function ListingFormDialog({
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
-  listing?: Listing;
-  prefill?: Partial<Draft>;
-  onSaved?: (l?: Listing) => void;
+  listing?: Listing | undefined;
+  prefill?: Partial<Draft> | undefined;
+  onSaved?: ((l?: Listing) => void) | undefined;
 }) {
   const [draft, setDraft] = useState<Draft>(blank);
   const [errors, setErrors] = useState<Partial<Record<keyof Draft, string>>>({});

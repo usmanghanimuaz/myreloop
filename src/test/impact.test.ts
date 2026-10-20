@@ -27,7 +27,7 @@ describe("impact tracking", () => {
     let s = summarizeImpact(__test.getState());
     expect(s.completed.kg).toBe(9);
     expect(s.planned.kg).toBe(2);
-    actions.markPlanCompleted(__test.getState().impact[0].id);
+    actions.markPlanCompleted(__test.getState().impact[0]!.id);
     s = summarizeImpact(__test.getState());
     expect(s.completed.kg).toBe(11);
   });

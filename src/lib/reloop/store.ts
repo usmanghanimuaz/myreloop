@@ -49,7 +49,7 @@ export function hydrateStore() {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = AppStateSchema.safeParse(JSON.parse(raw));
-      if (parsed.success) state = parsed.data;
+      if (parsed.success) state = parsed.data as AppState;
       else {
         recovered = true;
         state = createSeedState();

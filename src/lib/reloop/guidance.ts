@@ -101,7 +101,7 @@ export interface RecommendationGroup {
   tips: string[];
 }
 
-const ORDER: Record<IntendedOutcome, RecommendationGroup["kind"][]> = {
+const ORDER: Record<IntendedOutcome, ("reuse" | "repair" | "donate" | "recycle")[]> = {
   reuse: ["reuse", "donate", "repair", "recycle"],
   donate: ["donate", "reuse", "repair", "recycle"],
   repair: ["repair", "reuse", "donate", "recycle"],
