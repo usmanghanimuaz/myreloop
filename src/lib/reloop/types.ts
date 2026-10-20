@@ -84,7 +84,7 @@ export interface CommunityAction {
   durationMinutes: number;
   category: Category;
   status: ActionStatus;
-  completedAt?: string;
+  completedAt?: string | undefined;
   origin: Origin;
 }
 
