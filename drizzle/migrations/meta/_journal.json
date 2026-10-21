@@ -8,6 +8,13 @@
       "when": 1792562989364,
       "tag": "0000_reloop_cloud_records",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792563088391,
+      "tag": "0001_reloop_atomic_commands",
+      "breakpoints": true
     }
   ]
 }

@@ -50,6 +50,10 @@ export type Database = {
         Args: { removals: Json; upserts: Json }
         Returns: undefined
       }
+      reloop_commit: {
+        Args: { actor: string; removals: Json; upserts: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
