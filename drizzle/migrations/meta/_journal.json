@@ -15,6 +15,13 @@
       "when": 1792563088391,
       "tag": "0001_reloop_atomic_commands",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792563147160,
+      "tag": "0002_reloop_sample_records",
+      "breakpoints": true
     }
   ]
 }
