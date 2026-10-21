@@ -14,13 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reloop_records: {
+        Row: {
+          data: Json
+          key: string
+          kind: string
+          owner_id: string | null
+          revision: number
+          sample: boolean
+        }
+        Insert: {
+          data: Json
+          key: string
+          kind: string
+          owner_id?: string | null
+          revision?: number
+          sample?: boolean
+        }
+        Update: {
+          data?: Json
+          key?: string
+          kind?: string
+          owner_id?: string | null
+          revision?: number
+          sample?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reloop_apply_patch: {
+        Args: { removals: Json; upserts: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
