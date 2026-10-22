@@ -56,6 +56,8 @@ function StoreData({records,userId,ready,children}:{records:CloudRecord[];userId
 export const actions={
  postNeed:(input:import("zod").infer<typeof import("./schema").NeedInputSchema>)=>send({type:"postNeed",input}),
  closeNeed:(id:string)=>send({type:"closeNeed",id}),
+ updateNeed:(id:string,input:import("zod").infer<typeof import("./schema").NeedInputSchema>)=>send({type:"updateNeed",id,input}),
+ deleteNeed:(id:string)=>send({type:"deleteNeed",id}),
  sendOffer:(id:string,note:string,quantity:number,unit:Unit)=>send({type:"sendOffer",id,note,quantity,unit}),
  respondRequest:(id:string,decision:"accept"|"reject"|"confirm"|"cancel")=>send({type:"respondRequest",id,decision}),
  createListing:async(input:ListingInput)=>(await send({type:"createListing",input})).listing,

@@ -51,8 +51,9 @@ export const executeCommand = createServerFn({method:"POST"})
     }
     const initial=recordsToState(rows);
     const ownsTarget=(kind:string,id:string)=>rows.some(r=>r.kind===kind && !r.sample && r.owner_id===context.userId && (r.data as {id?:string}).id===id);
-    if(command.type === "closeNeed" && !ownsTarget("needs",command.id)) throw new Error("Only the need owner can close it.");
-    if(command.type === "closeNeed" || command.type === "deleteListing" || command.type === "setListingStatus" || command.type === "updateListing") {
+    if(["closeNeed","updateNeed","deleteNeed"].includes(command.type) && "id" in command && !ownsTarget("needs",command.id)) throw new Error("Only the need owner can change it.");
+    if(command.type === "resetDemo") throw new Error("Account-wide clearing is disabled to preserve handover records.");
+    if(command.type === "closeNeed" || command.type === "updateNeed" || command.type === "deleteNeed" || command.type === "deleteListing" || command.type === "setListingStatus" || command.type === "updateListing") {
       const targetId=command.id;
       if(initial.interests.some(i=>i.listingId===targetId && ["accepted","handover","completed"].includes(i.status ?? "pending"))) throw new Error("Cancel an active handover first. Completed exchanges are kept as records.");
     }
@@ -72,6 +73,7 @@ export const executeCommand = createServerFn({method:"POST"})
     }
     if(command.type === "markPlanCompleted" || command.type === "deleteImpactEntry") {
       if(!owns("impact",command.id)) throw new Error("Only your own plans can be changed.");
+      if(initial.impact.find(e=>e.id===command.id)?.source!=="finder") throw new Error("Completed handover records cannot be changed.");
     }
     if(command.type === "sendInterest") {
       const listing=initial.listings.find(l=>l.id===command.id);
@@ -82,6 +84,8 @@ export const executeCommand = createServerFn({method:"POST"})
     switch(command.type) {
       case "postNeed": initial.needs.unshift({...command.input,id:crypto.randomUUID(),status:"open",createdAt:new Date().toISOString(),origin:"user"}); break;
       case "closeNeed": { const need=initial.needs.find(n=>n.id===command.id); if(need) need.status="closed"; break; }
+      case "updateNeed": initial.needs=initial.needs.map(n=>n.id===command.id ? {...n,...command.input} : n); break;
+      case "deleteNeed": initial.needs=initial.needs.filter(n=>n.id!==command.id); break;
       case "sendOffer": initial.interests.unshift({id:crypto.randomUUID(),listingId:command.id,targetKind:"needs",status:"pending",note:command.note,quantity:command.quantity,unit:command.unit,createdAt:new Date().toISOString(),origin:"user"}); break;
       case "createListing": a.createListing(command.input); break;
       case "updateListing": a.updateListing(command.id,command.input); break;
@@ -97,10 +101,10 @@ export const executeCommand = createServerFn({method:"POST"})
       case "saveEvidence": a.saveEvidence(command.evidence); break;
       case "resetDemo": break;
     }
-    const before=stateRecords(recordsToState(rows),context.userId), after=stateRecords(["postNeed","closeNeed","sendOffer"].includes(command.type) ? initial : engine.getState(),context.userId);
+    const before=stateRecords(recordsToState(rows),context.userId), after=stateRecords(["postNeed","closeNeed","updateNeed","deleteNeed","sendOffer"].includes(command.type) ? initial : engine.getState(),context.userId);
     const owned=rows.filter(r=>r.owner_id===context.userId && !r.sample);
     const removals=owned.filter(r=> command.type==="resetDemo" || !after.has(r.key)).map(r=>({key:r.key,revision:r.revision}));
-    const upserts=command.type==="resetDemo" ? [] : [...after.values()].filter(r=>JSON.stringify(before.get(r.key)?.data)!==JSON.stringify(r.data)).map(r=>{
+    const upserts=[...after.values()].filter(r=>JSON.stringify(before.get(r.key)?.data)!==JSON.stringify(r.data)).map(r=>{
       const existing=rows.find(x=>x.key===r.key);
       if(existing && existing.owner_id!==context.userId) throw new Error("Only your records can be changed.");
       return {...r,revision:existing?.revision ?? 0};

@@ -7,6 +7,8 @@ export interface ImpactSummary {
   /** Completed (user-recorded) diversion, per unit — never summed across units */
   completed: UnitTotals;
   completedByOrigin: Record<Origin, UnitTotals>;
+  verified: UnitTotals;
+  verifiedExchanges: number;
   /** Planned / unverified entries, per unit */
   planned: UnitTotals;
   byCategory: { category: Category; unit: Unit; quantity: number }[];
@@ -24,6 +26,7 @@ export function dedupeImpact(entries: ImpactEntry[]): ImpactEntry[] {
 export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): ImpactSummary {
   const s: ImpactSummary = {
     completed: emptyTotals(),
+    verified: emptyTotals(), verifiedExchanges: 0,
     completedByOrigin: { sample: emptyTotals(), user: emptyTotals() },
     planned: emptyTotals(),
     byCategory: [],
@@ -41,6 +44,7 @@ export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): Im
       continue;
     }
     s.completed[e.unit] += e.quantity;
+    if(e.source === "exchange" && e.verified) {s.verified[e.unit] += e.quantity; s.verifiedExchanges++;}
     s.completedByOrigin[e.origin][e.unit] += e.quantity;
     s.byDiversion[e.diversion][e.unit] += e.quantity;
     const k = `${e.category}|${e.unit}`;

@@ -40,11 +40,12 @@ function Impact() {
       <PageHeader eyebrow="Transparent Impact Tracker" title="Impact tracker" description="Material counts as diverted only when someone records that it was actually reused or recycled. Units are never added together. No CO₂ or landfill estimates are shown." />
 
       <div className="grid gap-4 md:grid-cols-4">
-        <Stat label="Recorded as diverted" value={formatTotals(s.completed)} />
+        <Stat label="Two-party confirmed reuse" value={formatTotals(s.verified)} />
         <Stat label="Reused" value={formatTotals(s.byDiversion.reuse)} />
         <Stat label="Recycled" value={formatTotals(s.byDiversion.recycle)} />
         <Stat label="Planned — not yet verified" value={formatTotals(s.planned)} muted />
       </div>
+      <p className="mt-3 text-sm text-muted-foreground">{s.verifiedExchanges} confirmed handovers. Self-reported reuse/recycling: {formatTotals(s.completed)}; these records are not independently verified.</p>
       <p className="mt-3 text-xs text-muted-foreground">
         Your records: {formatTotals(s.completedByOrigin.user)} · Sample records: {formatTotals(s.completedByOrigin.sample)} · Completed actions: {s.completedActions.user} yours, {s.completedActions.sample} sample
       </p>
@@ -85,7 +86,7 @@ function Impact() {
                   <strong>{e.quantity} {e.unit}</strong> {CATEGORY_LABEL[e.category].toLowerCase()} — {e.note}
                   <span className="block text-xs text-muted-foreground">{formatDate(e.createdAt)} · {e.diversion === "reuse" ? "Reuse" : "Recycling"} · via {e.source}</span>
                 </span>
-                <span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", e.completed ? "bg-lime/60 text-lime-foreground" : "bg-warning text-warning-foreground")}>{e.completed ? "Recorded" : "Planned — unverified"}</span>
+                <span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", e.completed ? "bg-lime/60 text-lime-foreground" : "bg-warning text-warning-foreground")}>{e.verified ? "Two-party confirmed" : e.completed ? "Self-reported / sample" : "Planned — unverified"}</span>
                 <OriginBadge origin={e.origin} />
                 {!e.completed && e.origin === "user" && (
                   <>
