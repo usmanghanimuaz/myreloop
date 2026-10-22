@@ -35,7 +35,7 @@ export function CloudStoreProvider({children}:{children:ReactNode}) {
   });
   const focus=()=>{void queryClient.invalidateQueries({queryKey:["reloop-public"]});if(userId)void queryClient.invalidateQueries({queryKey:["reloop-account"]});};
   window.addEventListener("focus",focus);
-  return ()=>{active=false;subscription.unsubscribe();window.clearInterval(timer);window.removeEventListener("focus",focus);};
+  return ()=>{active=false;subscription.unsubscribe();window.removeEventListener("focus",focus);};
  },[queryClient,router,userId]);
  return createElement(Suspense,{fallback:createElement("p",{className:"p-8 text-muted-foreground"},"Loading your saved records…")},
   userId ? createElement(AccountStore,{userId,children}) : createElement(StoreData,{records:publicRows,userId:null,ready,children}));
@@ -61,7 +61,7 @@ export const actions={
  createListing:async(input:ListingInput)=>(await send({type:"createListing",input})).listing,
  updateListing:(id:string,input:ListingInput)=>send({type:"updateListing",id,input}),
  deleteListing:(id:string)=>send({type:"deleteListing",id}),
- setListingStatus:(id:string,status:ListingStatus)=>send({type:"setListingStatus",id,status}),
+ setListingStatus:(id:string,status:"available"|"closed")=>send({type:"setListingStatus",id,status}),
  sendInterest:(id:string,note:string)=>send({type:"sendInterest",id,note}),
  completeAction:(id:string,record?:{category:Category;quantity:number;unit:Unit;diversion:DiversionType})=>send({type:"completeAction",id,record}),
  reopenAction:(id:string)=>send({type:"reopenAction",id}),
