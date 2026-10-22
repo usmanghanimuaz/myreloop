@@ -139,8 +139,8 @@ export function ListingFormDialog({
             <Input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={busy || !userId} onChange={async e=>{
               const files=Array.from(e.target.files ?? []);
               if(!userId) return;
-              if(photos.length+files.length>4) return toast.error("Maximum 4 photos");
-              if(files.some(f=>f.size>5*1024*1024 || !["image/jpeg","image/png","image/webp"].includes(f.type))) return toast.error("Use JPG, PNG or WebP up to 5 MB");
+              if(photos.length+files.length>4) { toast.error("Maximum 4 photos"); return; }
+              if(files.some(f=>f.size>5*1024*1024 || !["image/jpeg","image/png","image/webp"].includes(f.type))) { toast.error("Use JPG, PNG or WebP up to 5 MB"); return; }
               setBusy(true);
               try {
                 const paths:string[]=[];

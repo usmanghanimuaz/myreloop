@@ -7,7 +7,7 @@ let engine = createEngine(createSeedState());
 const __test = { setState: (s: ReturnType<typeof createSeedState>) => { engine = createEngine(s); }, getState: () => engine.getState() };
 const actions = new Proxy({} as ReturnType<typeof createEngine>["actions"], { get: (_, key) => engine.actions[key as keyof typeof engine.actions] });
 
-const input = { title: "Jars", category: "glass" as const, quantity: 5, unit: "items" as const, condition: "good" as const, description: "", area: "Town centre" };
+const input = { mode: "FREE" as const, photos: [] as string[], title: "Jars", category: "glass" as const, quantity: 5, unit: "items" as const, condition: "good" as const, description: "", area: "Town centre" };
 
 describe("impact tracking", () => {
   beforeEach(() => __test.setState(createSeedState()));
