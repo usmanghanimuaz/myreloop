@@ -10,6 +10,8 @@ import { CATEGORY_LABEL } from "@/lib/reloop/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      {property:"og:type",content:"website"},
+      {name:"twitter:card",content:"summary_large_image"},
       { title: "Overview — ReLoop" },
       { name: "description", content: "See material recorded for reuse, active exchange listings and community actions at a glance." },
       { property: "og:title", content: "ReLoop Overview" },

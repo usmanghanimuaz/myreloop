@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2, Clock, Target, Undo2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/actions")({
   head: () => ({
     meta: [
+      {property:"og:type",content:"website"},
+      {name:"twitter:card",content:"summary_large_image"},
       { title: "Community Actions — ReLoop" },
       { name: "description", content: "Cleanups, packaging collections, textile drives and repair events you can run and record." },
       { property: "og:title", content: "Community Actions — ReLoop" },
@@ -63,7 +66,7 @@ function ActionCard({ a, onComplete }: { a: CommunityAction; onComplete?: () => 
         <span className="flex items-center gap-1 text-xs text-muted-foreground"><Clock className="size-3.5" /> ~{a.durationMinutes} min</span>
         {done ? (
           a.origin === "user" && (
-            <Button size="sm" variant="ghost" onClick={() => { actions.reopenAction(a.id); toast("Action reopened; its recorded impact was removed."); }}><Undo2 /> Undo</Button>
+            <Button size="sm" variant="ghost" onClick={() => { void saved(()=>actions.reopenAction(a.id),"Action reopened"); }}><Undo2 /> Undo</Button>
           )
         ) : (
           <Button size="sm" onClick={onComplete}><CheckCircle2 /> Record completion</Button>
@@ -92,13 +95,13 @@ function CompleteDialog({ action, onClose }: { action: CommunityAction | null; o
         </DialogHeader>
         <form
           className="grid gap-4"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             if (!action) return;
             if (!confirmed) return setErr("Please confirm that this action took place.");
             const n = qty.trim() === "" ? 0 : Number(qty);
             if (!Number.isFinite(n) || n < 0 || n > 10000) return setErr("Enter a valid quantity, or leave it empty.");
-            actions.completeAction(action.id, n > 0 ? { category, quantity: n, unit, diversion } : undefined);
+            if(!await saved(()=>actions.completeAction(action.id, n > 0 ? { category, quantity: n, unit, diversion } : undefined),"Action recorded")) return;
             toast.success("Action recorded", { description: n > 0 ? `${n} ${unit} added to your impact.` : "No quantity recorded." });
             onClose(); reset();
           }}

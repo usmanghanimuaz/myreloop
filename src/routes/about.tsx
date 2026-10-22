@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { School, Store, Users, Recycle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,8 @@ import type { Evidence } from "@/lib/reloop/types";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      {property:"og:type",content:"website"},
+      {name:"twitter:card",content:"summary_large_image"},
       { title: "About the Project — ReLoop" },
       { name: "description", content: "Why ReLoop exists, a community evidence template, and how it could be piloted locally." },
       { property: "og:title", content: "About ReLoop" },
@@ -43,9 +46,9 @@ function About() {
       <PageHeader eyebrow="About the Project" title="Why ReLoop" description="ReLoop helps communities reduce avoidable waste by turning reusable household materials into useful local resources — through an exchange board, practical guidance, community actions and honest impact tracking." />
 
       <Card className="mb-8">
-        <h2 className="text-xl font-semibold">How this demo works</h2>
+        <h2 className="text-xl font-semibold">Community reuse and honest records</h2>
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-          <li>Everything runs in your browser; data is saved only on this device. There is no shared server, so other people can't see your listings.</li>
+          <li>Listings and needs are shared. Your evidence notes, plans and completion records are saved privately to your account.</li>
           <li>Records labelled “Sample data” are fictional and exist so the app can be explored.</li>
           <li>Guidance is general advice from a built-in dataset — always check local collection rules.</li>
           <li>No CO₂ or landfill figures are estimated.</li>
@@ -55,7 +58,7 @@ function About() {
       <h2 className="mb-1 text-2xl font-semibold">Community evidence</h2>
       <p className="mb-4 text-sm text-muted-foreground">Fill this in with real research. Empty fields stay marked as awaiting validation — nothing here is pre-filled or invented.</p>
       <Card>
-        <form className="grid gap-4 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); actions.saveEvidence(ev); toast.success("Evidence notes saved on this device"); }}>
+        <form className="grid gap-4 md:grid-cols-2" onSubmit={async (e) => { e.preventDefault(); actions.saveEvidence(ev); toast.success("Evidence notes saved on this device"); }}>
           {FIELDS.map((f) => {
             const empty = !ev[f.key].trim();
             return (
