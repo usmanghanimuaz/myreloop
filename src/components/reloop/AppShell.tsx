@@ -55,7 +55,9 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
             aria-current={active ? "page" : undefined}
             className={cn(
               "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-sidebar-ring",
-              active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+              active
+                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
             )}
           >
             <Icon className={cn("size-4", active && "text-sidebar-primary")} aria-hidden />
@@ -79,7 +81,9 @@ function ResetButton() {
         <AlertDialogHeader>
           <AlertDialogTitle>Reset demo data?</AlertDialogTitle>
           <AlertDialogDescription>
-            This restores the original sample dataset and permanently clears everything you created on this device: listings, interest requests, completed actions, impact records and evidence notes.
+            This restores the original sample dataset and permanently clears everything you created
+            on this device: listings, interest requests, completed actions, impact records and
+            evidence notes.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -87,8 +91,12 @@ function ResetButton() {
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={async () => {
-              try { await actions.resetDemo(); toast.success("Your records cleared"); }
-              catch(error) { toast.error(error instanceof Error ? error.message : "Could not clear records"); }
+              try {
+                await actions.resetDemo();
+                toast.success("Your records cleared");
+              } catch (error) {
+                toast.error(error instanceof Error ? error.message : "Could not clear records");
+              }
             }}
           >
             Reset everything
@@ -106,7 +114,8 @@ function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) 
       <NavLinks onNavigate={onNavigate} />
       <div className="mt-auto space-y-3">
         <p className="rounded-xl bg-sidebar-accent/70 p-3 text-xs leading-relaxed text-sidebar-foreground/80">
-          Shared community listings. Records marked <strong>Sample</strong> are fictional and excluded from real impact.
+          Shared community listings. Records marked <strong>Sample</strong> are fictional and
+          excluded from real impact.
         </p>
         <AccountButton />
       </div>
@@ -121,12 +130,16 @@ export function AppShell({ children }: { children: ReactNode }) {
     hydrateStore();
   }, []);
   useEffect(() => {
-    if (meta.recoveredFromCorruptData) toast.warning("Saved data was unreadable, so the demo dataset was restored.");
+    if (meta.recoveredFromCorruptData)
+      toast.warning("Saved data was unreadable, so the demo dataset was restored.");
   }, [meta.recoveredFromCorruptData]);
 
   return (
     <div className="min-h-screen bg-background">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2"
+      >
         Skip to content
       </a>
       <aside className="fixed inset-y-0 left-0 hidden w-64 bg-sidebar lg:block">
@@ -136,7 +149,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Logo />
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <button aria-label="Open navigation" className="grid size-10 place-items-center rounded-xl hover:bg-sidebar-accent">
+            <button
+              aria-label="Open navigation"
+              className="grid size-10 place-items-center rounded-xl hover:bg-sidebar-accent"
+            >
               <Menu className="size-5" />
             </button>
           </SheetTrigger>

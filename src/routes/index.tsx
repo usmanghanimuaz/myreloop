@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, OriginBadge, PageHeader, formatDate } from "@/components/reloop/shared";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
-import { useAppState } from "@/lib/reloop/store";
+import { useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORY_LABEL } from "@/lib/reloop/types";
 
 export const Route = createFileRoute("/")({
@@ -23,8 +23,9 @@ export const Route = createFileRoute("/")({
 
 function Overview() {
   const state = useAppState();
+  const {userId}=useStoreMeta();
   const impact = useMemo(() => summarizeImpact(state), [state]);
-  const activeListings = state.listings.filter((l) => l.status !== "exchanged");
+  const activeListings = state.listings.filter((l) => l.status === "available");
   const suggested = useMemo(() => {
     const cats = new Set(activeListings.map((l) => l.category));
     return state.actions.filter((a) => a.status === "open" && cats.has(a.category)).slice(0, 3);
@@ -34,26 +35,28 @@ function Overview() {
     <div className="animate-rise">
       <section className="bg-hero mb-8 overflow-hidden rounded-3xl p-8 text-primary-foreground md:p-12">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">ReLoop</p>
-        <h1 className="max-w-2xl text-4xl font-semibold md:text-5xl">Turn local waste into local resources.</h1>
+        <h1 className="max-w-2xl text-4xl font-semibold md:text-5xl">ReLoop</h1>
+        <p className="mt-4 text-xl font-semibold">Don’t Waste It. Reuse It. Keep Our Environment Clean.</p>
         <p className="mt-4 max-w-xl opacity-85">Share reusable materials with neighbours, get practical guidance, and record what actually got reused or recycled.</p>
         <Button asChild variant="lime" size="lg" className="mt-6">
           <Link to="/finder">Find a Better Use <ArrowRight /></Link>
         </Button>
+        <div className="mt-3 flex flex-wrap gap-3"><Button asChild variant="lime"><Link to="/exchange">I Have Something</Link></Button><Button asChild variant="lime"><Link to="/exchange" hash="community-needs">I Need Something</Link></Button></div>
       </section>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
-          <p className="text-sm text-muted-foreground">Material recorded as reused or recycled</p>
-          <p className="mt-2 font-display text-3xl font-semibold">{formatTotals(impact.completed)}</p>
+          <p className="text-sm text-muted-foreground">Two-party confirmed handover quantities</p>
+          <p className="mt-2 font-display text-3xl font-semibold">{formatTotals(impact.verified)}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Yours: <strong>{formatTotals(impact.completedByOrigin.user)}</strong> · Sample: {formatTotals(impact.completedByOrigin.sample)}
+            {impact.verifiedExchanges} confirmed exchanges · Self-reported records are separate.
           </p>
         </Card>
         <Card>
           <p className="text-sm text-muted-foreground">Active exchange listings</p>
           <p className="mt-2 font-display text-3xl font-semibold">{activeListings.length}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Yours: <strong>{activeListings.filter((l) => l.origin === "user").length}</strong> · Sample: {activeListings.filter((l) => l.origin === "sample").length}
+            Yours: <strong>{activeListings.filter((l) => l.ownerId === userId && l.origin === "user").length}</strong> · Sample: {activeListings.filter((l) => l.origin === "sample").length}
           </p>
         </Card>
         <Card>
@@ -64,6 +67,7 @@ function Overview() {
           </p>
         </Card>
       </div>
+      <section className="mt-8 grid gap-6 md:grid-cols-2"><div><h2 className="mb-3 text-xl font-semibold">Recent available items</h2>{activeListings.slice(0,3).map(l=><p key={l.id} className="border-b py-3"><Link to="/exchange" className="font-medium text-primary">{l.title}</Link> · {l.quantity} {l.unit} <OriginBadge origin={l.origin}/></p>)}</div><div><h2 className="mb-3 text-xl font-semibold">Recent community needs</h2>{state.needs.filter(n=>n.status==="open").slice(0,3).map(n=><p key={n.id} className="border-b py-3"><Link to="/exchange" hash="community-needs" className="font-medium text-primary">{n.title ?? n.description}</Link> · {n.mode} <OriginBadge origin={n.origin}/></p>)}</div></section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3">

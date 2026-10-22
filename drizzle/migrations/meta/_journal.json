@@ -29,6 +29,13 @@
       "when": 1792637623207,
       "tag": "0003_reloop_participant_handover",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792704122536,
+      "tag": "0004_restrict_private_photo_access",
+      "breakpoints": true
     }
   ]
 }
