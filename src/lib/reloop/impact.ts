@@ -32,6 +32,10 @@ export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): Im
   };
   const cat = new Map<string, number>();
   for (const e of dedupeImpact(state.impact)) {
+    if (e.origin === "sample") {
+      if (e.completed) s.completedByOrigin.sample[e.unit] += e.quantity;
+      continue;
+    }
     if (!e.completed) {
       s.planned[e.unit] += e.quantity;
       continue;
@@ -80,7 +84,7 @@ export function computeInsights(state: AppState): Insights {
   }
   const available = new Set(state.listings.filter((l) => l.status === "available").map((l) => l.category));
   const needs = new Map<Category, string[]>();
-  for (const n of state.needs) if (!available.has(n.category)) needs.set(n.category, [...(needs.get(n.category) ?? []), n.description]);
+  for (const n of state.needs) if ((n.status ?? "open") === "open" && !available.has(n.category)) needs.set(n.category, [...(needs.get(n.category) ?? []), n.description]);
   const sort = (m: Map<Category, number>) =>
     [...m.entries()].map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
   return {

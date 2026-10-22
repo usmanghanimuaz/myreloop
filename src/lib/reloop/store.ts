@@ -12,7 +12,7 @@ import type { ListingInput } from "./schema";
 export const publicRecordsOptions = queryOptions({queryKey:["reloop-public"],queryFn:()=>readPublicRecords(),staleTime:15000});
 export interface StoreMeta { hydrated:boolean; storageAvailable:boolean; recoveredFromCorruptData:boolean; userId:string|null; busy:boolean; error:string|null }
 const StoreContext=createContext<{state:AppState;meta:StoreMeta}>({state:createSeedState(),meta:{hydrated:false,storageAvailable:true,recoveredFromCorruptData:false,userId:null,busy:false,error:null}});
-let dispatch: ((command:Command)=>Promise<{listing?:import("./types").Listing}>)|undefined;
+let dispatch: ((command:Command)=>Promise<{listing?:import("./types").Listing|undefined}>)|undefined;
 const send=(command:Command) => dispatch ? dispatch(command) : Promise.reject(new Error("Please wait for ReLoop to load."));
 export function useAppState(){return useContext(StoreContext).state;}
 export function useStoreMeta(){return useContext(StoreContext).meta;}

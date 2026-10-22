@@ -1,10 +1,11 @@
+import type { Json } from "@/integrations/supabase/types";
 import { z } from "zod";
 import { AppStateSchema, ListingInputSchema, looksLikeContactDetails } from "./schema";
 import { CATEGORIES, UNITS, type AppState } from "./types";
 
 export const kinds = ["listings", "interests", "actions", "impact", "needs", "activity", "evidence"] as const;
 export type RecordKind = typeof kinds[number];
-export interface CloudRecord { key: string; kind: string; owner_id: string | null; sample: boolean; data: unknown; revision: number }
+export interface CloudRecord { key: string; kind: string; owner_id: string | null; sample: boolean; data: Json; revision: number }
 const safeText = (max: number) => z.string().trim().max(max).refine(t => !looksLikeContactDetails(t), "Don't include emails or phone numbers");
 const quantity = z.number().positive().max(10000);
 const material = z.object({ category: z.enum(CATEGORIES), quantity, unit: z.enum(UNITS), diversion: z.enum(["reuse", "recycle"]) });
@@ -32,7 +33,7 @@ export function recordsToState(records: CloudRecord[]): AppState {
   const raw: Record<string, unknown> = { version: 1, evidence: { problem: "", community: "", date: "", method: "", interviewed: "", findings: "", limitations: "", howReloopHelps: "" } };
   for (const kind of kinds) {
     const rows = records.filter(r => r.kind === kind);
-    if (kind === "evidence") { if (rows[0]) raw.evidence = rows[0].data; }
+    if (kind === "evidence") { if (rows[0]) raw["evidence"] = rows[0].data; }
     else {
       const byId = new Map<string, unknown>();
       // A personal completion overrides its fictional action template, not another user's progress.
