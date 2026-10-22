@@ -11,3 +11,5 @@ Implement Cloud records, authenticated transactional writes, shared listings and
 - Authentication testing is blocked: the account-session tool confirms this project has no registered auth users. No credentials were requested and no accounts were fabricated. A real signup/sign-in is required for listing uploads, refresh persistence, cross-user ownership and two-party handover tests.
 - User-facing profile fields are not implemented; existing account identity supplies ownership, without a new profile table.
 - Media reuse licensing is unconfirmed, so reports are paraphrased and linked rather than copying photos/charts/videos.
+- Final checks: 15 tests passed. Browser checked all six public pages with no page errors; condition/area/mode controls, exchange preference, signed-out submit protection, four source links and mobile sign-in access verified. No horizontal overflow at 1280px or 390px.
+- Repository lint still reports formatting errors, including integration-managed generated files that cannot be edited. It is not reported as passing.

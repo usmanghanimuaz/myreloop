@@ -98,10 +98,7 @@ export function createEngine(initial: AppState) {
           ...s,
           listings: s.listings.map((x) => (x.id === id ? { ...x, status, updatedAt: now() } : x)),
         };
-        next =
-          status === "exchanged"
-            ? upsertImpact(next, exchangeImpact(l))
-            : removeImpact(next, "exchange", id);
+        next = removeImpact(next, "exchange", id);
         return log(next, `You marked '${l.title}' as ${status}`);
       });
     },
