@@ -16,6 +16,7 @@ import {
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { actions, hydrateStore, useStoreMeta } from "@/lib/reloop/store";
 import { cn } from "@/lib/utils";
+import { AccountButton } from "./AccountButton";
 
 const NAV = [
   { to: "/", label: "Overview", icon: LayoutGrid },
@@ -85,9 +86,9 @@ function ResetButton() {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={() => {
-              actions.resetDemo();
-              toast.success("Demo data restored");
+            onClick={async () => {
+              try { await actions.resetDemo(); toast.success("Your records cleared"); }
+              catch(error) { toast.error(error instanceof Error ? error.message : "Could not clear records"); }
             }}
           >
             Reset everything
@@ -105,9 +106,9 @@ function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) 
       <NavLinks onNavigate={onNavigate} />
       <div className="mt-auto space-y-3">
         <p className="rounded-xl bg-sidebar-accent/70 p-3 text-xs leading-relaxed text-sidebar-foreground/80">
-          Demo app. Data is stored only in this browser. Records marked <strong>Sample</strong> are fictional.
+          Shared community listings. Records marked <strong>Sample</strong> are fictional and excluded from real impact.
         </p>
-        <ResetButton />
+        <AccountButton />
       </div>
     </div>
   );
