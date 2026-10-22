@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { School, Store, Users, Recycle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, Notice, PageHeader } from "@/components/reloop/shared";
-import { actions, useAppState } from "@/lib/reloop/store";
+import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
+import { wasteSources, sourceRetrievalDate } from "@/lib/reloop/sources";
 import type { Evidence } from "@/lib/reloop/types";
 
 export const Route = createFileRoute("/about")({
@@ -38,6 +38,7 @@ const FIELDS: { key: keyof Evidence; label: string; long?: boolean; type?: strin
 
 function About() {
   const state = useAppState();
+  const {userId,busy}=useStoreMeta();
   const [ev, setEv] = useState<Evidence>(state.evidence);
   useEffect(() => setEv(state.evidence), [state.evidence]);
 
@@ -54,11 +55,12 @@ function About() {
           <li>No CO₂ or landfill figures are estimated.</li>
         </ul>
       </Card>
+      <section className="mb-10"><h2 className="mb-2 text-2xl font-semibold">Waste problem & published evidence</h2><p className="mb-4 text-sm text-muted-foreground">Published research and government guidance — not neighbourhood observations or ReLoop impact measurements.</p><div className="grid gap-4 md:grid-cols-2">{wasteSources.map(source=><Card key={source.url}><p className="text-xs font-semibold uppercase text-primary">{source.organization}</p><h3 className="mt-2 text-lg font-semibold"><a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{source.title}</a></h3><p className="mt-3 text-sm">{source.summary}</p><p className="mt-3 text-xs text-muted-foreground">Published: {source.published}<br/>Retrieved: {sourceRetrievalDate}<br/>Attribution: {source.organization}. Original summary with source link; media reuse rights not confirmed.</p></Card>)}</div><Notice className="mt-3">Report images, charts and videos are not reproduced because their reuse permissions have not been confirmed.</Notice></section>
 
       <h2 className="mb-1 text-2xl font-semibold">Community evidence</h2>
       <p className="mb-4 text-sm text-muted-foreground">Fill this in with real research. Empty fields stay marked as awaiting validation — nothing here is pre-filled or invented.</p>
       <Card>
-        <form className="grid gap-4 md:grid-cols-2" onSubmit={async (e) => { e.preventDefault(); actions.saveEvidence(ev); toast.success("Evidence notes saved on this device"); }}>
+        <form className="grid gap-4 md:grid-cols-2" onSubmit={async (e) => { e.preventDefault(); await saved(()=>actions.saveEvidence(ev),"Evidence saved privately to your account"); }}>
           {FIELDS.map((f) => {
             const empty = !ev[f.key].trim();
             return (
@@ -75,7 +77,7 @@ function About() {
               </div>
             );
           })}
-          <div className="md:col-span-2"><Button type="submit">Save evidence</Button></div>
+          <div className="md:col-span-2"><Button type="submit" disabled={!userId || busy}>Save evidence</Button>{!userId && <p className="mt-2 text-sm text-muted-foreground">Sign in to save private evidence notes.</p>}</div>
         </form>
       </Card>
       <Notice className="mt-3">Don't record names or contact details of interviewees. Keep findings anonymized.</Notice>
