@@ -33,10 +33,11 @@ export function CloudStoreProvider({children}:{children:ReactNode}) {
    else {void refresh(); void queryClient.invalidateQueries({queryKey:["reloop-account"]});}
    void router.invalidate();
   });
-  const focus=()=>{void queryClient.invalidateQueries({queryKey:["reloop-public"]});if(userId)void queryClient.invalidateQueries({queryKey:["reloop-account"]});};
+   const focus=()=>{void queryClient.invalidateQueries({queryKey:["reloop-public"]});void queryClient.invalidateQueries({queryKey:["reloop-account"]});};
   window.addEventListener("focus",focus);
-  return ()=>{active=false;subscription.unsubscribe();window.removeEventListener("focus",focus);};
- },[queryClient,router,userId]);
+   const timer=window.setInterval(focus,15000);
+   return ()=>{active=false;subscription.unsubscribe();window.clearInterval(timer);window.removeEventListener("focus",focus);};
+  },[queryClient,router]);
  return createElement(Suspense,{fallback:createElement("p",{className:"p-8 text-muted-foreground"},"Loading your saved records…")},
   userId ? createElement(AccountStore,{userId,children}) : createElement(StoreData,{records:publicRows,userId:null,ready,children}));
 }

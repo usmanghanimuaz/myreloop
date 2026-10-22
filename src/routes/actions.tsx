@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, OriginBadge, PageHeader, formatDate } from "@/components/reloop/shared";
-import { actions, useAppState } from "@/lib/reloop/store";
+import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORIES, CATEGORY_LABEL, UNITS, type CommunityAction, type Category, type DiversionType, type Unit } from "@/lib/reloop/types";
 import { cn } from "@/lib/utils";
 
@@ -50,6 +50,7 @@ function Actions() {
 }
 
 function ActionCard({ a, onComplete }: { a: CommunityAction; onComplete?: () => void }) {
+  const {userId,busy}=useStoreMeta();
   const done = a.status === "completed";
   return (
     <Card className={cn("flex flex-col", done && "bg-muted/60")}>
@@ -65,11 +66,11 @@ function ActionCard({ a, onComplete }: { a: CommunityAction; onComplete?: () => 
       <div className="mt-auto flex items-center justify-between gap-2 pt-4">
         <span className="flex items-center gap-1 text-xs text-muted-foreground"><Clock className="size-3.5" /> ~{a.durationMinutes} min</span>
         {done ? (
-          a.origin === "user" && (
-            <Button size="sm" variant="ghost" onClick={() => { void saved(()=>actions.reopenAction(a.id),"Action reopened"); }}><Undo2 /> Undo</Button>
+          a.ownerId === userId && a.origin === "user" && (
+            <Button size="sm" variant="ghost" disabled={busy} onClick={() => { void saved(()=>actions.reopenAction(a.id),"Action reopened"); }}><Undo2 /> Undo</Button>
           )
         ) : (
-          <Button size="sm" onClick={onComplete}><CheckCircle2 /> Record completion</Button>
+          <Button size="sm" disabled={!userId || busy} onClick={onComplete}><CheckCircle2 /> Record completion</Button>
         )}
       </div>
     </Card>
@@ -77,6 +78,7 @@ function ActionCard({ a, onComplete }: { a: CommunityAction; onComplete?: () => 
 }
 
 function CompleteDialog({ action, onClose }: { action: CommunityAction | null; onClose: () => void }) {
+  const {busy,userId}=useStoreMeta();
   const [confirmed, setConfirmed] = useState(false);
   const [qty, setQty] = useState("");
   const [unit, setUnit] = useState<Unit>("kg");
@@ -102,7 +104,6 @@ function CompleteDialog({ action, onClose }: { action: CommunityAction | null; o
             const n = qty.trim() === "" ? 0 : Number(qty);
             if (!Number.isFinite(n) || n < 0 || n > 10000) return setErr("Enter a valid quantity, or leave it empty.");
             if(!await saved(()=>actions.completeAction(action.id, n > 0 ? { category, quantity: n, unit, diversion } : undefined),"Action recorded")) return;
-            toast.success("Action recorded", { description: n > 0 ? `${n} ${unit} added to your impact.` : "No quantity recorded." });
             onClose(); reset();
           }}
         >
@@ -136,7 +137,7 @@ function CompleteDialog({ action, onClose }: { action: CommunityAction | null; o
           {err && <p className="text-xs text-destructive" role="alert">{err}</p>}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => { onClose(); reset(); }}>Cancel</Button>
-            <Button type="submit">Record as completed</Button>
+            <Button type="submit" disabled={!userId || busy}>Record as completed</Button>
           </DialogFooter>
         </form>
       </DialogContent>

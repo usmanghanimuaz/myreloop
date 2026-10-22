@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, Recycle, RefreshCw, Wrench, HeartHandshake, Info } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
 import { Card, Notice, PageHeader } from "@/components/reloop/shared";
 import { getRecommendations, type RecommendationGroup } from "@/lib/reloop/guidance";
-import { actions } from "@/lib/reloop/store";
+import { actions, useStoreMeta } from "@/lib/reloop/store";
 import {
   CATEGORIES, CATEGORY_LABEL, CONDITIONS, CONDITION_LABEL, OUTCOMES, OUTCOME_LABEL, UNITS,
   type Category, type Condition, type IntendedOutcome, type Unit,
@@ -35,6 +34,7 @@ const ICONS: Record<RecommendationGroup["kind"], typeof Recycle> = {
 };
 
 function Finder() {
+  const {userId,busy}=useStoreMeta();
   const [category, setCategory] = useState<Category>("cardboard");
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<Unit>("items");
@@ -132,9 +132,9 @@ function Finder() {
                   <p className="mr-auto text-sm text-muted-foreground">Next step for {qty} {unit} of {CATEGORY_LABEL[category].toLowerCase()}:</p>
                   <Button variant="outline" onClick={() => setListOpen(true)}>List on Reuse Exchange</Button>
                   <Button
+                    disabled={!userId || busy}
                     onClick={async () => {
                       if(!await saved(()=>actions.planFromFinder({ category, quantity: qty, unit, diversion: outcome === "recycle" ? "recycle" : "reuse", note: `${OUTCOME_LABEL[outcome]} ${qty} ${unit} ${CATEGORY_LABEL[category].toLowerCase()}` }),"Plan saved")) return;
-                      toast.success("Saved as a planned entry", { description: "It counts as diverted only once you mark it done in the Impact Tracker." });
                     }}
                   >Save as plan</Button>
                 </Card>

@@ -24,7 +24,7 @@ export function AccountButton() {
   }
   async function signOut() {
     setBusy(true);
-    try { await qc.cancelQueries(); qc.clear(); await supabase.auth.signOut(); window.location.assign("/"); }
+    try { await qc.cancelQueries(); const {error}=await supabase.auth.signOut(); if(error) throw error; qc.removeQueries({queryKey:["reloop-account"]});qc.removeQueries({queryKey:["photo"]});window.location.assign("/"); }
     catch { toast.error("Could not sign out"); setBusy(false); }
   }
   return <>
