@@ -43,7 +43,28 @@ export const executeCommand = createServerFn({method:"POST"})
       if(error) throw new Error("Could not read your records.");
       rows.push(...data); if(data.length<1000) break;
     }
+    if (command.type === "respondRequest") {
+      const {supabaseAdmin}=await import("@/integrations/supabase/client.server");
+      const {error}=await supabaseAdmin.rpc("reloop_workflow",{actor:context.userId,request_id:command.id,decision:command.decision});
+      if(error) throw new Error("Could not update handover. Check its status and try again.");
+      return {listing:undefined};
+    }
     const initial=recordsToState(rows);
+    const ownsTarget=(kind:string,id:string)=>rows.some(r=>r.kind===kind && !r.sample && r.owner_id===context.userId && (r.data as {id?:string}).id===id);
+    if(command.type === "closeNeed" && !ownsTarget("needs",command.id)) throw new Error("Only the need owner can close it.");
+    if(command.type === "closeNeed" || command.type === "deleteListing" || command.type === "setListingStatus" || command.type === "updateListing") {
+      const targetId=command.id;
+      if(initial.interests.some(i=>i.listingId===targetId && ["accepted","handover","completed"].includes(i.status ?? "pending"))) throw new Error("Cancel an active handover first. Completed exchanges are kept as records.");
+    }
+    if(command.type === "sendOffer") {
+      const need=initial.needs.find(n=>n.id===command.id);
+      if(!need || need.origin==="sample" || need.status!=="open" || ownsTarget("needs",command.id)) throw new Error("Choose an open need from another member.");
+      if(command.unit!==need.unit || command.quantity<(need.quantity ?? 1)) throw new Error("Offer must match the requested unit and fulfill its quantity.");
+      if(initial.interests.some(i=>i.listingId===command.id && i.ownerId===context.userId && !["rejected","cancelled"].includes(i.status ?? "pending"))) throw new Error("You already offered for this need.");
+    }
+    if(command.type === "createListing" || command.type === "updateListing") {
+      if(command.input.photos.some(path=>!path.startsWith(context.userId+"/"))) throw new Error("Only your uploaded photos can be attached.");
+    }
     const engine=createEngine(initial);
     const owns=(kind:string,id:string) => rows.some(r=>r.kind===kind && !r.sample && r.owner_id===context.userId && (r.data as {id?:string}).id===id);
     if (command.type === "updateListing" || command.type === "deleteListing" || command.type === "setListingStatus") {
@@ -59,6 +80,9 @@ export const executeCommand = createServerFn({method:"POST"})
     }
     const a=engine.actions;
     switch(command.type) {
+      case "postNeed": initial.needs.unshift({...command.input,id:crypto.randomUUID(),status:"open",createdAt:new Date().toISOString(),origin:"user"}); break;
+      case "closeNeed": { const need=initial.needs.find(n=>n.id===command.id); if(need) need.status="closed"; break; }
+      case "sendOffer": initial.interests.unshift({id:crypto.randomUUID(),listingId:command.id,targetKind:"needs",status:"pending",note:command.note,quantity:command.quantity,unit:command.unit,createdAt:new Date().toISOString(),origin:"user"}); break;
       case "createListing": a.createListing(command.input); break;
       case "updateListing": a.updateListing(command.id,command.input); break;
       case "deleteListing": a.deleteListing(command.id); break;
@@ -73,7 +97,7 @@ export const executeCommand = createServerFn({method:"POST"})
       case "saveEvidence": a.saveEvidence(command.evidence); break;
       case "resetDemo": break;
     }
-    const before=stateRecords(initial,context.userId), after=stateRecords(engine.getState(),context.userId);
+    const before=stateRecords(recordsToState(rows),context.userId), after=stateRecords(["postNeed","closeNeed","sendOffer"].includes(command.type) ? initial : engine.getState(),context.userId);
     const owned=rows.filter(r=>r.owner_id===context.userId && !r.sample);
     const removals=owned.filter(r=> command.type==="resetDemo" || !after.has(r.key)).map(r=>({key:r.key,revision:r.revision}));
     const upserts=command.type==="resetDemo" ? [] : [...after.values()].filter(r=>JSON.stringify(before.get(r.key)?.data)!==JSON.stringify(r.data)).map(r=>{

@@ -66,7 +66,7 @@ const actions = {
       if (!l || l.status === "exchanged") return s;
       return log(
         { ...s, interests: [{ id: uid("i"), listingId, note: note.trim(), createdAt: now(), origin: "user" }, ...s.interests] },
-        `You sent a demo interest request for '${l.title}'`,
+        `You sent an interest request for '${l.title}'`,
       );
     });
   },

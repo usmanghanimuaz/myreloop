@@ -1,9 +1,8 @@
-# ReLoop continuation
+# ReLoop confirmed model
 
-- [ ] Recover original brief and inspect current flows.
-- [ ] Connect Cloud and create protected shared/community and private records.
-- [ ] Replace browser-only persistence with Cloud reads and writes.
-- [ ] Complete exchange interest and ownership flows with save/error states.
-- [ ] Verify cross-user visibility and persisted guidance, impact, needs and evidence.
-- [ ] User decision: whether profile data is needed before adding authentication.
-- [ ] Update documentation and report remaining blockers; do not publish.
+- [ ] Fix errors and connect the existing Cloud provider and sign-in.
+- [ ] FREE/EXCHANGE listings, photos, needs and participant handover workflows.
+- [ ] Persist ownership-protected records and accurate completed impact.
+- [ ] Curated reliable source-linked evidence inside existing pages.
+- [ ] Test rules and main flows, refresh and cross-user access.
+- [ ] Document verification and blockers; do not publish.

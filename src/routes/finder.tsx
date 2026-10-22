@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, Recycle, RefreshCw, Wrench, HeartHandshake, Info } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +19,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/finder")({
   head: () => ({
     meta: [
+      {property:"og:type",content:"website"},
+      {name:"twitter:card",content:"summary_large_image"},
       { title: "Find a Better Use — ReLoop" },
       { name: "description", content: "Get practical reuse, repair, donation and recycling guidance for household materials." },
       { property: "og:title", content: "Find a Better Use — ReLoop" },
@@ -129,8 +132,8 @@ function Finder() {
                   <p className="mr-auto text-sm text-muted-foreground">Next step for {qty} {unit} of {CATEGORY_LABEL[category].toLowerCase()}:</p>
                   <Button variant="outline" onClick={() => setListOpen(true)}>List on Reuse Exchange</Button>
                   <Button
-                    onClick={() => {
-                      actions.planFromFinder({ category, quantity: qty, unit, diversion: outcome === "recycle" ? "recycle" : "reuse", note: `${OUTCOME_LABEL[outcome]} ${qty} ${unit} ${CATEGORY_LABEL[category].toLowerCase()}` });
+                    onClick={async () => {
+                      if(!await saved(()=>actions.planFromFinder({ category, quantity: qty, unit, diversion: outcome === "recycle" ? "recycle" : "reuse", note: `${OUTCOME_LABEL[outcome]} ${qty} ${unit} ${CATEGORY_LABEL[category].toLowerCase()}` }),"Plan saved")) return;
                       toast.success("Saved as a planned entry", { description: "It counts as diverted only once you mark it done in the Impact Tracker." });
                     }}
                   >Save as plan</Button>

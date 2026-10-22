@@ -3,6 +3,7 @@ import { BarChart3, Check, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
+import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/impact")({
   head: () => ({
     meta: [
+      {property:"og:type",content:"website"},
+      {name:"twitter:card",content:"summary_large_image"},
       { title: "Impact Tracker — ReLoop" },
       { name: "description", content: "Transparent, unit-consistent tracking of material recorded as reused or recycled, plus community insights." },
       { property: "og:title", content: "Impact Tracker — ReLoop" },
@@ -86,8 +89,8 @@ function Impact() {
                 <OriginBadge origin={e.origin} />
                 {!e.completed && e.origin === "user" && (
                   <>
-                    <Button size="sm" variant="outline" onClick={() => { actions.markPlanCompleted(e.id); toast.success("Recorded as done"); }}><Check /> Mark done</Button>
-                    <Button size="icon" variant="ghost" aria-label="Delete plan" onClick={() => actions.deleteImpactEntry(e.id)}><Trash2 /></Button>
+                    <Button size="sm" variant="outline" onClick={() => { void saved(()=>actions.markPlanCompleted(e.id),"Recorded as done"); }}><Check /> Mark done</Button>
+                    <Button size="icon" variant="ghost" aria-label="Delete plan" onClick={()=>void saved(()=>actions.deleteImpactEntry(e.id),"Plan removed")}><Trash2 /></Button>
                   </>
                 )}
               </li>
@@ -97,7 +100,7 @@ function Impact() {
       </Card>
 
       <section className="mt-10">
-        <PageHeader eyebrow="Community Insights" title="Insights" description="Calculated only from the sample and user records stored in this browser. They don't represent any real city or neighbourhood." />
+        <PageHeader eyebrow="Community Insights" title="Insights" description="Calculated from shared listings and your account records. They don't represent any real city or neighbourhood." />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <InsightList title="Most listed materials" rows={ins.mostListed.map((r) => [CATEGORY_LABEL[r.category], `${r.count}`])} />
           <InsightList title="Most exchange interest" rows={ins.mostInterest.map((r) => [CATEGORY_LABEL[r.category], `${r.count}`])} />
@@ -109,7 +112,7 @@ function Impact() {
             )}
           </Card>
         </div>
-        <NeedForm />
+
       </section>
     </div>
   );
@@ -136,11 +139,11 @@ function NeedForm() {
   const [err, setErr] = useState("");
   return (
     <Card className="mt-4">
-      <form className="grid gap-3 md:grid-cols-[180px_1fr_auto] md:items-end" onSubmit={(e) => {
+      <form className="grid gap-3 md:grid-cols-[180px_1fr_auto] md:items-end" onSubmit={async (e) => {
         e.preventDefault();
         if (desc.trim().length < 3) return setErr("Describe the need in a few words.");
         if (desc.length > 120) return setErr("Keep it under 120 characters.");
-        actions.addNeed(category, desc); setDesc(""); setErr(""); toast.success("Reuse need posted");
+        if(!await saved(()=>actions.addNeed(category,desc),"Need posted")) return; setDesc(""); setErr(""); toast.success("Reuse need posted");
       }}>
         <div className="grid gap-1.5"><Label htmlFor="n-cat">Material needed</Label>
           <select id="n-cat" className="field" value={category} onChange={(e) => setCategory(e.target.value as Category)}>{CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}</select>

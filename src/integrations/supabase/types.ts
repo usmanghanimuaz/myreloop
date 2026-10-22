@@ -54,6 +54,14 @@ export type Database = {
         Args: { actor: string; removals: Json; upserts: Json }
         Returns: undefined
       }
+      reloop_target_owner: {
+        Args: { target_id: string; target_kind: string }
+        Returns: string
+      }
+      reloop_workflow: {
+        Args: { actor: string; decision: string; request_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

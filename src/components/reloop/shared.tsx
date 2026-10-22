@@ -24,7 +24,7 @@ export function OriginBadge({ origin, className }: { origin: Origin; className?:
         className,
       )}
     >
-      {origin === "sample" ? "Sample data" : "Your record"}
+      {origin === "sample" ? "Sample data" : "Community record"}
     </span>
   );
 }
@@ -33,6 +33,7 @@ const STATUS_STYLE: Record<ListingStatus, string> = {
   available: "bg-lime/60 text-lime-foreground",
   reserved: "bg-warning text-warning-foreground",
   exchanged: "bg-muted text-muted-foreground",
+  closed: "bg-muted text-muted-foreground",
 };
 export function StatusBadge({ status }: { status: ListingStatus }) {
   return (

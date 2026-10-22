@@ -22,6 +22,13 @@
       "when": 1792563147160,
       "tag": "0002_reloop_sample_records",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792637623207,
+      "tag": "0003_reloop_participant_handover",
+      "breakpoints": true
     }
   ]
 }
