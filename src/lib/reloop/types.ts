@@ -49,7 +49,7 @@ export const OUTCOME_LABEL: Record<IntendedOutcome, string> = {
 export type DiversionType = "reuse" | "recycle";
 
 export type Origin = "sample" | "user";
-export type ListingStatus = "available" | "reserved" | "exchanged";
+export type ListingStatus = "available" | "reserved" | "exchanged" | "closed";
 
 export interface Listing {
   id: string;
@@ -58,15 +58,24 @@ export interface Listing {
   quantity: number;
   unit: Unit;
   condition: Condition;
+  mode?: "FREE" | "EXCHANGE" | undefined;
+  photos?: string[] | undefined;
   description: string;
   area: string;
   status: ListingStatus;
   createdAt: string;
   updatedAt: string;
   origin: Origin;
+  ownerId?: string | undefined;
 }
 
 export interface InterestRequest {
+  targetKind?: "listings" | "needs" | undefined;
+  status?: "pending" | "accepted" | "rejected" | "handover" | "completed" | "cancelled" | undefined;
+  ownerId?: string | undefined;
+  confirmedBy?: string | undefined;
+  quantity?: number | undefined;
+  unit?: Unit | undefined;
   id: string;
   listingId: string;
   note: string;
@@ -104,6 +113,13 @@ export interface ImpactEntry {
 }
 
 export interface ReuseNeed {
+  title?: string | undefined;
+  quantity?: number | undefined;
+  unit?: Unit | undefined;
+  area?: string | undefined;
+  mode?: "FREE" | "EXCHANGE" | undefined;
+  status?: "open" | "reserved" | "fulfilled" | "closed" | undefined;
+  ownerId?: string | undefined;
   id: string;
   category: Category;
   description: string;

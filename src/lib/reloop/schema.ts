@@ -4,6 +4,9 @@ import { CATEGORIES, CONDITIONS, UNITS } from "./types";
 const origin = z.enum(["sample", "user"]);
 const category = z.enum(CATEGORIES);
 const unit = z.enum(UNITS);
+export const TransactionModeSchema = z.enum(["FREE", "EXCHANGE"]);
+const mode = TransactionModeSchema.default("FREE");
+const photos = z.array(z.string().max(250)).max(4).default([]);
 
 export const ListingSchema = z.object({
   id: z.string(),
@@ -14,7 +17,8 @@ export const ListingSchema = z.object({
   condition: z.enum(CONDITIONS),
   description: z.string(),
   area: z.string(),
-  status: z.enum(["available", "reserved", "exchanged"]),
+  status: z.enum(["available", "reserved", "exchanged", "closed"]),
+  mode, photos, ownerId: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   origin,
@@ -24,7 +28,7 @@ export const AppStateSchema = z.object({
   version: z.literal(1),
   listings: z.array(ListingSchema),
   interests: z.array(
-    z.object({ id: z.string(), listingId: z.string(), note: z.string(), createdAt: z.string(), origin }),
+    z.object({ id: z.string(), listingId: z.string(), note: z.string(), createdAt: z.string(), origin, ownerId: z.string().optional(), targetKind: z.enum(["listings","needs"]).default("listings"), status: z.enum(["pending","accepted","rejected","handover","completed","cancelled"]).default("pending"), confirmedBy: z.string().optional(), quantity: z.number().positive().optional(), unit: unit.optional() }),
   ),
   actions: z.array(
     z.object({
@@ -55,7 +59,7 @@ export const AppStateSchema = z.object({
     }),
   ),
   needs: z.array(
-    z.object({ id: z.string(), category, description: z.string(), createdAt: z.string(), origin }),
+    z.object({ id: z.string(), category, description: z.string(), createdAt: z.string(), origin, title: z.string().optional(), quantity: z.number().positive().default(1), unit: unit.default("items"), area: z.string().default("General area not specified"), mode, status: z.enum(["open","reserved","fulfilled","closed"]).default("open"), ownerId: z.string().optional() }),
   ),
   activity: z.array(
     z.object({ id: z.string(), message: z.string(), createdAt: z.string(), origin }),
@@ -78,6 +82,7 @@ export function looksLikeContactDetails(text: string): boolean {
 }
 
 export const ListingInputSchema = z.object({
+  mode, photos,
   title: z.string().trim().min(3, "Title needs at least 3 characters").max(80, "Keep the title under 80 characters"),
   category,
   quantity: z.coerce
@@ -99,3 +104,5 @@ export const ListingInputSchema = z.object({
     .refine((t) => !looksLikeContactDetails(t), "Use a general area, not an exact address or contact"),
 });
 export type ListingInput = z.infer<typeof ListingInputSchema>;
+
+export const NeedInputSchema = ListingInputSchema.omit({condition:true,photos:true});
