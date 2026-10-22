@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/reloop/AppShell";
+import { CloudStoreProvider, publicRecordsOptions } from "@/lib/reloop/store";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -98,6 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
+  loader: ({context}) => context.queryClient.ensureQueryData(publicRecordsOptions),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -123,9 +125,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell>
+      <CloudStoreProvider><AppShell>
         <Outlet />
-      </AppShell>
+      </AppShell></CloudStoreProvider>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
