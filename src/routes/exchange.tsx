@@ -17,7 +17,7 @@ import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
 import { Card, EmptyState, Notice, OriginBadge, PageHeader, StatusBadge, formatDate } from "@/components/reloop/shared";
 import { looksLikeContactDetails } from "@/lib/reloop/schema";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
-import { CATEGORIES, CATEGORY_LABEL, CONDITION_LABEL, type Category, type Listing, type ListingStatus } from "@/lib/reloop/types";
+import { CATEGORIES, CATEGORY_LABEL, CONDITIONS, CONDITION_LABEL, type Category, type Listing, type ListingStatus } from "@/lib/reloop/types";
 
 export const Route = createFileRoute("/exchange")({
   head: () => ({
@@ -37,6 +37,7 @@ function Exchange() {
   const state = useAppState();
   const meta=useStoreMeta();
   const [mode,setMode]=useState("all");
+  const [condition,setCondition]=useState("all");const [area,setArea]=useState("");
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "all">("all");
   const [status, setStatus] = useState<ListingStatus | "all">("all");
@@ -57,9 +58,10 @@ function Exchange() {
       (l) =>
         (cat === "all" || l.category === cat) && (mode==="all" || (l.mode ?? "FREE")===mode) &&
         (status === "all" || l.status === status) &&
+        (condition === "all" || l.condition===condition) && l.area.toLowerCase().includes(area.toLowerCase()) &&
         (!term || `${l.title} ${l.description} ${l.area} ${CATEGORY_LABEL[l.category]}`.toLowerCase().includes(term)),
     );
-  }, [state.listings, q, cat, status, mode]);
+  }, [state.listings, q, cat, status, mode,condition,area]);
 
   const viewing = state.listings.find((l) => l.id === viewId) ?? null;
 
@@ -89,9 +91,11 @@ function Exchange() {
             <option value="available">Available</option>
             <option value="reserved">Reserved</option>
             <option value="exchanged">Exchanged</option>
+            <option value="closed">Closed</option>
           </select>
         </div>
       </Card>
+      <div className="mb-4 grid gap-3 sm:grid-cols-2"><div><Label htmlFor="filter-condition">Condition</Label><select id="filter-condition" className="field" value={condition} onChange={e=>setCondition(e.target.value)}><option value="all">Any condition</option>{CONDITIONS.map(c=><option key={c} value={c}>{CONDITION_LABEL[c]}</option>)}</select></div><div><Label htmlFor="filter-area">Pickup area</Label><Input id="filter-area" value={area} onChange={e=>setArea(e.target.value)}/></div></div>
 
       <div className="mb-4"><Label htmlFor="filter-mode">Transaction mode</Label><select id="filter-mode" className="field" value={mode} onChange={e=>setMode(e.target.value)}><option value="all">All modes</option><option>FREE</option><option>EXCHANGE</option></select></div>
       <p className="mb-3 text-sm text-muted-foreground" aria-live="polite">{filtered.length} listing{filtered.length === 1 ? "" : "s"}</p>
@@ -109,7 +113,7 @@ function Exchange() {
                   <span className="text-xs font-semibold uppercase tracking-wide text-primary">{CATEGORY_LABEL[l.category]}</span>
                   <StatusBadge status={l.status} />
                 </div>
-                {l.photos?.[0] && <ListingPhoto path={l.photos[0]} title={l.title}/>}
+                {l.photos?.[0] && meta.userId && (l.ownerId===meta.userId || state.interests.some(i=>i.listingId===l.id && i.ownerId===meta.userId && ["accepted","handover","completed"].includes(i.status ?? "pending"))) && <ListingPhoto path={l.photos[0]} title={l.title}/>}
                 <p className="text-xs font-semibold text-primary">{l.mode ?? "FREE"}</p>
                 <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}</p>
@@ -138,7 +142,7 @@ function Exchange() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete “{deleting?.title}”?</AlertDialogTitle>
-            <AlertDialogDescription>This removes the listing, its interest requests and any impact recorded from exchanging it. This can't be undone.</AlertDialogDescription>
+            <AlertDialogDescription>Removes this listing and pending requests. Active or completed handovers cannot be deleted.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -164,7 +168,9 @@ function ListingDetail({ listing, interest, onClose, onEdit, onDelete }: {
   const [note, setNote] = useState("");
   const [err, setErr] = useState("");
   const {userId,busy}=useStoreMeta();
+  const {interests}=useAppState();
   const own = !!userId && listing?.ownerId === userId;
+  const photoAccess=own || interests.some(i=>i.listingId===listing?.id && i.ownerId===userId && ["accepted","handover","completed"].includes(i.status ?? "pending"));
   return (
     <Dialog open={!!listing} onOpenChange={(o) => { if (!o) { onClose(); setNote(""); setErr(""); } }}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
@@ -176,8 +182,9 @@ function ListingDetail({ listing, interest, onClose, onEdit, onDelete }: {
               <DialogDescription>{CATEGORY_LABEL[listing.category]} · {listing.quantity} {listing.unit} · {CONDITION_LABEL[listing.condition]}</DialogDescription>
             </DialogHeader>
             <div className="space-y-2 text-sm">
-              {listing.photos?.map(path=><ListingPhoto key={path} path={path} title={listing.title}/>)}
+              {photoAccess ? listing.photos?.map(path=><ListingPhoto key={path} path={path} title={listing.title}/>) : !!listing.photos?.length && <p className="text-muted-foreground">Private photos become available after your request is accepted.</p>}
               <p className="font-semibold">{listing.mode ?? "FREE"}</p>
+              {listing.mode==="EXCHANGE" && listing.exchangePreference && <p>Requested in exchange: {listing.exchangePreference}</p>}
               {listing.description && <p>{listing.description}</p>}
               <p className="flex items-center gap-1 text-muted-foreground"><MapPin className="size-4" /> {listing.area}</p>
               <p className="text-muted-foreground">Listed {formatDate(listing.createdAt)} · {interest} interest request{interest === 1 ? "" : "s"}</p>

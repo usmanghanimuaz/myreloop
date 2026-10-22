@@ -60,7 +60,7 @@ export function stateRecords(state: AppState, userId: string) {
     if (kind === "evidence") { result.set(`evidence:${userId}`, {key:`evidence:${userId}`,kind,data:state.evidence}); continue; }
     for (const row of state[kind]) {
       if (row.origin === "sample") continue;
-      const key = kind === "actions" ? `actions:${userId}:${row.id}` : `${kind}:${row.id}`;
+      const key = kind === "actions" ? `actions:${userId}:${row.id}` : kind === "impact" && "verified" in row && row.verified ? `impact:handover:${row.id.replace(/^handover-/,"")}` : `${kind}:${row.id}`;
       result.set(key, {key,kind,data:row});
     }
   }
