@@ -52,6 +52,7 @@ const actions = {
     });
   },
   setListingStatus(id: string, status: ListingStatus) {
+    if(status === "exchanged" || status === "reserved") throw new Error("Only the participant handover workflow can reserve or complete a listing.");
     update((s) => {
       const l = s.listings.find((x) => x.id === id);
       if (!l || l.origin !== "user" || l.status === status) return s;

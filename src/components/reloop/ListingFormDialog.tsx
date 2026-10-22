@@ -31,6 +31,7 @@ export function ListingFormDialog({
   const {userId}=useStoreMeta();
   const [photos,setPhotos]=useState<string[]>([]);
   const [busy,setBusy]=useState(false);
+  const [uploadProgress,setUploadProgress]=useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -144,7 +145,8 @@ export function ListingFormDialog({
               setBusy(true);
               try {
                 const paths:string[]=[];
-                for(const file of files) {
+                for(const [index,file] of files.entries()) {
+                  setUploadProgress(`Uploading photo ${index+1} of ${files.length}…`);
                   const ext=file.type==="image/jpeg" ? "jpg" : file.type==="image/png" ? "png" : "webp";
                   const path=`${userId}/${crypto.randomUUID()}.${ext}`;
                   const {error}=await supabase.storage.from("reloop-photos").upload(path,file,{contentType:file.type});
@@ -152,9 +154,10 @@ export function ListingFormDialog({
                 }
                 setPhotos(p=>[...p,...paths]);
               } catch(error) {toast.error(error instanceof Error ? error.message : "Photo upload failed");}
-              finally {setBusy(false);}
+              finally {setBusy(false);setUploadProgress("");}
             }}/>
-            {photos.map((path,i)=><div key={path} className="flex items-center justify-between text-sm"><span>Photo {i+1}</span><Button type="button" size="sm" variant="ghost" disabled={busy} onClick={()=>setPhotos(p=>p.filter(x=>x!==path))}>Remove</Button></div>)}
+            {uploadProgress && <p role="status" className="text-sm text-muted-foreground">{uploadProgress}</p>}
+            {photos.map((path,i)=><div key={path} className="flex items-center justify-between text-sm"><span>Photo {i+1}</span><Button type="button" size="sm" variant="ghost" disabled={busy} onClick={async()=>{if(!listing?.photos?.includes(path)){const {error}=await supabase.storage.from("reloop-photos").remove([path]);if(error){toast.error("Could not remove photo");return;}}setPhotos(p=>p.filter(x=>x!==path));}}>Remove</Button></div>)}
           </div>
           {draft.mode === "EXCHANGE" && <div className="grid gap-1.5"><Label htmlFor="exchangePreference">Requested item / exchange preference</Label><Input id="exchangePreference" value={draft.exchangePreference} onChange={set("exchangePreference")} maxLength={200}/>{err("exchangePreference")}</div>}
           <div className="grid gap-1.5">

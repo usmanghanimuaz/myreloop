@@ -44,6 +44,11 @@ export const executeCommand = createServerFn({method:"POST"})
       rows.push(...data); if(data.length<1000) break;
     }
     if (command.type === "respondRequest") {
+      const request=rows.find(r=>r.kind==="interests" && !r.sample && (r.data as {id?:string}).id===command.id);
+      if(!request) throw new Error("Request unavailable.");
+      const detail=request.data as {listingId:string;targetKind?:string};
+      const target=rows.find(r=>r.kind===(detail.targetKind ?? "listings") && (r.data as {id?:string}).id===detail.listingId);
+      if(!target || request.owner_id===target.owner_id || (request.owner_id!==context.userId && target.owner_id!==context.userId)) throw new Error("Only the two participants can manage this handover.");
       const {supabaseAdmin}=await import("@/integrations/supabase/client.server");
       const {error}=await supabaseAdmin.rpc("reloop_workflow",{actor:context.userId,request_id:command.id,decision:command.decision});
       if(error) throw new Error("Could not update handover. Check its status and try again.");

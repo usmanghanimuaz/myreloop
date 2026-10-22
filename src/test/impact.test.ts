@@ -17,12 +17,10 @@ describe("impact tracking", () => {
     expect(s.completed).toEqual({ kg: 0, items: 0, litres: 0 });
   });
 
-  it("exchanging a listing twice counts it once", () => {
+  it("manual listing status cannot simulate an exchange", () => {
     const l = actions.createListing(input);
-    actions.setListingStatus(l.id, "exchanged");
-    actions.setListingStatus(l.id, "reserved");
-    actions.setListingStatus(l.id, "exchanged");
-    expect(summarizeImpact(__test.getState()).completedByOrigin.user.items).toBe(5);
+    expect(()=>actions.setListingStatus(l.id, "exchanged")).toThrow("participant handover");
+    expect(summarizeImpact(__test.getState()).verified.items).toBe(0);
   });
 
   it("planned entries are not counted as diverted until marked done", () => {
