@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ListingInputSchema, type ListingInput } from "@/lib/reloop/schema";
-import { actions } from "@/lib/reloop/store";
+import { actions, useStoreMeta } from "@/lib/reloop/store";
+import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, CATEGORY_LABEL, CONDITIONS, CONDITION_LABEL, UNITS, type Listing } from "@/lib/reloop/types";
 
-type Draft = Record<keyof ListingInput, string>;
-const blank: Draft = { title: "", category: "cardboard", quantity: "1", unit: "items", condition: "good", description: "", area: "" };
+type Draft = Record<Exclude<keyof ListingInput,"photos">, string>;
+const blank: Draft = { title: "", category: "cardboard", quantity: "1", unit: "items", condition: "good", description: "", area: "", mode:"FREE" };
 
 export function ListingFormDialog({
   open,
@@ -27,15 +28,19 @@ export function ListingFormDialog({
 }) {
   const [draft, setDraft] = useState<Draft>(blank);
   const [errors, setErrors] = useState<Partial<Record<keyof Draft, string>>>({});
+  const {userId}=useStoreMeta();
+  const [photos,setPhotos]=useState<string[]>([]);
+  const [busy,setBusy]=useState(false);
 
   useEffect(() => {
     if (!open) return;
     setErrors({});
     setDraft(
       listing
-        ? { ...listing, quantity: String(listing.quantity) }
+        ? { ...listing, mode:listing.mode ?? "FREE", quantity: String(listing.quantity) }
         : { ...blank, ...prefill },
     );
+    setPhotos(listing?.photos ?? []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, listing?.id]);
 
@@ -44,13 +49,15 @@ export function ListingFormDialog({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const res = ListingInputSchema.safeParse(draft);
+    if(busy) return;
+    const res = ListingInputSchema.safeParse({...draft,photos});
     if (!res.success) {
       const errs: Partial<Record<keyof Draft, string>> = {};
       for (const i of res.error.issues) errs[i.path[0] as keyof Draft] ??= i.message;
       setErrors(errs);
       return;
     }
+    setBusy(true);
     try {
     if (listing) {
       await actions.updateListing(listing.id, res.data);
@@ -63,6 +70,7 @@ export function ListingFormDialog({
     }
     onOpenChange(false);
     } catch (error) { toast.error(error instanceof Error ? error.message : "Could not save listing"); }
+    finally {setBusy(false);}
   }
 
   const err = (k: keyof Draft) =>
@@ -123,13 +131,39 @@ export function ListingFormDialog({
             {err("area")}
           </div>
           <div className="grid gap-1.5">
+            <Label htmlFor="mode">Transaction mode</Label>
+            <select id="mode" className="field" value={draft.mode} onChange={set("mode")}><option>FREE</option><option>EXCHANGE</option></select>
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="photos">Photos (up to 4, JPG/PNG/WebP, 5 MB each)</Label>
+            <Input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={busy || !userId} onChange={async e=>{
+              const files=Array.from(e.target.files ?? []);
+              if(!userId) return;
+              if(photos.length+files.length>4) return toast.error("Maximum 4 photos");
+              if(files.some(f=>f.size>5*1024*1024 || !["image/jpeg","image/png","image/webp"].includes(f.type))) return toast.error("Use JPG, PNG or WebP up to 5 MB");
+              setBusy(true);
+              try {
+                const paths:string[]=[];
+                for(const file of files) {
+                  const ext=file.type==="image/jpeg" ? "jpg" : file.type==="image/png" ? "png" : "webp";
+                  const path=`${userId}/${crypto.randomUUID()}.${ext}`;
+                  const {error}=await supabase.storage.from("reloop-photos").upload(path,file,{contentType:file.type});
+                  if(error) throw new Error("Photo upload failed. Please try again."); paths.push(path);
+                }
+                setPhotos(p=>[...p,...paths]);
+              } catch(error) {toast.error(error instanceof Error ? error.message : "Photo upload failed");}
+              finally {setBusy(false);}
+            }}/>
+            {photos.map((path,i)=><div key={path} className="flex items-center justify-between text-sm"><span>Photo {i+1}</span><Button type="button" size="sm" variant="ghost" disabled={busy} onClick={()=>setPhotos(p=>p.filter(x=>x!==path))}>Remove</Button></div>)}
+          </div>
+          <div className="grid gap-1.5">
             <Label htmlFor="description">Short description <span className="font-normal text-muted-foreground">(optional)</span></Label>
             <Textarea id="description" rows={3} value={draft.description} onChange={set("description")} {...aria("description")} />
             {err("description")}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit">{listing ? "Save changes" : "Publish listing"}</Button>
+            <Button type="submit" disabled={busy || !userId}>{busy ? "Saving…" : listing ? "Save changes" : "Publish listing"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
