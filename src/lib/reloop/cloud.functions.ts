@@ -99,11 +99,10 @@ export const executeCommand = createServerFn({method:"POST"})
       case "deleteImpactEntry": a.deleteImpactEntry(command.id); break;
       case "addNeed": a.addNeed(command.category,command.description); break;
       case "saveEvidence": a.saveEvidence(command.evidence); break;
-      case "resetDemo": break;
     }
     const before=stateRecords(recordsToState(rows),context.userId), after=stateRecords(["postNeed","closeNeed","updateNeed","deleteNeed","sendOffer"].includes(command.type) ? initial : engine.getState(),context.userId);
     const owned=rows.filter(r=>r.owner_id===context.userId && !r.sample);
-    const removals=owned.filter(r=> command.type==="resetDemo" || !after.has(r.key)).map(r=>({key:r.key,revision:r.revision}));
+    const removals=owned.filter(r=>!after.has(r.key)).map(r=>({key:r.key,revision:r.revision}));
     const upserts=[...after.values()].filter(r=>JSON.stringify(before.get(r.key)?.data)!==JSON.stringify(r.data)).map(r=>{
       const existing=rows.find(x=>x.key===r.key);
       if(existing && existing.owner_id!==context.userId) throw new Error("Only your records can be changed.");
