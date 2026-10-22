@@ -42,7 +42,7 @@ export function ListingFormDialog({
   const set = (k: keyof Draft) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setDraft((d) => ({ ...d, [k]: e.target.value }));
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     const res = ListingInputSchema.safeParse(draft);
     if (!res.success) {
@@ -51,16 +51,18 @@ export function ListingFormDialog({
       setErrors(errs);
       return;
     }
+    try {
     if (listing) {
-      actions.updateListing(listing.id, res.data);
+      await actions.updateListing(listing.id, res.data);
       toast.success("Listing updated");
       onSaved?.();
     } else {
-      const l = actions.createListing(res.data);
+      const l = await actions.createListing(res.data);
       toast.success("Listing published to the exchange");
       onSaved?.(l);
     }
     onOpenChange(false);
+    } catch (error) { toast.error(error instanceof Error ? error.message : "Could not save listing"); }
   }
 
   const err = (k: keyof Draft) =>
