@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, CATEGORY_LABEL, CONDITIONS, CONDITION_LABEL, UNITS, type Listing } from "@/lib/reloop/types";
 
 type Draft = Record<Exclude<keyof ListingInput,"photos">, string>;
-const blank: Draft = { title: "", category: "cardboard", quantity: "1", unit: "items", condition: "good", description: "", area: "", mode:"FREE" };
+const blank: Draft = { title: "", category: "cardboard", quantity: "1", unit: "items", condition: "good", description: "", area: "", mode:"FREE", exchangePreference:"" };
 
 export function ListingFormDialog({
   open,
@@ -37,7 +37,7 @@ export function ListingFormDialog({
     setErrors({});
     setDraft(
       listing
-        ? { ...listing, mode:listing.mode ?? "FREE", quantity: String(listing.quantity) }
+        ? { ...listing, mode:listing.mode ?? "FREE", exchangePreference:listing.exchangePreference ?? "", quantity: String(listing.quantity) }
         : { ...blank, ...prefill },
     );
     setPhotos(listing?.photos ?? []);
@@ -156,6 +156,7 @@ export function ListingFormDialog({
             }}/>
             {photos.map((path,i)=><div key={path} className="flex items-center justify-between text-sm"><span>Photo {i+1}</span><Button type="button" size="sm" variant="ghost" disabled={busy} onClick={()=>setPhotos(p=>p.filter(x=>x!==path))}>Remove</Button></div>)}
           </div>
+          {draft.mode === "EXCHANGE" && <div className="grid gap-1.5"><Label htmlFor="exchangePreference">Requested item / exchange preference</Label><Input id="exchangePreference" value={draft.exchangePreference} onChange={set("exchangePreference")} maxLength={200}/>{err("exchangePreference")}</div>}
           <div className="grid gap-1.5">
             <Label htmlFor="description">Short description <span className="font-normal text-muted-foreground">(optional)</span></Label>
             <Textarea id="description" rows={3} value={draft.description} onChange={set("description")} {...aria("description")} />

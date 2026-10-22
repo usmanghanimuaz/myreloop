@@ -16,6 +16,8 @@ export const CommandSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("setListingStatus"), id: z.string(), status: z.enum(["available", "closed"]) }),
   z.object({ type: z.literal("postNeed"), input: NeedInputSchema }),
   z.object({ type: z.literal("closeNeed"), id: z.string() }),
+  z.object({ type: z.literal("updateNeed"), id: z.string(), input: NeedInputSchema }),
+  z.object({ type: z.literal("deleteNeed"), id: z.string() }),
   z.object({ type: z.literal("sendOffer"), id: z.string(), note: safeText(200), quantity, unit: z.enum(UNITS) }),
   z.object({ type: z.literal("respondRequest"), id: z.string(), decision: z.enum(["accept","reject","confirm","cancel"]) }),
   z.object({ type: z.literal("sendInterest"), id: z.string(), note: safeText(200) }),
@@ -43,7 +45,8 @@ export function recordsToState(records: CloudRecord[]): AppState {
       // A personal completion overrides its fictional action template, not another user's progress.
       for (const r of [...rows].sort((a,b) => Number(b.sample)-Number(a.sample))) {
         const d = r.data as { id: string };
-        byId.set(d.id, { ...d, ownerId: r.owner_id ?? undefined });
+        const verified = r.kind === "impact" && r.key.startsWith("impact:handover:") && !r.sample;
+        byId.set(d.id, { ...d, ownerId: r.owner_id ?? undefined, ...(r.kind === "impact" ? {verified} : {}) });
       }
       raw[kind] = [...byId.values()].sort((a,b) => String((b as {createdAt?:string}).createdAt ?? "").localeCompare(String((a as {createdAt?:string}).createdAt ?? "")));
     }

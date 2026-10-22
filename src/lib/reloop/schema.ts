@@ -18,7 +18,7 @@ export const ListingSchema = z.object({
   description: z.string(),
   area: z.string(),
   status: z.enum(["available", "reserved", "exchanged", "closed"]),
-  mode, photos, ownerId: z.string().optional(),
+  mode, photos, ownerId: z.string().optional(), exchangePreference: z.string().default(""),
   createdAt: z.string(),
   updatedAt: z.string(),
   origin,
@@ -40,7 +40,7 @@ export const AppStateSchema = z.object({
       category,
       status: z.enum(["open", "completed"]),
       completedAt: z.string().optional(),
-      origin,
+      origin, ownerId: z.string().optional(),
     }),
   ),
   impact: z.array(
@@ -55,11 +55,11 @@ export const AppStateSchema = z.object({
       completed: z.boolean(),
       note: z.string(),
       createdAt: z.string(),
-      origin,
+      origin, ownerId: z.string().optional(), verified: z.boolean().default(false),
     }),
   ),
   needs: z.array(
-    z.object({ id: z.string(), category, description: z.string(), createdAt: z.string(), origin, title: z.string().optional(), quantity: z.number().positive().default(1), unit: unit.default("items"), area: z.string().default("General area not specified"), mode, status: z.enum(["open","reserved","fulfilled","closed"]).default("open"), ownerId: z.string().optional() }),
+    z.object({ id: z.string(), category, description: z.string(), createdAt: z.string(), origin, title: z.string().optional(), quantity: z.number().positive().default(1), unit: unit.default("items"), area: z.string().default("General area not specified"), mode, exchangePreference: z.string().default(""), status: z.enum(["open","reserved","fulfilled","closed"]).default("open"), ownerId: z.string().optional() }),
   ),
   activity: z.array(
     z.object({ id: z.string(), message: z.string(), createdAt: z.string(), origin }),
@@ -83,7 +83,8 @@ export function looksLikeContactDetails(text: string): boolean {
 
 export const ListingInputSchema = z.object({
   mode, photos,
-  title: z.string().trim().min(3, "Title needs at least 3 characters").max(80, "Keep the title under 80 characters"),
+  exchangePreference: z.string().trim().max(200).refine(t => !looksLikeContactDetails(t), "Don't include contact details").default(""),
+  title: z.string().trim().min(3, "Title needs at least 3 characters").max(80, "Keep the title under 80 characters").refine(t => !looksLikeContactDetails(t), "Don't include contact details"),
   category,
   quantity: z.coerce
     .number({ invalid_type_error: "Enter a number" })

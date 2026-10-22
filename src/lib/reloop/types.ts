@@ -59,6 +59,7 @@ export interface Listing {
   unit: Unit;
   condition: Condition;
   mode?: "FREE" | "EXCHANGE" | undefined;
+  exchangePreference?: string | undefined;
   photos?: string[] | undefined;
   description: string;
   area: string;
@@ -86,6 +87,7 @@ export interface InterestRequest {
 export type ActionStatus = "open" | "completed";
 
 export interface CommunityAction {
+  ownerId?: string | undefined;
   id: string;
   title: string;
   goal: string;
@@ -98,6 +100,8 @@ export interface CommunityAction {
 }
 
 export interface ImpactEntry {
+  ownerId?: string | undefined;
+  verified?: boolean | undefined;
   id: string;
   source: "exchange" | "action" | "finder";
   sourceId: string;
@@ -113,6 +117,7 @@ export interface ImpactEntry {
 }
 
 export interface ReuseNeed {
+  exchangePreference?: string | undefined;
   title?: string | undefined;
   quantity?: number | undefined;
   unit?: Unit | undefined;
