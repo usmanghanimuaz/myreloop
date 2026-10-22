@@ -37,7 +37,7 @@ function Impact() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Transparent Impact Tracker" title="Impact tracker" description="Material counts as diverted only when someone records that it was actually reused or recycled. Units are never added together. No CO₂ or landfill estimates are shown." />
+      <PageHeader eyebrow="Transparent Impact Tracker" title="Impact tracker" description="Confirmed handovers require both participants. Personal actions and plans remain self-reported. Units are never added together; no CO₂ or landfill estimates are shown." />
 
       <div className="grid gap-4 md:grid-cols-4">
         <Stat label="Two-party confirmed reuse" value={formatTotals(s.verified)} />

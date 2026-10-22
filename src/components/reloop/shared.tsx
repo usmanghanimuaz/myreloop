@@ -2,11 +2,25 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { ListingStatus, Origin } from "@/lib/reloop/types";
 
-export function PageHeader({ eyebrow, title, description, children }: { eyebrow?: string; title: string; description?: ReactNode; children?: ReactNode }) {
+export function PageHeader({
+  eyebrow,
+  title,
+  description,
+  children,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: ReactNode;
+  children?: ReactNode;
+}) {
   return (
     <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div className="max-w-2xl">
-        {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>}
+        {eyebrow && (
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            {eyebrow}
+          </p>
+        )}
         <h1 className="text-3xl font-semibold text-foreground md:text-4xl">{title}</h1>
         {description && <p className="mt-3 text-muted-foreground">{description}</p>}
       </div>
@@ -37,7 +51,12 @@ const STATUS_STYLE: Record<ListingStatus, string> = {
 };
 export function StatusBadge({ status }: { status: ListingStatus }) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium capitalize", STATUS_STYLE[status])}>
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium capitalize",
+        STATUS_STYLE[status],
+      )}
+    >
       {status}
     </span>
   );
@@ -51,10 +70,20 @@ export function Card({ className, children, ...rest }: React.HTMLAttributes<HTML
   );
 }
 
-export function EmptyState({ icon, title, children }: { icon: ReactNode; title: string; children?: ReactNode }) {
+export function EmptyState({
+  icon,
+  title,
+  children,
+}: {
+  icon: ReactNode;
+  title: string;
+  children?: ReactNode;
+}) {
   return (
     <div className="flex flex-col items-center rounded-2xl border border-dashed bg-card/60 px-6 py-12 text-center">
-      <div className="mb-3 grid size-12 place-items-center rounded-full bg-secondary text-primary">{icon}</div>
+      <div className="mb-3 grid size-12 place-items-center rounded-full bg-secondary text-primary">
+        {icon}
+      </div>
       <h3 className="text-lg font-semibold">{title}</h3>
       {children && <div className="mt-2 max-w-sm text-sm text-muted-foreground">{children}</div>}
     </div>
@@ -62,9 +91,20 @@ export function EmptyState({ icon, title, children }: { icon: ReactNode; title: 
 }
 
 export function Notice({ children, className }: { children: ReactNode; className?: string }) {
-  return <p className={cn("rounded-xl bg-sample/60 px-4 py-3 text-sm text-sample-foreground", className)}>{children}</p>;
+  return (
+    <p
+      className={cn("rounded-xl bg-sample/60 px-4 py-3 text-sm text-sample-foreground", className)}
+    >
+      {children}
+    </p>
+  );
 }
 
 export function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }

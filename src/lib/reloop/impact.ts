@@ -1,4 +1,12 @@
-import { CATEGORIES, UNITS, type AppState, type Category, type ImpactEntry, type Origin, type Unit } from "./types";
+import {
+  CATEGORIES,
+  UNITS,
+  type AppState,
+  type Category,
+  type ImpactEntry,
+  type Origin,
+  type Unit,
+} from "./types";
 
 export type UnitTotals = Record<Unit, number>;
 export const emptyTotals = (): UnitTotals => ({ kg: 0, items: 0, litres: 0 });
@@ -26,7 +34,8 @@ export function dedupeImpact(entries: ImpactEntry[]): ImpactEntry[] {
 export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): ImpactSummary {
   const s: ImpactSummary = {
     completed: emptyTotals(),
-    verified: emptyTotals(), verifiedExchanges: 0,
+    verified: emptyTotals(),
+    verifiedExchanges: 0,
     completedByOrigin: { sample: emptyTotals(), user: emptyTotals() },
     planned: emptyTotals(),
     byCategory: [],
@@ -44,7 +53,10 @@ export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): Im
       continue;
     }
     s.completed[e.unit] += e.quantity;
-    if(e.source === "exchange" && e.verified) {s.verified[e.unit] += e.quantity; s.verifiedExchanges++;}
+    if (e.source === "exchange" && e.verified) {
+      s.verified[e.unit] += e.quantity;
+      s.verifiedExchanges++;
+    }
     s.completedByOrigin[e.origin][e.unit] += e.quantity;
     s.byDiversion[e.diversion][e.unit] += e.quantity;
     const k = `${e.category}|${e.unit}`;
@@ -56,7 +68,14 @@ export function summarizeImpact(state: Pick<AppState, "impact" | "actions">): Im
       if (q) s.byCategory.push({ category: c, unit: u, quantity: round(q) });
     }
   for (const a of state.actions) if (a.status === "completed") s.completedActions[a.origin]++;
-  for (const t of [s.completed, s.planned, s.byDiversion.reuse, s.byDiversion.recycle, s.completedByOrigin.sample, s.completedByOrigin.user])
+  for (const t of [
+    s.completed,
+    s.planned,
+    s.byDiversion.reuse,
+    s.byDiversion.recycle,
+    s.completedByOrigin.sample,
+    s.completedByOrigin.user,
+  ])
     for (const u of UNITS) t[u] = round(t[u]);
   return s;
 }
@@ -86,11 +105,17 @@ export function computeInsights(state: AppState): Insights {
     const c = catOf.get(i.listingId);
     if (c) interest.set(c, (interest.get(c) ?? 0) + 1);
   }
-  const available = new Set(state.listings.filter((l) => l.status === "available").map((l) => l.category));
+  const available = new Set(
+    state.listings.filter((l) => l.status === "available").map((l) => l.category),
+  );
   const needs = new Map<Category, string[]>();
-  for (const n of state.needs) if ((n.status ?? "open") === "open" && !available.has(n.category)) needs.set(n.category, [...(needs.get(n.category) ?? []), n.description]);
+  for (const n of state.needs)
+    if ((n.status ?? "open") === "open" && !available.has(n.category))
+      needs.set(n.category, [...(needs.get(n.category) ?? []), n.description]);
   const sort = (m: Map<Category, number>) =>
-    [...m.entries()].map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
+    [...m.entries()]
+      .map(([category, count]) => ({ category, count }))
+      .sort((a, b) => b.count - a.count);
   return {
     mostListed: sort(listed),
     mostInterest: sort(interest),

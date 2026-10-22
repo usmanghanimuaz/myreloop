@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, OriginBadge, PageHeader, formatDate } from "@/components/reloop/shared";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
-import { useAppState } from "@/lib/reloop/store";
+import { useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORY_LABEL } from "@/lib/reloop/types";
 
 export const Route = createFileRoute("/")({
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/")({
 
 function Overview() {
   const state = useAppState();
+  const {userId}=useStoreMeta();
   const impact = useMemo(() => summarizeImpact(state), [state]);
   const activeListings = state.listings.filter((l) => l.status === "available");
   const suggested = useMemo(() => {
@@ -55,7 +56,7 @@ function Overview() {
           <p className="text-sm text-muted-foreground">Active exchange listings</p>
           <p className="mt-2 font-display text-3xl font-semibold">{activeListings.length}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Yours: <strong>{activeListings.filter((l) => l.origin === "user").length}</strong> · Sample: {activeListings.filter((l) => l.origin === "sample").length}
+            Yours: <strong>{activeListings.filter((l) => l.ownerId === userId && l.origin === "user").length}</strong> · Sample: {activeListings.filter((l) => l.origin === "sample").length}
           </p>
         </Card>
         <Card>

@@ -82,9 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ReLoop — Turn Local Waste Into Local Resources" },
-      { name: "description", content: "A community waste-to-value app: reuse exchange, practical waste guidance, community actions and transparent impact tracking." },
+      {
+        name: "description",
+        content:
+          "A community waste-to-value app: reuse exchange, practical waste guidance, community actions and transparent impact tracking.",
+      },
       { property: "og:title", content: "ReLoop — Turn Local Waste Into Local Resources" },
-      { property: "og:description", content: "Community reuse exchange, waste guidance and transparent impact tracking." },
+      {
+        property: "og:description",
+        content: "Community reuse exchange, waste guidance and transparent impact tracking.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -99,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
-  loader: ({context}) => context.queryClient.ensureQueryData(publicRecordsOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(publicRecordsOptions),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -125,9 +132,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CloudStoreProvider><AppShell>
-        <Outlet />
-      </AppShell></CloudStoreProvider>
+      <CloudStoreProvider>
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      </CloudStoreProvider>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
