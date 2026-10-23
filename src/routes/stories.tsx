@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ReportButton } from "@/components/reloop/ReportButton";
 import { ExternalLink, PlayCircle, ShieldCheck, Upload } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -243,6 +244,7 @@ function Stories() {
                   Watch the video <ExternalLink className="size-3.5" aria-hidden />
                 </a>
               )}
+              <ReportButton targetKind="fieldEvidence" targetId={e.id} />
             </Card>
           ))}
         </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ReportButton } from "./ReportButton";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -219,6 +220,7 @@ export function CommunityNeeds() {
                 {t("needs.offering")} {n.exchangePreference}
               </p>
             )}
+            {userId !== n.ownerId && <ReportButton targetKind="needs" targetId={n.id} />}
             {userId === n.ownerId && n.status === "open" && (
               <Button
                 className="mt-3"
