@@ -403,6 +403,53 @@ function MaterialLibrary() {
           </article>
         );
       })}
+      <article className="grid overflow-hidden rounded-2xl border border-warning-foreground/30 bg-warning/30 shadow-card md:grid-cols-3">
+        <img
+          src={IMAGES.hazardousMedicines.src}
+          alt={IMAGES.hazardousMedicines.alt}
+          loading="lazy"
+          className="h-44 w-full object-cover md:h-full"
+        />
+        <div className="p-6 md:col-span-2">
+          <h3 className="flex items-center gap-2 text-xl font-semibold">
+            <AlertTriangle className="size-5 text-warning-foreground" aria-hidden /> Batteries,
+            chemicals & hazardous waste
+          </h3>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Avoid</p>
+              <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                <li>
+                  Never put batteries, paint, chemicals, medicines, sharps or gas canisters in
+                  household bins.
+                </li>
+                <li>Never burn them or pour them into drains — smoke and runoff are toxic.</li>
+                <li>Do not offer them on the exchange or attempt DIY reuse.</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                Dispose safely
+              </p>
+              <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                <li>
+                  Batteries: take to a battery collection point; tape the terminals of loose lithium
+                  batteries.
+                </li>
+                <li>Medicines: return to a pharmacy take-back scheme where available.</li>
+                <li>
+                  Paint, chemicals, sharps and gas canisters: use your local hazardous-waste
+                  collection point.
+                </li>
+                <li>
+                  Swollen, leaking or hot batteries are a fire risk — isolate them and seek
+                  specialist collection.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
       <p className="text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
 
       <Card>
