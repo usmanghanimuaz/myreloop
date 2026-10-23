@@ -176,14 +176,27 @@ function About() {
           {FIELDS.map((f) => {
             const empty = !ev[f.key].trim();
             return (
-              <div key={f.key} className={f.long ? "grid gap-1.5 md:col-span-2" : "grid gap-1.5"}>
-                <div className="flex items-center justify-between gap-2">
-                  <Label htmlFor={`ev-${f.key}`}>{f.label}</Label>
-                  {empty && (
-                    <span className="rounded-full bg-warning px-2 py-0.5 text-[11px] font-semibold text-warning-foreground">
-                      Awaiting validation
-                    </span>
-                  )}
+              <div
+                key={f.key}
+                className={
+                  f.long
+                    ? "grid gap-2 rounded-xl border bg-background p-4 md:col-span-2"
+                    : "grid gap-2 rounded-xl border bg-background p-4"
+                }
+              >
+                <div className="flex min-w-0 items-start justify-between gap-3">
+                  <Label htmlFor={`ev-${f.key}`} className="min-w-0 leading-snug">
+                    {f.label}
+                  </Label>
+                  <span
+                    className={
+                      empty
+                        ? "shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                        : "shrink-0 rounded-full bg-lime/50 px-2 py-0.5 text-[11px] font-medium text-lime-foreground"
+                    }
+                  >
+                    {empty ? "Awaiting validation" : "Recorded"}
+                  </span>
                 </div>
                 {f.long ? (
                   <Textarea

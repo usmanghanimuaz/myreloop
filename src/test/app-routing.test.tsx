@@ -15,6 +15,7 @@ describe("App routing", () => {
     "/actions",
     "/impact",
     "/about",
+    "/stories",
     "/blog",
     "/blog/reuse-before-disposal",
     "/blog/household-waste-prevention",

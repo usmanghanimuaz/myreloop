@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Clock, Target, Undo2 } from "lucide-react";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Camera, CheckCircle2, Clock, HandHeart, PackageOpen, Target, Undo2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { saved } from "@/components/reloop/CommunityNeeds";
 import { useI18n } from "@/lib/i18n";
@@ -51,12 +51,67 @@ export const Route = createFileRoute("/actions")({
   component: Actions,
 });
 
+type FeedKind = "offered" | "needed" | "exchange" | "evidence";
+const FEED_FILTERS: { id: FeedKind | "all"; label: string }[] = [
+  { id: "all", label: "All activity" },
+  { id: "offered", label: "Items offered" },
+  { id: "needed", label: "Needs posted" },
+  { id: "exchange", label: "Confirmed exchanges" },
+  { id: "evidence", label: "Evidence submitted" },
+];
+
 function Actions() {
   const state = useAppState();
   const { t } = useI18n();
   const [completing, setCompleting] = useState<CommunityAction | null>(null);
+  const [feedFilter, setFeedFilter] = useState<FeedKind | "all">("all");
   const open = state.actions.filter((a) => a.status === "open");
   const done = state.actions.filter((a) => a.status === "completed");
+
+  // Real records only, newest first. A confirmed exchange requires both participants.
+  const feed = useMemo(() => {
+    const events: {
+      kind: FeedKind;
+      id: string;
+      text: string;
+      area?: string | undefined;
+      at: string;
+    }[] = [];
+    for (const l of state.listings)
+      events.push({
+        kind: "offered",
+        id: `l-${l.id}`,
+        text: `${l.title} — ${l.quantity} ${l.unit} offered ${l.mode === "EXCHANGE" ? "for exchange" : "free"}`,
+        area: l.area,
+        at: l.createdAt,
+      });
+    for (const n of state.needs)
+      events.push({
+        kind: "needed",
+        id: `n-${n.id}`,
+        text: `${n.title ?? n.description} — ${n.quantity ?? 1} ${n.unit ?? "items"} needed`,
+        area: n.area,
+        at: n.createdAt,
+      });
+    for (const i of state.interests)
+      if (i.status === "completed")
+        events.push({
+          kind: "exchange",
+          id: `x-${i.id}`,
+          text: `Exchange completed and confirmed by both participants`,
+          at: i.createdAt,
+        });
+    for (const e of state.fieldEvidence)
+      events.push({
+        kind: "evidence",
+        id: `e-${e.id}`,
+        text: `Field evidence submitted: ${e.title}`,
+        area: e.area,
+        at: e.createdAt,
+      });
+    return events.sort((a, b) => b.at.localeCompare(a.at));
+  }, [state.listings, state.needs, state.interests, state.fieldEvidence]);
+  const visibleFeed = feed.filter((e) => feedFilter === "all" || e.kind === feedFilter);
 
   return (
     <div className="animate-rise">
@@ -89,6 +144,75 @@ function Actions() {
           <p className="mt-3 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
         </div>
       </section>
+      <section className="mb-10">
+        <h2 className="mb-3 text-xl font-semibold">Community feed</h2>
+        <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Filter activity">
+          {FEED_FILTERS.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setFeedFilter(f.id)}
+              aria-pressed={feedFilter === f.id}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-sm transition-colors",
+                feedFilter === f.id
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "bg-card hover:bg-accent",
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        {visibleFeed.length === 0 ? (
+          <div className="rounded-2xl border border-dashed p-8 text-center">
+            <p className="text-muted-foreground">
+              {feed.length === 0
+                ? "No community activity yet — the feed fills up as real items, needs and exchanges are recorded."
+                : "Nothing in this category yet."}
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <Button asChild variant="outline">
+                <Link to="/exchange">Offer an item</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/needs">Post a need</Link>
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <ol className="space-y-2">
+            {visibleFeed.map((e) => (
+              <li key={e.id} className="flex items-start gap-3 rounded-xl border bg-card px-4 py-3">
+                <span
+                  className={cn(
+                    "mt-0.5 grid size-8 shrink-0 place-items-center rounded-full",
+                    e.kind === "exchange"
+                      ? "bg-lime/60 text-lime-foreground"
+                      : "bg-secondary text-secondary-foreground",
+                  )}
+                >
+                  {e.kind === "offered" && <PackageOpen className="size-4" aria-hidden />}
+                  {e.kind === "needed" && <HandHeart className="size-4" aria-hidden />}
+                  {e.kind === "exchange" && <CheckCircle2 className="size-4" aria-hidden />}
+                  {e.kind === "evidence" && <Camera className="size-4" aria-hidden />}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm">{e.text}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {e.area && `${e.area} · `}
+                    {new Date(e.at).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
+
       <h2 className="mb-3 text-xl font-semibold">Open ({open.length})</h2>
       <div className="mb-10 grid gap-4 md:grid-cols-2">
         {open.map((a) => (

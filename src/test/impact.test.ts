@@ -49,7 +49,7 @@ describe("impact tracking", () => {
     expect(state.impact).toHaveLength(0);
     expect(state.activity).toHaveLength(0);
     const s = summarizeImpact(state);
-    expect(s.completed).toEqual({ kg: 0, items: 0, litres: 0 });
+    expect(s.completed).toEqual({ kg: 0, g: 0, lb: 0, items: 0, litres: 0 });
     expect(s.verifiedExchanges).toBe(0);
   });
 

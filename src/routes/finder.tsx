@@ -64,24 +64,57 @@ const ICONS: Record<RecommendationGroup["kind"], typeof Recycle> = {
   check: Info,
 };
 
+/** Common searchable items per category for the quick tool's item field. */
+const COMMON_ITEMS: Partial<Record<Category, string[]>> = {
+  cardboard: ["moving box", "shipping box", "egg carton", "tube"],
+  paper: ["office paper", "newspaper", "magazines", "shredded paper", "envelopes"],
+  plastic: ["water bottle", "food container", "plant pot", "bucket", "crate", "HDPE bottle"],
+  flexiblePlastic: ["shopping bag", "bubble wrap", "cling film", "crisp packet", "bread bag"],
+  glass: ["jam jar", "wine bottle", "drinking glass", "mirror"],
+  metal: ["food tin", "aluminium can", "aerosol can", "bike parts", "tools", "scrap metal"],
+  textiles: ["t-shirt", "jeans", "jacket", "shoes", "bed sheets", "towels", "curtains"],
+  furniture: ["sofa", "chair", "table", "wardrobe", "bed frame", "wooden shelf", "pallet"],
+  electronics: ["phone", "laptop", "charger", "keyboard", "headphones", "cables", "printer"],
+  batteries: ["AA batteries", "laptop battery", "phone battery", "power tool battery", "vape"],
+  lamps: ["LED bulb", "fluorescent tube", "CFL bulb", "desk lamp", "fairy lights"],
+  paint: ["leftover paint", "solvent", "varnish", "pesticide", "cleaning chemicals"],
+  medicines: ["expired medicines", "needles", "syringes", "inhalers"],
+  construction: ["bricks", "tiles", "timber offcuts", "plasterboard", "rubble", "sink"],
+  organic: ["vegetable peels", "fruit scraps", "coffee grounds", "garden waste", "eggshells"],
+  tyres: ["car tyre", "bicycle tyre", "rubber mat", "garden hose"],
+  appliances: ["fridge", "washing machine", "microwave", "kettle", "toaster", "vacuum cleaner"],
+  booksToys: ["novels", "textbooks", "board games", "soft toys", "puzzles", "comics"],
+  mixedPackaging: ["gift wrap", "padded envelope", "tetra pak", "coffee pod", "foil-lined bag"],
+  hygiene: ["nappies", "wipes", "sanitary products", "masks"],
+};
+
 function Finder() {
   const { userId, busy } = useStoreMeta();
   const [category, setCategory] = useState<Category>("cardboard");
+  const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<Unit>("items");
   const [condition, setCondition] = useState<Condition>("good");
-  const [outcome, setOutcome] = useState<IntendedOutcome>("reuse");
+  const [outcome, setOutcome] = useState<IntendedOutcome | "dispose">("reuse");
   const [hazardous, setHazardous] = useState(false);
   const [result, setResult] = useState<RecommendationGroup[] | null>(null);
   const [qtyError, setQtyError] = useState("");
   const [listOpen, setListOpen] = useState(false);
 
   const qty = Number(quantity);
+  const dispose = outcome === "dispose";
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!Number.isFinite(qty) || qty <= 0) return setQtyError("Enter a quantity greater than 0");
     setQtyError("");
-    setResult(getRecommendations({ category, condition, outcome, hazardous }));
+    setResult(
+      getRecommendations({
+        category,
+        condition,
+        outcome: dispose ? "recycle" : outcome,
+        hazardous: hazardous || dispose,
+      }),
+    );
   }
   const unsafe = result?.[0]?.kind === "safety" && result.length === 1;
 
@@ -111,6 +144,22 @@ function Finder() {
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="f-item">Item (search or type your own)</Label>
+              <Input
+                id="f-item"
+                list="f-item-suggestions"
+                value={itemName}
+                maxLength={60}
+                placeholder={`e.g. ${(COMMON_ITEMS[category] ?? ["item"])[0]}`}
+                onChange={(e) => setItemName(e.target.value)}
+              />
+              <datalist id="f-item-suggestions">
+                {(COMMON_ITEMS[category] ?? []).map((i) => (
+                  <option key={i} value={i} />
+                ))}
+              </datalist>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-1.5">
@@ -184,6 +233,24 @@ function Finder() {
                     {OUTCOME_LABEL[o]}
                   </label>
                 ))}
+                <label
+                  className={cn(
+                    "cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+                    outcome === "dispose"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "bg-card hover:bg-accent",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="outcome"
+                    value="dispose"
+                    checked={outcome === "dispose"}
+                    onChange={() => setOutcome("dispose")}
+                    className="sr-only"
+                  />
+                  Safe disposal
+                </label>
               </div>
             </fieldset>
             <label className="flex items-start gap-2 text-sm">
@@ -247,7 +314,8 @@ function Finder() {
               {!unsafe && (
                 <Card className="flex flex-wrap items-center gap-3">
                   <p className="mr-auto text-sm text-muted-foreground">
-                    Next step for {qty} {unit} of {CATEGORY_LABEL[category].toLowerCase()}:
+                    Next step for {qty} {unit} of{" "}
+                    {itemName.trim() || CATEGORY_LABEL[category].toLowerCase()}:
                   </p>
                   <Button variant="outline" onClick={() => setListOpen(true)}>
                     List on Reuse Exchange
@@ -263,7 +331,7 @@ function Finder() {
                               quantity: qty,
                               unit,
                               diversion: outcome === "recycle" ? "recycle" : "reuse",
-                              note: `${OUTCOME_LABEL[outcome]} ${qty} ${unit} ${CATEGORY_LABEL[category].toLowerCase()}`,
+                              note: `${dispose ? "Safe disposal" : OUTCOME_LABEL[outcome]} ${qty} ${unit} ${itemName.trim() || CATEGORY_LABEL[category].toLowerCase()}`,
                             }),
                           "Plan saved",
                         ))
@@ -330,14 +398,42 @@ const GUIDE_LINKS = [
     url: "https://wrap.org.uk",
     note: "Practical campaigns on food waste, textiles and recycling.",
   },
+  {
+    title: "Health risks and opportunities in the global waste crisis",
+    org: "World Health Organization (Dec 2025)",
+    url: "https://www.who.int/news/item/16-12-2025-who-highlights-health-risks-and-opportunities-in-the-global-waste-crisis",
+    note: "How mismanaged waste creates health risks for people and communities.",
+  },
+  {
+    title: "Used lithium-ion batteries",
+    org: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/recycle/used-lithium-ion-batteries",
+    note: "Why lithium batteries must never go in household bins, and where to take them.",
+  },
+  {
+    title: "Solid waste management",
+    org: "UN-Habitat",
+    url: "https://unhabitat.org/topic/solid-waste-management",
+    note: "How cities can build safe, inclusive waste systems.",
+  },
+  {
+    title: "Beat Waste Pollution",
+    org: "UN Environment Programme",
+    url: "https://www.unep.org/beatpollution/waste",
+    note: "UNEP's hub on preventing waste pollution worldwide.",
+  },
 ] as const;
 
 const CATEGORY_IMAGE: Partial<Record<Category, (typeof IMAGES)[keyof typeof IMAGES]>> = {
   cardboard: IMAGES.cardboard,
   paper: IMAGES.paper,
   plastic: IMAGES.reusableBottle,
+  flexiblePlastic: IMAGES.crushedBottles,
   textiles: IMAGES.textiles,
+  furniture: IMAGES.furniture,
   electronics: IMAGES.electronics,
+  appliances: IMAGES.electronics,
+  medicines: IMAGES.hazardousMedicines,
   organic: IMAGES.organic,
   other: IMAGES.woodFurniture,
 };

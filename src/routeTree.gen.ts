@@ -28,6 +28,7 @@ import { Route as NeedsRouteImport } from './routes/needs'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SafetyRouteImport } from './routes/safety'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
@@ -126,6 +127,11 @@ const SafetyRoute = SafetyRouteImport.update({
   path: '/safety',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/safety': typeof SafetyRoute
+  '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/safety': typeof SafetyRoute
+  '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/safety': typeof SafetyRoute
+  '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/report'
     | '/safety'
+    | '/stories'
     | '/terms'
     | '/blog/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/report'
     | '/safety'
+    | '/stories'
     | '/terms'
     | '/blog/$slug'
   id:
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/report'
     | '/safety'
+    | '/stories'
     | '/terms'
     | '/blog/$slug'
   fileRoutesById: FileRoutesById
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
   SafetyRoute: typeof SafetyRoute
+  StoriesRoute: typeof StoriesRoute
   TermsRoute: typeof TermsRoute
 }
 
@@ -437,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -484,6 +504,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
   SafetyRoute: SafetyRoute,
+  StoriesRoute: StoriesRoute,
   TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport

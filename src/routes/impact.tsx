@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
+import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { BarChart3, Check, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -61,6 +62,53 @@ function Impact() {
         title="Impact tracker"
         description="Confirmed handovers require both participants. Personal actions and plans remain self-reported. Units are never added together; no CO₂ or landfill estimates are shown."
       />
+
+      <section className="mb-8 grid gap-4 md:grid-cols-2">
+        <figure className="overflow-hidden rounded-2xl border bg-card shadow-card">
+          <img
+            src={IMAGES.sortingBins.src}
+            alt={IMAGES.sortingBins.alt}
+            loading="lazy"
+            className="h-44 w-full object-cover"
+          />
+          <figcaption className="px-4 py-2 text-xs text-muted-foreground">
+            {UNSPLASH_CREDIT.label}
+          </figcaption>
+        </figure>
+        <figure className="overflow-hidden rounded-2xl border bg-card shadow-card">
+          <img
+            src={IMAGES.recyclingBins.src}
+            alt={IMAGES.recyclingBins.alt}
+            loading="lazy"
+            className="h-44 w-full object-cover"
+          />
+          <figcaption className="px-4 py-2 text-xs text-muted-foreground">
+            {UNSPLASH_CREDIT.label}
+          </figcaption>
+        </figure>
+      </section>
+
+      <Card className="mb-6">
+        <h2 className="text-xl font-semibold">How impact is counted</h2>
+        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
+          <li>
+            <strong>Verified reuse</strong> counts only exchanges where both participants confirmed
+            the handover. Interest or offers alone never count.
+          </li>
+          <li>
+            <strong>Self-reported records</strong> (personal actions and plans you marked done) are
+            shown separately and are not independently verified.
+          </li>
+          <li>
+            Quantities are summed only within the same unit — kilograms are never added to items or
+            litres.
+          </li>
+          <li>
+            These are activity counts, not environmental outcome estimates: ReLoop shows no CO₂,
+            landfill or pollution-avoided figures, because we cannot verify them.
+          </li>
+        </ul>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-4">
         <Stat label="Two-party confirmed reuse" value={formatTotals(s.verified)} />

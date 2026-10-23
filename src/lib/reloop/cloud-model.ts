@@ -2,6 +2,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { z } from "zod";
 import {
   AppStateSchema,
+  FieldEvidenceInputSchema,
   ListingInputSchema,
   NeedInputSchema,
   looksLikeContactDetails,
@@ -16,6 +17,7 @@ export const kinds = [
   "needs",
   "activity",
   "evidence",
+  "fieldEvidence",
 ] as const;
 export type RecordKind = (typeof kinds)[number];
 export interface CloudRecord {
@@ -88,6 +90,8 @@ export const CommandSchema = z.discriminatedUnion("type", [
       howReloopHelps: safeText(2000),
     }),
   }),
+  z.object({ type: z.literal("submitFieldEvidence"), input: FieldEvidenceInputSchema }),
+  z.object({ type: z.literal("deleteFieldEvidence"), id: z.string() }),
   z.object({ type: z.literal("resetDemo") }),
 ]);
 export type Command = z.infer<typeof CommandSchema>;
@@ -105,6 +109,7 @@ export function recordsToState(records: CloudRecord[]): AppState {
       limitations: "",
       howReloopHelps: "",
     },
+    fieldEvidence: [],
   };
   for (const kind of kinds) {
     const rows = records.filter((r) => r.kind === kind);

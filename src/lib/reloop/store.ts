@@ -205,5 +205,8 @@ export const actions = {
   addNeed: (category: Category, description: string) =>
     send({ type: "addNeed", category, description }),
   saveEvidence: (evidence: Evidence) => send({ type: "saveEvidence", evidence }),
+  submitFieldEvidence: (input: import("./schema").FieldEvidenceInput) =>
+    send({ type: "submitFieldEvidence", input }),
+  deleteFieldEvidence: (id: string) => send({ type: "deleteFieldEvidence", id }),
   resetDemo: () => send({ type: "resetDemo" }),
 };

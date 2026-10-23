@@ -9,7 +9,8 @@ import {
 } from "./types";
 
 export type UnitTotals = Record<Unit, number>;
-export const emptyTotals = (): UnitTotals => ({ kg: 0, items: 0, litres: 0 });
+export const emptyTotals = (): UnitTotals =>
+  Object.fromEntries(UNITS.map((u) => [u, 0])) as UnitTotals;
 
 export interface ImpactSummary {
   /** Completed (user-recorded) diversion, per unit — never summed across units */
