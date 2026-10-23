@@ -9,6 +9,7 @@ import {
   Menu,
   Newspaper,
   PackageOpen,
+  ShieldCheck,
   UserRound,
   Users,
 } from "lucide-react";
@@ -18,6 +19,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { useI18n } from "@/lib/i18n";
 import { hydrateStore, useStoreMeta } from "@/lib/reloop/store";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import { AccountButton } from "./AccountButton";
 import { LogoMark } from "./LogoMark";
 import { Footer, LanguageSwitcher } from "./Footer";
@@ -53,9 +55,27 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { t } = useI18n();
   const { userId } = useStoreMeta();
-  const items = userId
-    ? [...NAV, { to: "/account", key: "nav.account", icon: UserRound } as const]
-    : NAV;
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (!userId) return setIsAdmin(false);
+    let live = true;
+    // Display only; /admin data is re-checked server-side and in the database.
+    void supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("role", "admin")
+      .maybeSingle()
+      .then(({ data }) => live && setIsAdmin(!!data));
+    return () => {
+      live = false;
+    };
+  }, [userId]);
+  const items = [
+    ...NAV,
+    ...(userId ? [{ to: "/account", key: "nav.account", icon: UserRound } as const] : []),
+    ...(isAdmin ? [{ to: "/admin", key: "nav.admin", icon: ShieldCheck } as const] : []),
+  ];
   return (
     <nav aria-label={t("nav.main")} className="flex flex-col gap-1">
       {items.map(({ to, key, icon: Icon }) => {
