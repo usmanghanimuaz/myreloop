@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { registerPushToken, unregisterPushTokens } from "@/lib/reloop/push.functions";
 
 const MESSAGES: Record<string, string> = {
-  "open-in-new-tab": "Open ReLoop in its own browser tab (or the published app) to allow notifications.",
+  "open-in-new-tab":
+    "Open ReLoop in its own browser tab (or the published app) to allow notifications.",
   denied: "Notifications are blocked. Allow them for this site in your browser's site settings.",
   "not-configured": "Notifications aren't set up yet.",
   unsupported: "This browser doesn't support web notifications.",
@@ -54,8 +55,12 @@ export function PushToggle() {
         request. Only the event is sent — no contact details.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
-        <Button onClick={on} disabled={busy}>Turn on for this device</Button>
-        <Button variant="outline" onClick={off} disabled={busy}>Turn off</Button>
+        <Button onClick={on} disabled={busy}>
+          Turn on for this device
+        </Button>
+        <Button variant="outline" onClick={off} disabled={busy}>
+          Turn off
+        </Button>
       </div>
     </section>
   );
