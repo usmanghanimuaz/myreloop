@@ -13,7 +13,7 @@
 
 # Environmental-first redesign (23 Oct 2026 brief)
 
-- [x] i18n: English-first + Urdu, Hindi, Arabic, Spanish, French; RTL for ur/ar; persisted choice (verified: dir=rtl, Urdu nav, survives reload).
+- [x] i18n: English-first + Urdu, Hindi, Arabic, Spanish, French, Chinese; RTL for ur/ar; persisted choice; forms/needs/requests/empty states translated; English-fallback note on long-form pages (verified in browser: ur RTL + translated headings, zh LTR, fallback note on /terms).
 - [x] Homepage: environmental problem first, mission, CTAs, 4-step How ReLoop Works; no fake stats.
 - [x] New routes: /needs, /how-it-works, /about-us, /mission, /contact, /report, /faq, /blog + 3 articles, /terms, /privacy, /cookies, /community-guidelines, /safety, /disclaimer; all 23 routes HTTP 200 verified.
 - [x] Footer with Explore/Learn/About/Policies (20 real links).
