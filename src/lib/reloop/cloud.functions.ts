@@ -89,6 +89,11 @@ export const executeCommand = createServerFn({ method: "POST" })
         decision: command.decision,
       });
       if (error) throw new Error("Could not update handover. Check its status and try again.");
+      const other = request.owner_id === context.userId ? target.owner_id : request.owner_id;
+      if (other) {
+        const { notifyUser } = await import("./push.server");
+        await notifyUser(other, "ReLoop handover update", "A request you're part of was updated.");
+      }
       return { listing: undefined };
     }
     const initial = recordsToState(rows);
@@ -317,6 +322,22 @@ export const executeCommand = createServerFn({ method: "POST" })
     });
     if (error)
       throw new Error("Couldn't save. The record may have changed; refresh and try again.");
+    if (command.type === "sendInterest" || command.type === "sendOffer") {
+      const kind = command.type === "sendInterest" ? "listings" : "needs";
+      const ownerId = rows.find(
+        (r) => r.kind === kind && (r.data as { id?: string }).id === command.id,
+      )?.owner_id;
+      if (ownerId && ownerId !== context.userId) {
+        const { notifyUser } = await import("./push.server");
+        await notifyUser(
+          ownerId,
+          command.type === "sendInterest" ? "New request on ReLoop" : "New offer on ReLoop",
+          command.type === "sendInterest"
+            ? "Someone is interested in your item."
+            : "Someone offered an item for your need.",
+        );
+      }
+    }
     const listing =
       command.type === "createListing"
         ? engine.getState().listings.find((l) => !initial.listings.some((x) => x.id === l.id))
