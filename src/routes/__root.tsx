@@ -109,6 +109,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Environmental waste-prevention and community reuse platform: list usable items for free or exchange, learn responsible recycling and safe disposal.",
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "ReLoop",
+          description:
+            "An independent environmental waste-prevention initiative helping communities reuse usable items instead of throwing them away.",
+        }),
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

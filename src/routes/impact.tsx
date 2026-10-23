@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useI18n } from "@/lib/i18n";
 import { BarChart3, Check, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -43,6 +44,7 @@ export const Route = createFileRoute("/impact")({
 });
 
 function Impact() {
+  const { t } = useI18n();
   const state = useAppState();
   const s = useMemo(() => summarizeImpact(state), [state]);
   const ins = useMemo(() => computeInsights(state), [state]);
@@ -126,7 +128,7 @@ function Impact() {
       <Card className="mt-6">
         <h2 className="mb-4 text-xl font-semibold">Activity log</h2>
         {log.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No records yet.</p>
+          <p className="text-sm text-muted-foreground">{t("empty.impact")}</p>
         ) : (
           <ul className="divide-y">
             {log.map((e) => (
