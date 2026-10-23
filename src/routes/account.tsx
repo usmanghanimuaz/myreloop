@@ -227,10 +227,10 @@ function Dashboard({ userId }: { userId: string }) {
             Your listings
           </h2>
           {myListings.length === 0 ? (
-            <EmptyState
-              title="No listings yet"
-              description="Before you throw something usable away, list it for FREE or EXCHANGE."
-            >
+            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title="No listings yet">
+              <p className="mb-3">
+                Before you throw something usable away, list it for FREE or EXCHANGE.
+              </p>
               <Button asChild size="sm">
                 <Link to="/exchange">Share an item</Link>
               </Button>
@@ -254,7 +254,8 @@ function Dashboard({ userId }: { userId: string }) {
             Your needs
           </h2>
           {myNeeds.length === 0 ? (
-            <EmptyState title="No needs posted" description="Ask for an item before buying new.">
+            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title="No needs posted">
+              <p className="mb-3">Ask for an item before buying new.</p>
               <Button asChild size="sm">
                 <Link to="/needs">Post a need</Link>
               </Button>

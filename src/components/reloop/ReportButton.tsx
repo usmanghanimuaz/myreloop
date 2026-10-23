@@ -39,7 +39,10 @@ export function ReportButton({
       className="mt-3 grid gap-2 rounded-xl border bg-background p-3 text-sm"
       onSubmit={async (e) => {
         e.preventDefault();
-        if (details.length > 1000) return toast.error("Keep details under 1000 characters.");
+        if (details.length > 1000) {
+          toast.error("Keep details under 1000 characters.");
+          return;
+        }
         setBusy(true);
         try {
           await send({ data: { targetKind, targetId, reason, details } });
