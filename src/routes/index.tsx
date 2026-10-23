@@ -122,7 +122,9 @@ function Home() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">
             {t("home.eyebrow")}
           </p>
-          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">{t("home.heroTitle")}</h1>
+          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
+            {t("home.heroTitle")}
+          </h1>
           <p className="mt-4 text-lg opacity-90">{t("home.heroText")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild variant="lime" size="lg">
@@ -151,16 +153,11 @@ function Home() {
         <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.howText")}</p>
         <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {STEP_KEYS.map((n) => (
-            <li
-              key={n}
-              className="rounded-2xl border bg-card p-6 shadow-card"
-            >
+            <li key={n} className="rounded-2xl border bg-card p-6 shadow-card">
               <span className="mb-3 grid size-10 place-items-center rounded-full bg-primary font-display text-lg font-semibold text-primary-foreground">
                 {n}
               </span>
-              <h3 className="text-lg font-semibold">
-                {t(`home.step${n}Title` as const)}
-              </h3>
+              <h3 className="text-lg font-semibold">{t(`home.step${n}Title` as const)}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 {t(`home.step${n}Text` as const)}
               </p>
@@ -261,8 +258,7 @@ function Home() {
             <p className="text-sm text-muted-foreground">Available items right now</p>
             <p className="mt-2 font-display text-3xl font-semibold">{activeListings.length}</p>
             <p className="mt-2 text-xs text-muted-foreground">
-              Yours:{" "}
-              <strong>{activeListings.filter((l) => l.ownerId === userId).length}</strong>
+              Yours: <strong>{activeListings.filter((l) => l.ownerId === userId).length}</strong>
             </p>
           </Card>
           <Card>
@@ -361,13 +357,13 @@ function Home() {
                   .filter((e) => e.origin === "user")
                   .slice(0, 7)
                   .map((e) => (
-                  <li key={e.id} className="flex items-start justify-between gap-3 py-3 text-sm">
-                    <span>{e.message}</span>
-                    <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
-                      {formatDate(e.createdAt)} <OriginBadge origin={e.origin} />
-                    </span>
-                  </li>
-                ))}
+                    <li key={e.id} className="flex items-start justify-between gap-3 py-3 text-sm">
+                      <span>{e.message}</span>
+                      <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+                        {formatDate(e.createdAt)} <OriginBadge origin={e.origin} />
+                      </span>
+                    </li>
+                  ))}
               </ul>
             )}
           </Card>

@@ -32,9 +32,7 @@ export function ContactForm({ kind }: { kind: "contact" | "report" }) {
     }
     setErrors({});
     setStatus("sending");
-    const { error } = await supabase
-      .from("contact_messages")
-      .insert({ kind, ...parsed.data });
+    const { error } = await supabase.from("contact_messages").insert({ kind, ...parsed.data });
     setStatus(error ? "error" : "sent");
   }
 

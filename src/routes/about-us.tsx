@@ -52,10 +52,10 @@ function AboutUs() {
           <Leaf className="mb-2 size-6 text-primary" aria-hidden />
           <h2 className="text-xl font-semibold">The problem we care about</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Usable items are often thrown away simply because their owners no longer need them.
-            That wastes the item's remaining useful life and adds to the waste problem. Poorly
-            managed waste can pollute land, water and air, attract pests, and contribute to
-            contamination and health risks for people and animals.
+            Usable items are often thrown away simply because their owners no longer need them. That
+            wastes the item's remaining useful life and adds to the waste problem. Poorly managed
+            waste can pollute land, water and air, attract pests, and contribute to contamination
+            and health risks for people and animals.
           </p>
         </Card>
         <Card>
@@ -63,8 +63,8 @@ function AboutUs() {
           <h2 className="text-xl font-semibold">What ReLoop does</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             ReLoop encourages people to think before throwing usable items away: list them, offer
-            them FREE or by EXCHANGE, let someone who needs them get in touch, and extend the
-            item's useful life. When reuse isn't possible, ReLoop points to credible recycling and
+            them FREE or by EXCHANGE, let someone who needs them get in touch, and extend the item's
+            useful life. When reuse isn't possible, ReLoop points to credible recycling and
             safe-disposal guidance. Community assistance is a direct and welcome outcome — but
             environmental protection is the mission.
           </p>

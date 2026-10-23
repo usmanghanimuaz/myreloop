@@ -17,8 +17,7 @@ export const Route = createFileRoute("/blog")({
       { property: "og:title", content: "Learning Blog — ReLoop" },
       {
         property: "og:description",
-        content:
-          "Practical, source-linked environmental education from the ReLoop project.",
+        content: "Practical, source-linked environmental education from the ReLoop project.",
       },
     ],
     links: [{ rel: "canonical", href: "/blog" }],

@@ -23,8 +23,8 @@ function Cookies() {
     <PolicyPage eyebrow="Policies" title="Cookie Policy" updated="23 October 2026">
       <PolicySection title="The short version">
         <p>
-          ReLoop does not use advertising, analytics or tracking cookies. There is no cookie
-          banner because there is nothing optional to consent to.
+          ReLoop does not use advertising, analytics or tracking cookies. There is no cookie banner
+          because there is nothing optional to consent to.
         </p>
       </PolicySection>
       <PolicySection title="What is stored in your browser">
@@ -36,9 +36,9 @@ function Cookies() {
       </PolicySection>
       <PolicySection title="Third-party content">
         <p>
-          Illustrative photos are loaded from Unsplash's image servers, and fonts from Google
-          Fonts. Those services may see your request for the file (like any image on the web) but
-          ReLoop does not send them your account data.
+          Illustrative photos are loaded from Unsplash's image servers, and fonts from Google Fonts.
+          Those services may see your request for the file (like any image on the web) but ReLoop
+          does not send them your account data.
         </p>
       </PolicySection>
       <PolicySection title="If this changes">

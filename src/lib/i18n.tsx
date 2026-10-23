@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 /**
  * ReLoop interface translations.
@@ -480,8 +474,10 @@ const fr: Dict = {
   "home.communityTitle": "Ce qui se passe dans la communauté",
   "home.communityText":
     "Des enregistrements réels de cette communauté ReLoop. L'impact ne compte que les remises confirmées par les deux participants.",
-  "home.noListings": "Rien n'est encore proposé — soyez la première personne à transmettre quelque chose.",
-  "home.noNeeds": "Aucun besoin ouvert pour le moment — publiez-en un si vous cherchez quelque chose.",
+  "home.noListings":
+    "Rien n'est encore proposé — soyez la première personne à transmettre quelque chose.",
+  "home.noNeeds":
+    "Aucun besoin ouvert pour le moment — publiez-en un si vous cherchez quelque chose.",
   "home.noActivity": "Aucune activité enregistrée pour le moment.",
   "footer.explore": "Explorer",
   "footer.learn": "Apprendre",

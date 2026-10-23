@@ -47,9 +47,8 @@ function Mission() {
         <div className="relative max-w-2xl p-8 text-sidebar-foreground md:p-12">
           <h2 className="text-2xl font-semibold md:text-3xl">What we believe</h2>
           <p className="mt-3 opacity-90">
-            Every usable item thrown away is a double loss: its remaining useful life is wasted,
-            and the waste problem grows. The cheapest, cleanest waste is the waste that never
-            happens.
+            Every usable item thrown away is a double loss: its remaining useful life is wasted, and
+            the waste problem grows. The cheapest, cleanest waste is the waste that never happens.
           </p>
           <p className="mt-6 text-xs opacity-60">{UNSPLASH_CREDIT.label}</p>
         </div>
@@ -66,15 +65,15 @@ function Mission() {
         <Card>
           <h2 className="text-lg font-semibold">Guide</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            When reuse isn't possible, provide credible repair, recycling and safe-disposal
-            guidance — including hazardous items like batteries and electronics.
+            When reuse isn't possible, provide credible repair, recycling and safe-disposal guidance
+            — including hazardous items like batteries and electronics.
           </p>
         </Card>
         <Card>
           <h2 className="text-lg font-semibold">Be honest</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            No invented statistics, no exaggerated claims. Impact counts only what both
-            participants confirm, and external research is always cited and kept separate.
+            No invented statistics, no exaggerated claims. Impact counts only what both participants
+            confirm, and external research is always cited and kept separate.
           </p>
         </Card>
       </div>

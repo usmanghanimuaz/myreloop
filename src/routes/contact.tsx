@@ -29,8 +29,8 @@ function Contact() {
       />
       <Notice className="mb-6">
         ReLoop is a small independent project and does not yet have an official contact email or
-        postal address. This form is the way to reach us; when an official address exists it will
-        be published here.
+        postal address. This form is the way to reach us; when an official address exists it will be
+        published here.
       </Notice>
       <div className="max-w-xl">
         <ContactForm kind="contact" />

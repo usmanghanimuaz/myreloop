@@ -481,8 +481,7 @@ function ListingDetail({
               </form>
             ) : (
               <Notice>
-                This listing is not open for new requests — it may be reserved, completed or
-                closed.
+                This listing is not open for new requests — it may be reserved, completed or closed.
               </Notice>
             )}
           </>

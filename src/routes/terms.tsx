@@ -36,10 +36,9 @@ function Terms() {
       </PolicySection>
       <PolicySection title="Your responsibilities">
         <p>
-          Describe items honestly, including condition. Do not list hazardous waste, illegal
-          items, or anything you do not have the right to give away. Do not include personal
-          contact details in public listing text — use the handover notes after a request is
-          accepted.
+          Describe items honestly, including condition. Do not list hazardous waste, illegal items,
+          or anything you do not have the right to give away. Do not include personal contact
+          details in public listing text — use the handover notes after a request is accepted.
         </p>
       </PolicySection>
       <PolicySection title="Handovers">

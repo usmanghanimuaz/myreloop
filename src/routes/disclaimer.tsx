@@ -24,8 +24,8 @@ function Disclaimer() {
       <PolicySection title="General guidance, not professional advice">
         <p>
           Material guidance and blog articles are general educational information. Waste and
-          recycling rules differ between areas — always follow your local collection rules and
-          local authorities.
+          recycling rules differ between areas — always follow your local collection rules and local
+          authorities.
         </p>
       </PolicySection>
       <PolicySection title="External research">

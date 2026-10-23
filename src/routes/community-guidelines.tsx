@@ -35,14 +35,14 @@ function Guidelines() {
       </PolicySection>
       <PolicySection title="Keep it clean and safe">
         <p>
-          Offer items in a condition you would be comfortable receiving. Never list hazardous
-          waste, medicines, weapons, or illegal goods.
+          Offer items in a condition you would be comfortable receiving. Never list hazardous waste,
+          medicines, weapons, or illegal goods.
         </p>
       </PolicySection>
       <PolicySection title="Protect privacy">
         <p>
-          Do not post other people's names, addresses or contact details. Keep handover
-          arrangements in the private request notes.
+          Do not post other people's names, addresses or contact details. Keep handover arrangements
+          in the private request notes.
         </p>
       </PolicySection>
       <PolicySection title="Honest records">

@@ -38,15 +38,14 @@ function Privacy() {
       <PolicySection title="What we do not do">
         <p>
           We do not run advertising or analytics trackers, we do not sell data, and we do not
-          collect precise location. Listings use a general area description that you write
-          yourself.
+          collect precise location. Listings use a general area description that you write yourself.
         </p>
       </PolicySection>
       <PolicySection title="Local browser storage">
         <p>
           Your chosen interface language is saved in your browser's local storage so it persists
-          between visits. Sign-in session data is also kept in browser storage by the
-          authentication service. See the Cookie Policy for details.
+          between visits. Sign-in session data is also kept in browser storage by the authentication
+          service. See the Cookie Policy for details.
         </p>
       </PolicySection>
       <PolicySection title="Your choices">

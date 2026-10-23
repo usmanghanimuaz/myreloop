@@ -118,7 +118,9 @@ function HowItWorks() {
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
           <li>No selling and no payments — items are offered FREE or by EXCHANGE only.</li>
           <li>No invented impact figures — only handovers confirmed by both participants count.</li>
-          <li>No replacement for local waste services — always follow your local collection rules.</li>
+          <li>
+            No replacement for local waste services — always follow your local collection rules.
+          </li>
         </ul>
       </Card>
     </div>

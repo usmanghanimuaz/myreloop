@@ -16,8 +16,7 @@ export const Route = createFileRoute("/needs")({
       { property: "og:title", content: "Community Needs — I Need — ReLoop" },
       {
         property: "og:description",
-        content:
-          "Reuse before buying new: post a need and let someone's surplus become your find.",
+        content: "Reuse before buying new: post a need and let someone's surplus become your find.",
       },
     ],
     links: [{ rel: "canonical", href: "/needs" }],

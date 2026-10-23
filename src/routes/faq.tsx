@@ -70,7 +70,11 @@ function Faq() {
         ))}
       </div>
       <p className="mt-6 text-sm text-muted-foreground">
-        Still unsure? <Link to="/contact" className="font-medium text-primary underline underline-offset-4">Contact us</Link>.
+        Still unsure?{" "}
+        <Link to="/contact" className="font-medium text-primary underline underline-offset-4">
+          Contact us
+        </Link>
+        .
       </p>
     </div>
   );
