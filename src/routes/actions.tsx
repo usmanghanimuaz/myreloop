@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, OriginBadge, PageHeader, formatDate } from "@/components/reloop/shared";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
+import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import {
   CATEGORIES,
   CATEGORY_LABEL,
@@ -32,16 +33,16 @@ export const Route = createFileRoute("/actions")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Community Actions — ReLoop" },
+      { title: "Community Activity & Exchange — ReLoop" },
       {
         name: "description",
         content:
-          "Cleanups, packaging collections, textile drives and repair events you can run and record.",
+          "Real community actions and exchange records with clear open, accepted and completed states — plus safe, respectful local handover guidance.",
       },
-      { property: "og:title", content: "Community Actions — ReLoop" },
+      { property: "og:title", content: "Community Activity & Exchange — ReLoop" },
       {
         property: "og:description",
-        content: "Practical sustainability actions for your neighbourhood.",
+        content: "Real activity, safe handovers, and only confirmed completions count.",
       },
     ],
   }),
@@ -57,10 +58,32 @@ function Actions() {
   return (
     <div className="animate-rise">
       <PageHeader
-        eyebrow="Community Action Board"
-        title="Community actions"
-        description="Pick an action, run it, then record it. Nothing is counted as completed unless you record it here."
+        eyebrow="Community Activity & Exchange"
+        title="Community activity & exchange"
+        description="Real actions and exchange records only. States are honest: open means not yet done, completed means someone recorded it. Confirmed exchanges need both participants. Nothing here is invented."
       />
+
+      <section className="mb-10 grid overflow-hidden rounded-2xl border bg-card shadow-card md:grid-cols-3">
+        <img
+          src={IMAGES.volunteer.src}
+          alt={IMAGES.volunteer.alt}
+          loading="lazy"
+          className="h-44 w-full object-cover md:h-full"
+        />
+        <div className="p-6 md:col-span-2">
+          <h2 className="text-xl font-semibold">Safe, respectful local handovers</h2>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+            <li>Meet in a public, well-lit place during the day, and tell someone where you're going.</li>
+            <li>Check the item matches its description before taking it home.</li>
+            <li>Be on time, be polite, and don't pressure anyone into an exchange.</li>
+            <li>
+              Only mark an exchange completed after it really happened — both sides confirm, and
+              only confirmed completions count toward verified impact.
+            </li>
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
+        </div>
+      </section>
       <h2 className="mb-3 text-xl font-semibold">Open ({open.length})</h2>
       <div className="mb-10 grid gap-4 md:grid-cols-2">
         {open.map((a) => (
