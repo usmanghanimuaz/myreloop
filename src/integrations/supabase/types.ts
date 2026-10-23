@@ -44,6 +44,30 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          general_area: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          general_area?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          general_area?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reloop_records: {
         Row: {
           data: Json
@@ -71,11 +95,87 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          created_at: string
+          details: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          status: string
+          target_id: string
+          target_kind: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string
+          id?: string
+          reason: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          status?: string
+          target_id: string
+          target_kind: string
+        }
+        Update: {
+          created_at?: string
+          details?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          status?: string
+          target_id?: string
+          target_kind?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      reloop_admin_pending_evidence: {
+        Args: never
+        Returns: {
+          data: Json
+          key: string
+        }[]
+      }
+      reloop_admin_review_report: {
+        Args: { decision: string; report_id: string }
+        Returns: undefined
+      }
+      reloop_admin_validate_evidence: {
+        Args: { approve: boolean; evidence_key: string }
+        Returns: undefined
+      }
       reloop_apply_patch: {
         Args: { removals: Json; upserts: Json }
         Returns: undefined
@@ -94,7 +194,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -221,6 +321,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator"],
+    },
   },
 } as const
