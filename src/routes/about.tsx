@@ -30,6 +30,7 @@ export const Route = createFileRoute("/about")({
           "Published environmental research kept separate from personal observations and ReLoop impact.",
       },
     ],
+    links: [{ rel: "canonical", href: "/about" }],
   }),
   component: About,
 });

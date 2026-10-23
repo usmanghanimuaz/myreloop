@@ -53,18 +53,19 @@ export const Route = createFileRoute("/exchange")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Available Items & Community Needs — ReLoop" },
+      { title: "Available Items — I Have — ReLoop" },
       {
         name: "description",
         content:
-          "Browse, list and request reusable materials from neighbours — free or in exchange, never for sale.",
+          "Browse, list and request reusable items from neighbours — free or in exchange, never for sale. Every item passed on is one less thing thrown away.",
       },
-      { property: "og:title", content: "Available Items & Community Needs — ReLoop" },
+      { property: "og:title", content: "Available Items — I Have — ReLoop" },
       {
         property: "og:description",
-        content: "A local board for passing on reusable materials, free or in exchange.",
+        content: "A local board for passing on usable items, free or in exchange.",
       },
     ],
+    links: [{ rel: "canonical", href: "/exchange" }],
   }),
   component: Exchange,
 });

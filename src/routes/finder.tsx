@@ -50,6 +50,7 @@ export const Route = createFileRoute("/finder")({
         content: "Practical reuse, repair and recycling guidance for everyday materials.",
       },
     ],
+    links: [{ rel: "canonical", href: "/finder" }],
   }),
   component: Finder,
 });

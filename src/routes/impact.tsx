@@ -37,6 +37,7 @@ export const Route = createFileRoute("/impact")({
         content: "Only what you record counts. No invented CO2 figures.",
       },
     ],
+    links: [{ rel: "canonical", href: "/impact" }],
   }),
   component: Impact,
 });
