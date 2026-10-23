@@ -3,8 +3,8 @@
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/firebase_messaging";
 
 export async function notifyUser(userId: string, title: string, body: string, path = "/account") {
-  const lovableKey = process.env.LOVABLE_API_KEY;
-  const connKey = process.env.FIREBASE_MESSAGING_API_KEY;
+  const lovableKey = process.env["LOVABLE_API_KEY"];
+  const connKey = process.env["FIREBASE_MESSAGING_API_KEY"];
   if (!lovableKey || !connKey) return;
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
