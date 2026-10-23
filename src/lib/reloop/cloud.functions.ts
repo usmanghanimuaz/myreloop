@@ -54,6 +54,22 @@ export const executeCommand = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => CommandSchema.parse(input))
   .handler(async ({ data: command, context }) => {
+    const [{ data: restriction }, { data: profile }] = await Promise.all([
+      context.supabase
+        .from("member_restrictions")
+        .select("user_id")
+        .eq("user_id", context.userId)
+        .maybeSingle(),
+      context.supabase
+        .from("profiles")
+        .select("terms_accepted_at")
+        .eq("id", context.userId)
+        .maybeSingle(),
+    ]);
+    if (restriction)
+      throw new Error("Your account is restricted from posting. Contact ReLoop via the Contact page.");
+    if (!profile?.terms_accepted_at)
+      throw new Error("Please accept the Terms and Privacy Policy in My ReLoop before posting.");
     const rows: CloudRecord[] = [];
     for (let offset = 0; ; offset += 1000) {
       const { data, error } = await context.supabase
