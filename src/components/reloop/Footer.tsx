@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Recycle } from "lucide-react";
+import { LogoMark } from "./LogoMark";
 import { LANGUAGES, useI18n, type Lang } from "@/lib/i18n";
 
 export function LanguageSwitcher({ className }: { className?: string }) {
@@ -75,7 +75,7 @@ export function Footer() {
           <div>
             <p className="flex items-center gap-2 font-display text-lg font-semibold">
               <span className="grid size-7 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <Recycle className="size-4" aria-hidden />
+                <LogoMark className="size-4" />
               </span>
               ReLoop
             </p>

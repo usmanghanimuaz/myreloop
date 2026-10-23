@@ -35,10 +35,10 @@
 - [x] QA: tests/lint/build + browser (badges, feed, impact, guidance, stories, RTL, 390px).
 
 ## Launch readiness (Oct 23)
-- [ ] Badge visual check desktop/390px
-- [ ] Profiles + My ReLoop /account
-- [ ] Roles, reports, admin moderation /admin (no admin auto-grant)
-- [ ] Report/flag flow + private inbox
-- [ ] Public query review, contact/report honeypot + limits
-- [ ] Tests/lint/build/browser QA
-- [ ] Update plan.md + reloop-verification.md
+- [x] Badge visual check desktop/390px
+- [x] Profiles + My ReLoop /account
+- [x] Roles, reports, admin moderation /admin (no admin auto-grant)
+- [x] Report/flag flow + private inbox
+- [x] Public query review, contact/report honeypot + limits
+- [x] Tests/lint/build/browser QA
+- [x] Update plan.md + reloop-verification.md
