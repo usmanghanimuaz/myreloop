@@ -96,6 +96,11 @@ export const IMAGES = {
     src: unsplash("1559027615-cd4628902d4a", 1200),
     alt: "A volunteer in a coloured vest helping at a community event",
   },
+  /** Assorted pills and capsules — expired medicines are hazardous waste */
+  hazardousMedicines: {
+    src: unsplash("1622227922682-56c92e523e58", 900),
+    alt: "Assorted pills and capsules — expired medicines must go to a designated collection point, not the bin",
+  },
 } as const satisfies Record<string, SiteImage>;
 
 export const HERO_OG_IMAGE = unsplash("1593113598332-cd288d649433", 1200, 630);
