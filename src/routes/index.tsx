@@ -100,6 +100,17 @@ function Home() {
   const impact = useMemo(() => summarizeImpact(state), [state]);
   const activeListings = state.listings.filter((l) => l.status === "available");
   const openNeeds = state.needs.filter((n) => n.status === "open");
+  const completedExchanges = useMemo(
+    () =>
+      state.interests
+        .filter((i) => i.status === "completed")
+        .map((i) => ({
+          interest: i,
+          listing: state.listings.find((l) => l.id === i.listingId),
+        }))
+        .slice(0, 4),
+    [state.interests, state.listings],
+  );
   const suggested = useMemo(() => {
     const cats = new Set(activeListings.map((l) => l.category));
     return state.actions.filter((a) => a.status === "open" && cats.has(a.category)).slice(0, 3);
@@ -132,8 +143,11 @@ function Home() {
               </Link>
             </Button>
             <Button asChild variant="lime" size="lg">
+              <Link to="/exchange">Share an item</Link>
+            </Button>
+            <Button asChild variant="lime" size="lg">
               <Link to="/exchange" hash="community-needs">
-                Share an item / Post a need
+                Post a need
               </Link>
             </Button>
           </div>
