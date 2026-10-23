@@ -3,6 +3,7 @@ import { createSeedState } from "@/lib/reloop/seed";
 import { summarizeImpact } from "@/lib/reloop/impact";
 import { getRecommendations } from "@/lib/reloop/guidance";
 import { createEngine } from "@/lib/reloop/engine";
+import type { CommunityAction } from "@/lib/reloop/types";
 let engine = createEngine(createSeedState());
 const __test = {
   setState: (s: ReturnType<typeof createSeedState>) => {
@@ -27,12 +28,29 @@ const input = {
   area: "Town centre",
 };
 
+const userAction: CommunityAction = {
+  id: "a-test",
+  title: "Street cleanup",
+  goal: "Clear litter from one street.",
+  instructions: ["Bring gloves."],
+  durationMinutes: 60,
+  category: "plastic",
+  status: "open",
+  origin: "user",
+};
+
 describe("impact tracking", () => {
   beforeEach(() => __test.setState(createSeedState()));
 
-  it("seed totals keep kg separate from items", () => {
-    const s = summarizeImpact(__test.getState());
+  it("seed state starts empty — no fictional records are counted", () => {
+    const state = __test.getState();
+    expect(state.listings).toHaveLength(0);
+    expect(state.needs).toHaveLength(0);
+    expect(state.impact).toHaveLength(0);
+    expect(state.activity).toHaveLength(0);
+    const s = summarizeImpact(state);
     expect(s.completed).toEqual({ kg: 0, items: 0, litres: 0 });
+    expect(s.verifiedExchanges).toBe(0);
   });
 
   it("manual listing status cannot simulate an exchange", () => {
@@ -60,20 +78,25 @@ describe("impact tracking", () => {
   });
 
   it("reopening an action removes its recorded quantity", () => {
-    actions.completeAction("s-a1", {
+    __test.setState({ ...createSeedState(), actions: [userAction] });
+    actions.completeAction("a-test", {
       category: "plastic",
       quantity: 4,
       unit: "kg",
       diversion: "recycle",
     });
     expect(summarizeImpact(__test.getState()).completed.kg).toBe(4);
-    actions.reopenAction("s-a1");
+    actions.reopenAction("a-test");
     expect(summarizeImpact(__test.getState()).completed.kg).toBe(0);
   });
 
-  it("sample listings cannot be deleted", () => {
-    actions.deleteListing("s-l1");
-    expect(__test.getState().listings.some((l) => l.id === "s-l1")).toBe(true);
+  it("deleting a listing removes it together with its interest requests", () => {
+    const l = actions.createListing(input);
+    actions.sendInterest(l.id, "I can collect Saturday");
+    expect(__test.getState().interests).toHaveLength(1);
+    actions.deleteListing(l.id);
+    expect(__test.getState().listings.some((x) => x.id === l.id)).toBe(false);
+    expect(__test.getState().interests).toHaveLength(0);
   });
 });
 
