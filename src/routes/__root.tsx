@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/reloop/AppShell";
+import { I18nProvider } from "@/lib/i18n";
 import { CloudStoreProvider, publicRecordsOptions } from "@/lib/reloop/store";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -81,19 +82,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ReLoop — Turn Local Waste Into Local Resources" },
+      { title: "ReLoop — Don't Waste It. Reuse It." },
       {
         name: "description",
         content:
-          "A community waste-to-value app: reuse exchange, practical waste guidance, community actions and transparent impact tracking.",
+          "ReLoop is an environmental waste-prevention initiative: pass on usable items for free or exchange, repair and recycle responsibly, and keep useful things out of bins, drains and dumps.",
       },
-      { property: "og:title", content: "ReLoop — Turn Local Waste Into Local Resources" },
+      { property: "og:title", content: "ReLoop — Don't Waste It. Reuse It." },
       {
         property: "og:description",
-        content: "Community reuse exchange, waste guidance and transparent impact tracking.",
+        content:
+          "An environmental reuse platform: extend the useful life of everyday items and manage waste responsibly.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "ReLoop" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "ReLoop",
+          description:
+            "Environmental waste-prevention and community reuse platform: list usable items for free or exchange, learn responsible recycling and safe disposal.",
+        }),
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -132,11 +147,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CloudStoreProvider>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      </CloudStoreProvider>
+      <I18nProvider>
+        <CloudStoreProvider>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </CloudStoreProvider>
+      </I18nProvider>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
   );

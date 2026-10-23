@@ -45,6 +45,7 @@ export const Route = createFileRoute("/actions")({
         content: "Real activity, safe handovers, and only confirmed completions count.",
       },
     ],
+    links: [{ rel: "canonical", href: "/actions" }],
   }),
   component: Actions,
 });

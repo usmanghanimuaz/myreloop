@@ -11,10 +11,25 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as ActionsRouteImport } from './routes/actions'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CommunityGuidelinesRouteImport } from './routes/community-guidelines'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ExchangeRouteImport } from './routes/exchange'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinderRouteImport } from './routes/finder'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImpactRouteImport } from './routes/impact'
+import { Route as MissionRouteImport } from './routes/mission'
+import { Route as NeedsRouteImport } from './routes/needs'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as SafetyRouteImport } from './routes/safety'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,9 +41,39 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutUsRoute = AboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ActionsRoute = ActionsRouteImport.update({
   id: '/actions',
   path: '/actions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
+  id: '/community-guidelines',
+  path: '/community-guidelines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExchangeRoute = ExchangeRouteImport.update({
@@ -36,9 +81,19 @@ const ExchangeRoute = ExchangeRouteImport.update({
   path: '/exchange',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinderRoute = FinderRouteImport.update({
   id: '/finder',
   path: '/finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImpactRoute = ImpactRouteImport.update({
@@ -46,54 +101,205 @@ const ImpactRoute = ImpactRouteImport.update({
   path: '/impact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NeedsRoute = NeedsRouteImport.update({
+  id: '/needs',
+  path: '/needs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyRoute = SafetyRouteImport.update({
+  id: '/safety',
+  path: '/safety',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/community-guidelines': typeof CommunityGuidelinesRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/community-guidelines': typeof CommunityGuidelinesRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/community-guidelines': typeof CommunityGuidelinesRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/about-us'
+    | '/actions'
+    | '/blog'
+    | '/community-guidelines'
+    | '/contact'
+    | '/cookies'
+    | '/disclaimer'
+    | '/exchange'
+    | '/faq'
+    | '/finder'
+    | '/how-it-works'
+    | '/impact'
+    | '/mission'
+    | '/needs'
+    | '/privacy'
+    | '/report'
+    | '/safety'
+    | '/terms'
+    | '/blog/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
+  to:
+    | '/'
+    | '/about'
+    | '/about-us'
+    | '/actions'
+    | '/blog'
+    | '/community-guidelines'
+    | '/contact'
+    | '/cookies'
+    | '/disclaimer'
+    | '/exchange'
+    | '/faq'
+    | '/finder'
+    | '/how-it-works'
+    | '/impact'
+    | '/mission'
+    | '/needs'
+    | '/privacy'
+    | '/report'
+    | '/safety'
+    | '/terms'
+    | '/blog/$slug'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/about-us'
     | '/actions'
+    | '/blog'
+    | '/community-guidelines'
+    | '/contact'
+    | '/cookies'
+    | '/disclaimer'
     | '/exchange'
+    | '/faq'
     | '/finder'
+    | '/how-it-works'
     | '/impact'
+    | '/mission'
+    | '/needs'
+    | '/privacy'
+    | '/report'
+    | '/safety'
+    | '/terms'
+    | '/blog/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AboutUsRoute: typeof AboutUsRoute
   ActionsRoute: typeof ActionsRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
+  ContactRoute: typeof ContactRoute
+  CookiesRoute: typeof CookiesRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   ExchangeRoute: typeof ExchangeRoute
+  FaqRoute: typeof FaqRoute
   FinderRoute: typeof FinderRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   ImpactRoute: typeof ImpactRoute
+  MissionRoute: typeof MissionRoute
+  NeedsRoute: typeof NeedsRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ReportRoute: typeof ReportRoute
+  SafetyRoute: typeof SafetyRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -112,11 +318,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about-us': {
+      id: '/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof AboutUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/actions': {
       id: '/actions'
       path: '/actions'
       fullPath: '/actions'
       preLoaderRoute: typeof ActionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community-guidelines': {
+      id: '/community-guidelines'
+      path: '/community-guidelines'
+      fullPath: '/community-guidelines'
+      preLoaderRoute: typeof CommunityGuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exchange': {
@@ -126,11 +374,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExchangeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/finder': {
       id: '/finder'
       path: '/finder'
       fullPath: '/finder'
       preLoaderRoute: typeof FinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/impact': {
@@ -140,16 +402,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImpactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/needs': {
+      id: '/needs'
+      path: '/needs'
+      fullPath: '/needs'
+      preLoaderRoute: typeof NeedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety': {
+      id: '/safety'
+      path: '/safety'
+      fullPath: '/safety'
+      preLoaderRoute: typeof SafetyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AboutUsRoute: AboutUsRoute,
   ActionsRoute: ActionsRoute,
+  BlogRoute: BlogRouteWithChildren,
+  CommunityGuidelinesRoute: CommunityGuidelinesRoute,
+  ContactRoute: ContactRoute,
+  CookiesRoute: CookiesRoute,
+  DisclaimerRoute: DisclaimerRoute,
   ExchangeRoute: ExchangeRoute,
+  FaqRoute: FaqRoute,
   FinderRoute: FinderRoute,
+  HowItWorksRoute: HowItWorksRoute,
   ImpactRoute: ImpactRoute,
+  MissionRoute: MissionRoute,
+  NeedsRoute: NeedsRoute,
+  PrivacyRoute: PrivacyRoute,
+  ReportRoute: ReportRoute,
+  SafetyRoute: SafetyRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

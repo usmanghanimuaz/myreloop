@@ -13,6 +13,7 @@ import {
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, OriginBadge, formatDate } from "@/components/reloop/shared";
+import { useI18n } from "@/lib/i18n";
 import { HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
 import { useAppState, useStoreMeta } from "@/lib/reloop/store";
@@ -38,24 +39,12 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: HERO_OG_IMAGE },
       { name: "twitter:image", content: HERO_OG_IMAGE },
     ],
+    links: [{ rel: "canonical", href: "/" }],
   }),
   component: Home,
 });
 
-const STEPS = [
-  {
-    title: "Keep it out of the bin",
-    text: "Before you throw something away, ask: could someone nearby still use it? A box, a jar, a chair, a working kettle — most “rubbish” still has a use.",
-  },
-  {
-    title: "List it free, or post a need",
-    text: "Offer what you have for FREE or EXCHANGE, or tell neighbours what you're looking for. No selling, no payments — just passing things on.",
-  },
-  {
-    title: "Meet locally, hand over safely",
-    text: "Arrange a polite, public handover nearby. Both sides confirm the exchange, so the impact record is real — not guessed.",
-  },
-] as const;
+const STEP_KEYS = [1, 2, 3, 4] as const;
 
 const EVERYDAY = [
   {
@@ -97,13 +86,16 @@ const TODAY = [
 function Home() {
   const state = useAppState();
   const { userId } = useStoreMeta();
+  const { t } = useI18n();
   const impact = useMemo(() => summarizeImpact(state), [state]);
-  const activeListings = state.listings.filter((l) => l.status === "available");
-  const openNeeds = state.needs.filter((n) => n.status === "open");
+  const activeListings = state.listings.filter(
+    (l) => l.status === "available" && l.origin === "user",
+  );
+  const openNeeds = state.needs.filter((n) => n.status === "open" && n.origin === "user");
   const completedExchanges = useMemo(
     () =>
       state.interests
-        .filter((i) => i.status === "completed")
+        .filter((i) => i.status === "completed" && i.origin === "user")
         .map((i) => ({
           interest: i,
           listing: state.listings.find((l) => l.id === i.listingId),
@@ -127,28 +119,24 @@ function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-sidebar/95 via-sidebar/80 to-sidebar/30" />
         <div className="relative max-w-2xl p-8 text-sidebar-foreground md:p-14">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">ReLoop</p>
-          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
-            Don't throw useful things away. Pass them on.
-          </h1>
-          <p className="mt-4 text-lg opacity-90">
-            ReLoop is a community waste-to-value platform. Share surplus items with neighbours for
-            free or in exchange, learn how to repair and recycle safely, and record what actually
-            got reused — so less ends up in bins, drains and dumps.
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">
+            {t("home.eyebrow")}
           </p>
+          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
+            {t("home.heroTitle")}
+          </h1>
+          <p className="mt-4 text-lg opacity-90">{t("home.heroText")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild variant="lime" size="lg">
               <Link to="/exchange">
-                Explore available items <ArrowRight />
+                {t("home.ctaExplore")} <ArrowRight className="rtl:rotate-180" />
               </Link>
             </Button>
             <Button asChild variant="lime" size="lg">
-              <Link to="/exchange">Share an item</Link>
+              <Link to="/exchange">{t("home.ctaShare")}</Link>
             </Button>
             <Button asChild variant="lime" size="lg">
-              <Link to="/exchange" hash="community-needs">
-                Post a need
-              </Link>
+              <Link to="/needs">{t("home.ctaNeed")}</Link>
             </Button>
           </div>
           <p className="mt-6 text-xs opacity-60">
@@ -161,18 +149,18 @@ function Home() {
 
       {/* 2 — How ReLoop works */}
       <section className="mb-12">
-        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">How ReLoop works</h2>
-        <p className="mb-6 max-w-2xl text-muted-foreground">
-          Three simple steps turn would-be waste into someone else's useful find.
-        </p>
-        <ol className="grid gap-4 md:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <li key={s.title} className="rounded-2xl border bg-card p-6 shadow-card">
+        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">{t("home.howTitle")}</h2>
+        <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.howText")}</p>
+        <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {STEP_KEYS.map((n) => (
+            <li key={n} className="rounded-2xl border bg-card p-6 shadow-card">
               <span className="mb-3 grid size-10 place-items-center rounded-full bg-primary font-display text-lg font-semibold text-primary-foreground">
-                {i + 1}
+                {n}
               </span>
-              <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+              <h3 className="text-lg font-semibold">{t(`home.step${n}Title` as const)}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t(`home.step${n}Text` as const)}
+              </p>
             </li>
           ))}
         </ol>
@@ -254,11 +242,8 @@ function Home() {
 
       {/* 5 — Live community sections (secondary) */}
       <section className="mb-12">
-        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">Happening in the community</h2>
-        <p className="mb-6 max-w-2xl text-muted-foreground">
-          Real records from this ReLoop community. Items marked “Sample data” are fictional examples
-          and never count as real impact.
-        </p>
+        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">{t("home.communityTitle")}</h2>
+        <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.communityText")}</p>
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <p className="text-sm text-muted-foreground">Two-party confirmed handovers</p>
@@ -273,11 +258,7 @@ function Home() {
             <p className="text-sm text-muted-foreground">Available items right now</p>
             <p className="mt-2 font-display text-3xl font-semibold">{activeListings.length}</p>
             <p className="mt-2 text-xs text-muted-foreground">
-              Yours:{" "}
-              <strong>
-                {activeListings.filter((l) => l.ownerId === userId && l.origin === "user").length}
-              </strong>{" "}
-              · Sample: {activeListings.filter((l) => l.origin === "sample").length}
+              Yours: <strong>{activeListings.filter((l) => l.ownerId === userId).length}</strong>
             </p>
           </Card>
           <Card>
@@ -296,7 +277,7 @@ function Home() {
             </h3>
             {activeListings.length === 0 ? (
               <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-                Nothing listed yet — be the first to pass something on.
+                {t("home.noListings")}
               </p>
             ) : (
               activeListings.slice(0, 3).map((l) => (
@@ -309,7 +290,7 @@ function Home() {
               ))
             )}
             <Button asChild variant="outline" size="sm" className="mt-4">
-              <Link to="/exchange">Browse all items</Link>
+              <Link to="/exchange">{t("common.browseAll")}</Link>
             </Button>
           </div>
           <div>
@@ -318,12 +299,12 @@ function Home() {
             </h3>
             {openNeeds.length === 0 ? (
               <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-                No open needs right now — post one if you're looking for something.
+                {t("home.noNeeds")}
               </p>
             ) : (
               openNeeds.slice(0, 3).map((n) => (
                 <p key={n.id} className="border-b py-3">
-                  <Link to="/exchange" hash="community-needs" className="font-medium text-primary">
+                  <Link to="/needs" className="font-medium text-primary">
                     {n.title ?? n.description}
                   </Link>{" "}
                   · {n.mode ?? "FREE"} <OriginBadge origin={n.origin} />
@@ -331,9 +312,7 @@ function Home() {
               ))
             )}
             <Button asChild variant="outline" size="sm" className="mt-4">
-              <Link to="/exchange" hash="community-needs">
-                See all needs
-              </Link>
+              <Link to="/needs">{t("common.seeAllNeeds")}</Link>
             </Button>
           </div>
         </div>
@@ -370,18 +349,21 @@ function Home() {
             <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Clock className="size-5 text-primary" /> Recent community activity
             </h3>
-            {state.activity.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No activity recorded yet.</p>
+            {state.activity.filter((e) => e.origin === "user").length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("home.noActivity")}</p>
             ) : (
               <ul className="divide-y">
-                {state.activity.slice(0, 7).map((e) => (
-                  <li key={e.id} className="flex items-start justify-between gap-3 py-3 text-sm">
-                    <span>{e.message}</span>
-                    <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
-                      {formatDate(e.createdAt)} <OriginBadge origin={e.origin} />
-                    </span>
-                  </li>
-                ))}
+                {state.activity
+                  .filter((e) => e.origin === "user")
+                  .slice(0, 7)
+                  .map((e) => (
+                    <li key={e.id} className="flex items-start justify-between gap-3 py-3 text-sm">
+                      <span>{e.message}</span>
+                      <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+                        {formatDate(e.createdAt)} <OriginBadge origin={e.origin} />
+                      </span>
+                    </li>
+                  ))}
               </ul>
             )}
           </Card>

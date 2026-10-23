@@ -30,6 +30,7 @@ export const Route = createFileRoute("/about")({
           "Published environmental research kept separate from personal observations and ReLoop impact.",
       },
     ],
+    links: [{ rel: "canonical", href: "/about" }],
   }),
   component: About,
 });
@@ -111,7 +112,8 @@ function About() {
             saved privately to your account.
           </li>
           <li>
-            Records labelled “Sample data” are fictional and exist so the app can be explored.
+            Only real community records are shown — no fictional or demonstration data is counted
+            anywhere.
           </li>
           <li>
             Guidance is general advice from a built-in dataset — always check local collection

@@ -37,6 +37,7 @@ export const Route = createFileRoute("/impact")({
         content: "Only what you record counts. No invented CO2 figures.",
       },
     ],
+    links: [{ rel: "canonical", href: "/impact" }],
   }),
   component: Impact,
 });
@@ -70,9 +71,8 @@ function Impact() {
         {formatTotals(s.completed)}; these records are not independently verified.
       </p>
       <p className="mt-3 text-xs text-muted-foreground">
-        Your records: {formatTotals(s.completedByOrigin.user)} · Sample records:{" "}
-        {formatTotals(s.completedByOrigin.sample)} · Completed actions: {s.completedActions.user}{" "}
-        yours, {s.completedActions.sample} sample
+        Recorded by community members: {formatTotals(s.completedByOrigin.user)} · Completed
+        community actions: {s.completedActions.user}
       </p>
 
       <Card className="mt-6">
@@ -152,7 +152,7 @@ function Impact() {
                   {e.verified
                     ? "Two-party confirmed"
                     : e.completed
-                      ? "Self-reported / sample"
+                      ? "Self-reported"
                       : "Planned — unverified"}
                 </span>
                 <OriginBadge origin={e.origin} />
