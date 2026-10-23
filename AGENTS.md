@@ -16,3 +16,4 @@
 - Keep recommendation rules and impact calculations client-safe and deterministic; no external AI or paid services are required.
 - Derive handover verification from service-created record keys, not editable payload flags; preserve those keys in patches so ordinary edits cannot recreate completion records.
 - Curated environmental source metadata lives separately from private observation notes; source media is linked rather than copied without confirmed reuse rights.
+- Keep correctness linting on Cloud-managed integrations but exclude their generated formatting from Prettier enforcement, because regeneration owns those files.
