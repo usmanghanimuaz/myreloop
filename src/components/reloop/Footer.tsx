@@ -25,7 +25,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 
 export function Footer() {
   const { t } = useI18n();
-  const groups: { heading: string; links: { to: string; label: string; hash?: string }[] }[] = [
+  const groups: { heading: string; links: { to: string; label: string }[] }[] = [
     {
       heading: t("footer.explore"),
       links: [
@@ -90,7 +90,6 @@ export function Footer() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      hash={l.hash}
                       className="opacity-80 underline-offset-4 hover:opacity-100 hover:underline"
                     >
                       {l.label}
