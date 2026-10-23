@@ -285,12 +285,11 @@ function Dashboard({ userId }: { userId: string }) {
                 >
                   <span className="min-w-0 truncate font-medium">{n.title ?? n.description}</span>
                   <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                    {n.status
-                      ? t(`st.${n.status}`) === `st.${n.status}`
-                        ? n.status
-                        : t(`st.${n.status}`)
-                      : t("open")}
+                    {n.status ?? t("open")}
                   </span>
+                  <Link to="/needs" className="shrink-0 text-xs text-primary underline">
+                    {t("manage")}
+                  </Link>
                 </li>
               ))}
             </ul>
