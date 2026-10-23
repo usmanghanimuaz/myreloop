@@ -42,20 +42,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const STEPS = [
-  {
-    title: "Keep it out of the bin",
-    text: "Before you throw something away, ask: could someone nearby still use it? A box, a jar, a chair, a working kettle — most “rubbish” still has a use.",
-  },
-  {
-    title: "List it free, or post a need",
-    text: "Offer what you have for FREE or EXCHANGE, or tell neighbours what you're looking for. No selling, no payments — just passing things on.",
-  },
-  {
-    title: "Meet locally, hand over safely",
-    text: "Arrange a polite, public handover nearby. Both sides confirm the exchange, so the impact record is real — not guessed.",
-  },
-] as const;
+const STEP_KEYS = [1, 2, 3, 4] as const;
 
 const EVERYDAY = [
   {
