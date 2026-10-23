@@ -140,15 +140,16 @@ function StoreData({
       ]);
     },
   });
+  const { mutateAsync } = mutation;
   useEffect(() => {
     dispatch = async (command) => {
       if (!userId) throw new Error("Sign in to save or send interest.");
-      return mutation.mutateAsync({ data: command });
+      return mutateAsync({ data: command });
     };
     return () => {
       dispatch = undefined;
     };
-  }, [userId, mutation.mutateAsync]);
+  }, [userId, mutateAsync]);
   const state = recordsToState(records);
   return createElement(
     StoreContext.Provider,

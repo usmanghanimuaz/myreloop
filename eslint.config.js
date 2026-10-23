@@ -37,4 +37,9 @@ export default tseslint.config(
     },
   },
   eslintPluginPrettier,
+  // Cloud-managed integrations are regenerated; retain correctness linting without rewriting them.
+  {
+    files: ["src/integrations/supabase/**"],
+    rules: { "prettier/prettier": "off" },
+  },
 );
