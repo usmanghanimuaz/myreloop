@@ -9,6 +9,7 @@ import {
   Menu,
   Newspaper,
   PackageOpen,
+  UserRound,
   Users,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
@@ -51,9 +52,13 @@ function Logo() {
 function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { t } = useI18n();
+  const { userId } = useStoreMeta();
+  const items = userId
+    ? [...NAV, { to: "/account", key: "nav.account", icon: UserRound } as const]
+    : NAV;
   return (
     <nav aria-label={t("nav.main")} className="flex flex-col gap-1">
-      {NAV.map(({ to, key, icon: Icon }) => {
+      {items.map(({ to, key, icon: Icon }) => {
         const active = to === "/" ? path === "/" : path.startsWith(to);
         return (
           <Link

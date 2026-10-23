@@ -50,6 +50,13 @@
       "when": 1792740600631,
       "tag": "0006_field_evidence_public_read_when_validated",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792742056461,
+      "tag": "0007_profiles_roles_reports_moderation",
+      "breakpoints": true
     }
   ]
 }

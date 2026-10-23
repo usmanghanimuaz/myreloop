@@ -65,3 +65,6 @@ Sign-in and sessions, database rules (run a security scan and lint), private upl
 - The email address to make the first admin.
 - Permission to create one test account for signed-in checks.
 - Whether to include bookmarks.
+
+## Status (23 Oct)
+Steps 1–6 are implemented. Step 8 (signed-in end-to-end testing) is blocked until there's a registered account and the first admin is set up. See the verification file.

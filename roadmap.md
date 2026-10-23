@@ -33,3 +33,12 @@
 - [x] New /stories page: official videos (UNEP/WHO/EPA/UN-Habitat links, attribution), user field evidence (photo/external video URL, consent, validation status, private until validated).
 - [x] Logo: circular reuse arrows + leaf SVG, favicon.
 - [x] QA: tests/lint/build + browser (badges, feed, impact, guidance, stories, RTL, 390px).
+
+## Launch readiness (Oct 23)
+- [x] Badge visual check desktop/390px
+- [x] Profiles + My ReLoop /account
+- [x] Roles, reports, admin moderation /admin (no admin auto-grant)
+- [x] Report/flag flow + private inbox
+- [x] Public query review, contact/report honeypot + limits
+- [x] Tests/lint/build/browser QA
+- [x] Update plan.md + reloop-verification.md

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ReportButton } from "@/components/reloop/ReportButton";
 import { MapPin, Pencil, Plus, Search, Send, Trash2, PackageOpen } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -416,6 +417,7 @@ function ListingDetail({
                 Listed {formatDate(listing.createdAt)} · {interest} interest request
                 {interest === 1 ? "" : "s"}
               </p>
+              {!own && <ReportButton targetKind="listings" targetId={listing.id} />}
             </div>
 
             {own && (
