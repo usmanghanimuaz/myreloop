@@ -364,8 +364,8 @@ export function AccountButton() {
                     </Button>
                     <p className="text-xs text-muted-foreground">
                       New accounts are regular members. A verification email is sent to confirm your
-                      address. Your name stays private unless you choose a display name; you can
-                      add an optional private phone later in My ReLoop.
+                      address. Your name and profile are private to you; you can add an
+                      optional private phone later in My ReLoop.
                     </p>
                   </form>
                 </TabsContent>
