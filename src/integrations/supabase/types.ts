@@ -44,26 +44,98 @@ export type Database = {
         }
         Relationships: []
       }
+      member_restrictions: {
+        Row: {
+          created_at: string
+          created_by: string
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          reason?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      moderation_log: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          id: string
+          note: string
+          target_id: string
+          target_kind: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          id?: string
+          note?: string
+          target_id: string
+          target_kind: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          id?: string
+          note?: string
+          target_id?: string
+          target_kind?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
           display_name: string
+          first_name: string
           general_area: string
           id: string
+          last_name: string
+          notify_requests: boolean
+          notify_updates: boolean
+          phone: string
+          terms_accepted_at: string | null
+          terms_version: string
           updated_at: string
         }
         Insert: {
           created_at?: string
           display_name?: string
+          first_name?: string
           general_area?: string
           id: string
+          last_name?: string
+          notify_requests?: boolean
+          notify_updates?: boolean
+          phone?: string
+          terms_accepted_at?: string | null
+          terms_version?: string
           updated_at?: string
         }
         Update: {
           created_at?: string
           display_name?: string
+          first_name?: string
           general_area?: string
           id?: string
+          last_name?: string
+          notify_requests?: boolean
+          notify_updates?: boolean
+          phone?: string
+          terms_accepted_at?: string | null
+          terms_version?: string
           updated_at?: string
         }
         Relationships: []
@@ -179,6 +251,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      reloop_admin_close_record: {
+        Args: { note?: string; target_id: string; target_kind: string }
+        Returns: undefined
+      }
       reloop_admin_pending_evidence: {
         Args: never
         Returns: {
@@ -187,8 +263,16 @@ export type Database = {
         }[]
       }
       reloop_admin_review_report: {
-        Args: { decision: string; report_id: string }
+        Args: { decision: string; note?: string; report_id: string }
         Returns: undefined
+      }
+      reloop_admin_set_restriction: {
+        Args: { member: string; reason?: string; restrict: boolean }
+        Returns: undefined
+      }
+      reloop_admin_target_owner: {
+        Args: { target_id: string; target_kind: string }
+        Returns: string
       }
       reloop_admin_validate_evidence: {
         Args: { approve: boolean; evidence_key: string }
