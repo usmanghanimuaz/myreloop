@@ -42,3 +42,7 @@
 - [x] Public query review, contact/report honeypot + limits
 - [x] Tests/lint/build/browser QA
 - [x] Update plan.md + reloop-verification.md
+- [x] Owner admin role assigned
+- [x] Installable app (manifest + icons)
+- [ ] Email notifications — blocked: needs owner's email domain
+- [ ] Push notifications — needs Firebase connection decision
