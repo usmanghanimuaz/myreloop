@@ -57,6 +57,13 @@
       "when": 1792742056461,
       "tag": "0007_profiles_roles_reports_moderation",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792752973868,
+      "tag": "0008_push_tokens",
+      "breakpoints": true
     }
   ]
 }
