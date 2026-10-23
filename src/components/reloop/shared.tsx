@@ -132,6 +132,16 @@ export function PolicySection({ title, children }: { title: string; children: Re
   );
 }
 
+export function UNSPLASH_NOTE() {
+  return (
+    <p className="mt-2 text-xs text-muted-foreground">
+      <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
+        Illustrative photo via Unsplash
+      </a>
+    </p>
+  );
+}
+
 export function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",

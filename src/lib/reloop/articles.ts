@@ -41,7 +41,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "What reuse saves",
         paragraphs: [
-          "Every reused item avoids three things at once: the item itself going to a bin, drain or dump; the demand for a new replacement product; and the packaging and transport that replacement would need. You don't need a exact number for this to be true — the direction is what matters.",
+          "Every reused item avoids three things at once: the item itself going to a bin, drain or dump; the demand for a new replacement product; and the packaging and transport that replacement would need. You don't need an exact number for this to be true — the direction is what matters.",
           "Poorly managed waste can pollute land, water and air, attract pests, and contribute to contamination and health risks for people and animals. Keeping usable items in use is one of the simplest ways to shrink that flow at the source.",
         ],
       },
