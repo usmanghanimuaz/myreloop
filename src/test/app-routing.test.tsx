@@ -10,12 +10,12 @@ describe("App routing", () => {
   it.each(["/", "/finder", "/exchange", "/actions", "/impact", "/about"])(
     "matches the existing %s page instead of falling back to not found",
     (path) => {
-    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+      const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 
-    const matches = router.matchRoutes(path);
+      const matches = router.matchRoutes(path);
 
-    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
-    expect(matches.at(-1)?.pathname).toBe(path);
+      expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+      expect(matches.at(-1)?.pathname).toBe(path);
     },
   );
 });
