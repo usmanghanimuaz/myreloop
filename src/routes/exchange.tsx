@@ -480,8 +480,8 @@ function ListingDetail({
               </form>
             ) : (
               <Notice>
-                Sample items are illustrative. Completed and closed listings cannot receive new
-                requests.
+                This listing is not open for new requests — it may be reserved, completed or
+                closed.
               </Notice>
             )}
           </>
