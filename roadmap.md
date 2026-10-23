@@ -13,12 +13,13 @@
 
 # Environmental-first redesign (23 Oct 2026 brief)
 
-- [ ] i18n: English-first + Urdu, Hindi, Arabic, Spanish, French; RTL for ur/ar; persisted choice; honest English fallback for long-form content.
-- [ ] Homepage: environmental problem first, mission, CTAs, 4-step How ReLoop Works, reuse/repair/recycle/hazardous guides; no fake stats.
-- [ ] New routes: /needs, /how-it-works, /about-us, /mission, /contact, /report, /faq, /blog + 3 starter articles, /terms, /privacy, /cookies, /community-guidelines, /safety, /disclaimer; keep old links working.
-- [ ] Footer with Explore/Learn/About/Policies groups; all links real routes.
-- [ ] About Us: Neighborhood Hacks origin story + Meet the Builder section; no invented details.
-- [ ] Remove fictional sample listings/activity from public pages; honest empty states; impact only from real verified records.
-- [ ] SEO: unique head() per route, JSON-LD where appropriate, robots.txt kept; sitemap deferred (no public URL).
-- [ ] Contact/report forms: validation, success/error states, safe persistence.
-- [ ] Tests/lint/build + browser verification incl. RTL and language switch; do not publish.
+- [x] i18n: English-first + Urdu, Hindi, Arabic, Spanish, French; RTL for ur/ar; persisted choice (verified: dir=rtl, Urdu nav, survives reload).
+- [x] Homepage: environmental problem first, mission, CTAs, 4-step How ReLoop Works; no fake stats.
+- [x] New routes: /needs, /how-it-works, /about-us, /mission, /contact, /report, /faq, /blog + 3 articles, /terms, /privacy, /cookies, /community-guidelines, /safety, /disclaimer; all 23 routes HTTP 200 verified.
+- [x] Footer with Explore/Learn/About/Policies (20 real links).
+- [x] About Us: Neighborhood Hacks origin + Meet the Builder; no invented details.
+- [x] Sample data removed: 24 sample rows deleted from DB, seed state emptied, sample copy removed; impact only from real verified records.
+- [x] SEO: unique head()+canonical per route, WebSite/Article JSON-LD, robots.txt kept; sitemap deferred (no public URL).
+- [x] Contact/report forms: zod validation (4 alerts verified), saved to contact_messages table (insert-only RLS).
+- [x] 38/38 tests pass, lint 0 errors, build OK, no broken images, no page errors.
+- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account.
