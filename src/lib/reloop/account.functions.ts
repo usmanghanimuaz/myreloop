@@ -61,7 +61,8 @@ export const getModerationQueue = createServerFn({ method: "POST" })
       _user_id: context.userId,
       _role: "admin",
     });
-    if (isAdmin !== true) return { allowed: false as const, evidence: [], reports: [] };
+    if (isAdmin !== true)
+      return { allowed: false as const, evidence: [] as never[], reports: [] as never[] };
     const [ev, rep] = await Promise.all([
       context.supabase.rpc("reloop_admin_pending_evidence"),
       context.supabase
@@ -73,10 +74,19 @@ export const getModerationQueue = createServerFn({ method: "POST" })
     if (ev.error || rep.error) throw new Error("Could not load the moderation queue.");
     return {
       allowed: true as const,
-      evidence: (ev.data ?? []).map((r) => ({
-        key: r.key,
-        data: r.data as Record<string, unknown>,
-      })),
+      evidence: (ev.data ?? []).map((r) => {
+        const d = (r.data ?? {}) as Record<string, unknown>;
+        const str = (k: string) => (typeof d[k] === "string" ? (d[k] as string) : "");
+        return {
+          key: r.key,
+          title: str("title"),
+          description: str("description"),
+          area: str("area"),
+          date: str("date"),
+          consent: d["consent"] === true,
+          rejected: d["rejected"] === true,
+        };
+      }),
       reports: rep.data ?? [],
     };
   });

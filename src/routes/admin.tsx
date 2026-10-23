@@ -91,14 +91,13 @@ function Queue() {
           <p className="text-sm text-muted-foreground">No submissions waiting.</p>
         ) : (
           <ul className="grid gap-3 md:grid-cols-2">
-            {q.data.evidence.map(({ key, data }) => (
+            {q.data.evidence.map(({ key, ...data }) => (
               <li key={key} className="rounded-xl border bg-background p-4 text-sm">
-                <p className="font-semibold">{String(data["title"] ?? "")}</p>
-                <p className="mt-1 text-muted-foreground">{String(data["description"] ?? "")}</p>
+                <p className="font-semibold">{data.title}</p>
+                <p className="mt-1 text-muted-foreground">{data.description}</p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {String(data["area"] ?? "")} · {String(data["date"] ?? "")} · consent{" "}
-                  {data["consent"] ? "given" : "missing"}
-                  {data["rejected"] ? " · previously rejected" : ""}
+                  {data.area} · {data.date} · consent {data.consent ? "given" : "missing"}
+                  {data.rejected ? " · previously rejected" : ""}
                 </p>
                 <div className="mt-3 flex gap-2">
                   <Button
