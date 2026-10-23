@@ -6,48 +6,41 @@ import {
   Home,
   Info,
   Menu,
+  Newspaper,
   PackageOpen,
   Recycle,
-  RotateCcw,
   Users,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { actions, hydrateStore, useStoreMeta } from "@/lib/reloop/store";
+import { useI18n } from "@/lib/i18n";
+import { hydrateStore, useStoreMeta } from "@/lib/reloop/store";
 import { cn } from "@/lib/utils";
 import { AccountButton } from "./AccountButton";
+import { Footer, LanguageSwitcher } from "./Footer";
 
 const NAV = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/exchange", label: "Available Items — I Have", icon: PackageOpen },
-  { to: "/exchange", hash: "community-needs", label: "Community Needs — I Need", icon: HandHeart },
-  { to: "/finder", label: "Material Guidance", icon: BookOpen },
-  { to: "/about", label: "Waste & Evidence", icon: Info },
-  { to: "/actions", label: "Community Activity", icon: Users },
-  { to: "/impact", label: "Impact Tracker", icon: BarChart3 },
+  { to: "/", key: "nav.home", icon: Home },
+  { to: "/exchange", key: "nav.exchange", icon: PackageOpen },
+  { to: "/needs", key: "nav.needs", icon: HandHeart },
+  { to: "/finder", key: "nav.finder", icon: BookOpen },
+  { to: "/about", key: "nav.about", icon: Info },
+  { to: "/actions", key: "nav.actions", icon: Users },
+  { to: "/impact", key: "nav.impact", icon: BarChart3 },
+  { to: "/blog", key: "nav.blog", icon: Newspaper },
 ] as const;
 
 function Logo() {
+  const { t } = useI18n();
   return (
-    <Link to="/" className="flex items-center gap-2.5 rounded-lg">
-      <span className="grid size-9 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+    <Link to="/" className="flex min-w-0 items-center gap-2.5 rounded-lg">
+      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
         <Recycle className="size-5" aria-hidden />
       </span>
-      <span>
+      <span className="min-w-0">
         <span className="block font-display text-xl font-semibold leading-none">ReLoop</span>
-        <span className="text-[11px] opacity-70">Local waste → local resources</span>
+        <span className="block truncate text-[11px] opacity-70">{t("common.tagline")}</span>
       </span>
     </Link>
   );
@@ -55,15 +48,15 @@ function Logo() {
 
 function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useI18n();
   return (
-    <nav aria-label="Main" className="flex flex-col gap-1">
-      {NAV.map(({ to, label, icon: Icon, ...rest }) => {
+    <nav aria-label={t("nav.main")} className="flex flex-col gap-1">
+      {NAV.map(({ to, key, icon: Icon }) => {
         const active = to === "/" ? path === "/" : path.startsWith(to);
         return (
           <Link
-            key={label}
+            key={key}
             to={to}
-            {...rest}
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
@@ -73,8 +66,8 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
                 : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
             )}
           >
-            <Icon className={cn("size-4", active && "text-sidebar-primary")} aria-hidden />
-            {label}
+            <Icon className={cn("size-4 shrink-0", active && "text-sidebar-primary")} aria-hidden />
+            <span className="leading-snug">{t(key)}</span>
           </Link>
         );
       })}
@@ -82,53 +75,16 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   );
 }
 
-function ResetButton() {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <button className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-sidebar-foreground/75 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground">
-          <RotateCcw className="size-4" aria-hidden /> Reset demo data
-        </button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Reset demo data?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This restores the original sample dataset and permanently clears everything you created
-            on this device: listings, interest requests, completed actions, impact records and
-            evidence notes.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={async () => {
-              try {
-                await actions.resetDemo();
-                toast.success("Your records cleared");
-              } catch (error) {
-                toast.error(error instanceof Error ? error.message : "Could not clear records");
-              }
-            }}
-          >
-            Reset everything
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
-
 function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
+  const { t } = useI18n();
   return (
-    <div className="flex h-full flex-col gap-8 p-5 text-sidebar-foreground">
+    <div className="flex h-full flex-col gap-6 overflow-y-auto p-5 text-sidebar-foreground">
       <Logo />
       <NavLinks onNavigate={onNavigate} />
       <div className="mt-auto space-y-3">
+        <LanguageSwitcher />
         <p className="rounded-xl bg-sidebar-accent/70 p-3 text-xs leading-relaxed text-sidebar-foreground/80">
-          Shared community listings. Records marked <strong>Sample</strong> are fictional and
-          excluded from real impact.
+          {t("footer.tagline")}
         </p>
         <AccountButton />
       </div>
@@ -139,6 +95,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const meta = useStoreMeta();
+  const { t } = useI18n();
   useEffect(() => {
     hydrateStore();
   }, []);
@@ -153,36 +110,42 @@ export function AppShell({ children }: { children: ReactNode }) {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2"
       >
-        Skip to content
+        {t("nav.skip")}
       </a>
-      <aside className="fixed inset-y-0 left-0 hidden w-64 bg-sidebar lg:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 bg-sidebar lg:block rtl:left-auto rtl:right-0">
         <SidebarBody />
       </aside>
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-sidebar px-4 py-3 text-sidebar-foreground lg:hidden">
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-2 bg-sidebar px-4 py-3 text-sidebar-foreground lg:hidden">
         <Logo />
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <button
-              aria-label="Open navigation"
-              className="grid size-10 place-items-center rounded-xl hover:bg-sidebar-accent"
-            >
-              <Menu className="size-5" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 border-0 bg-sidebar p-0">
-            <SheetTitle className="sr-only">Navigation</SheetTitle>
-            <SidebarBody onNavigate={() => setOpen(false)} />
-          </SheetContent>
-        </Sheet>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher className="w-28" />
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <button
+                aria-label={t("nav.open")}
+                className="grid size-10 place-items-center rounded-xl hover:bg-sidebar-accent"
+              >
+                <Menu className="size-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72 border-0 bg-sidebar p-0">
+              <SheetTitle className="sr-only">{t("nav.main")}</SheetTitle>
+              <SidebarBody onNavigate={() => setOpen(false)} />
+            </SheetContent>
+          </Sheet>
+        </div>
       </header>
-      <main id="main" className="lg:pl-64">
-        {!meta.storageAvailable && (
-          <p className="bg-warning px-6 py-2 text-sm text-warning-foreground">
-            Browser storage is unavailable — changes will be lost when you close this tab.
-          </p>
-        )}
-        <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">{children}</div>
-      </main>
+      <div className="lg:pl-64 rtl:lg:pl-0 rtl:lg:pr-64">
+        <main id="main">
+          {!meta.storageAvailable && (
+            <p className="bg-warning px-6 py-2 text-sm text-warning-foreground">
+              Browser storage is unavailable — changes will be lost when you close this tab.
+            </p>
+          )}
+          <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">{children}</div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
