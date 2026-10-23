@@ -1,70 +1,124 @@
-# ReLoop launch-readiness plan
+# ReLoop completeness audit and phased plan (read-only audit, 23 Oct 2026)
 
-No publishing, no new project, no sample data. Every change keeps FREE/EXCHANGE only, no trees, no fake impact.
+Core rules kept throughout: FREE and EXCHANGE only, no checkout, no tree planting, no fake data or invented impact, a global audience, privacy first, and no publishing.
 
-## What exists today (checked)
-- 23 pages, including `/stories`, `/needs`, the policy pages and the blog.
-- The database has two tables: `reloop_records`, which holds every listing, need, request, evidence item and handover as one data blob with an owner, and `contact_messages`, which accepts inserts only. There are **no profiles, no roles and no reports** tables.
-- Read rules: anyone can read listings and needs. Owners and the other party can read requests. Field evidence is public only when it is marked validated. All writes go through checked, revision-safe database functions.
-- Photos live in a private bucket. Photo reads are limited to the owner and people whose request on that listing was accepted.
-- The "Awaiting validation" badge is on Waste & Evidence (around line 198) and was restyled last turn. I have not yet checked it in a fresh screenshot.
+## 1. What exists today (verified in code and the live database)
 
-## High-risk blockers
-1. **There's no way for an admin to validate evidence.** Today evidence can only be validated by editing the database by hand. This needs proper roles (step 3).
-2. **Public listings expose the whole data blob.** Anyone can read every field of a listing or need. Before launch, I'll check that no exact address or contact detail can be saved in it. If anything can, public reads will move to a view that returns only safe fields.
-3. **The contact and report forms have no spam protection.** Anyone can send without limits. I'll add basic server-side checks: a honeypot field, length limits and a per-sender rate limit, all free.
-4. **Nothing signed-in has been tested.** There are no accounts, so uploads, requests, handovers and moderation can't be checked end to end. I'll need you to create one test account (or allow me to use one) and give it admin access.
-5. **UNEP links block automated checks (403).** They stay listed as official links. They are not dead.
+| Area | Status | Evidence |
+|---|---|---|
+| Pages | 26 route files: home, exchange, needs, finder, about, stories, actions, impact, blog and articles, how-it-works, mission, about-us, faq, contact, report, 6 policy pages, account, admin, reset-password | `src/routes/*` |
+| Sign-in | Google (managed) plus email and password with Log in / Create account tabs, email code or link verification, forgot password and a reset page. The Lovable sign-in option was removed from the UI. | `src/components/reloop/AccountButton.tsx`, `src/routes/reset-password.tsx` |
+| Signup fields | Email and password only. No name, phone or consent checkbox. | AccountButton |
+| Profile | Display name and general area only, owner-only RLS | `profiles` table, `/account` ProfileCard |
+| Roles | `user_roles` plus `has_role()`, no client insert policy, one admin (the owner), no auto-promotion trigger (0 triggers on the auth users table) | migrations 0007 and 0009 |
+| Dashboard | My ReLoop: attention, incoming, outgoing, own listings and needs, push toggle, translated into 7 languages | `src/routes/account.tsx`, `src/lib/i18n-dash.ts` |
+| Moderation | Evidence approve/reject and report review/dismiss. Checked server-side and inside the database functions. | `src/routes/admin.tsx`, `account.functions.ts`, `reloop_admin_*` |
+| Exchange workflow | Request, accept or reject, two-party confirmation, then a completed impact record (created only by the service) | `reloop_workflow`, `cloud.functions.ts` |
+| Reports | Authenticated, insert-own, admin read | `reports` table, `ReportButton.tsx` |
+| Contact | Public insert with length and email checks, honeypot, no read access | `contact_messages`, `ContactForm.tsx` |
+| Storage | `reloop-photos` private bucket, owner or accepted-participant access | migration 0004 |
+| Notifications | Web push through Firebase (connector linked). No email notifications, no in-app inbox table. | `push.server.ts`, `firebase-messaging-sw.js`, `push_tokens` |
+| PWA | manifest, icons, messaging service worker. No offline cache. | `public/` |
+| i18n | 7 languages. Urdu and Arabic switch to right-to-left. Long-form pages and the sign-in box are English only. | `i18n.tsx`, `i18n-dash.ts` |
+| SEO | Per-route `head()`, canonical links, JSON-LD, robots.txt. No sitemap.xml because there is no public URL yet. | routes, `public/robots.txt` |
+| Security scan | 0 findings. Linter: 7 security-definer execution warnings, reviewed and intentional. | latest scan |
+| n8n | **Not connected.** No n8n connection exists in the workspace, and no n8n code, webhook or workflow file is in the project. | connector list (empty), repo search |
 
-## Comparison with OLIO, Freecycle and Buy Nothing (from public help docs)
-| Feature | Them | ReLoop now | Plan |
-|---|---|---|---|
-| Profile (name, general area, joined) | yes | none | add a minimal profile |
-| My listings and needs page | yes | partial (inline) | add a "My ReLoop" page |
-| Incoming and outgoing requests | yes | per item | gather them on My ReLoop |
-| Two-party handover | pickup confirmation | exists | show it on My ReLoop |
-| Notifications | push/email | none | in-app inbox only (no paid email) |
-| Report or flag a listing | yes | contact form only | add a proper report flow |
-| Safe messaging | in-app chat, address hidden | requests carry a note | short request thread, no addresses or phone numbers shown |
-| Bookmarks | OLIO has them | none | optional, private to each user |
+## 2. Gap analysis (prioritised)
 
-## Database changes (smallest set, all protected by access rules)
-- `profiles`: display name, general area, created date. Users can read or edit only their own profile. Others see only the display name, through a safe lookup.
-- `app_role` plus `user_roles`, and a `has_role()` check that runs safely on the server. Users can only read their own role row, and nobody can write roles from the app. The first admin will be set up once by me, after you confirm the email.
-- `reports`: what is being reported, the reason, the reporter and the status. Anyone signed in can create a report. Only the reporter and admins can read it. Only admins can update it.
-- `notifications`: one row per user, written only by the server. Users can read their own and mark them read.
-- `bookmarks` (optional): owner only.
-- Moderation server functions check `has_role('admin')` on the server through the signed-in session. The page hides admin controls for non-admins, but that is cosmetic only.
-- Evidence validation becomes a checked database function, and the `validated` flag can no longer be set through ordinary edits.
+P0, launch blockers
+1. Signup consent: no Terms and Privacy acceptance is recorded at signup, for either Google or email.
+2. Account controls: no change email or password while signed in, no delete-account or data-export request, no sign out of all devices.
+3. Listing management inside My ReLoop: listings and needs show only a status label. There is no edit, close or delete from the dashboard. These actions exist only on the exchange and needs pages.
+4. Abuse limits: there is no rate limit on contact, report or listing creation. Lovable has no built-in server rate limiter, so this is a documented blocker unless a database-based limit is accepted.
+5. The two-party handover has not been tested end to end with a second real account.
 
-## Production audit checklist
-Sign-in and sessions, database rules (run a security scan and lint), private uploads (check paths and orphaned files), contact messages (validation and rate limits), empty states and data correctness, error and loading states, SEO (titles, canonical links, sitemap waiting on a public web address), accessibility (alt text, contrast, headings, keyboard use), all 7 languages including right-to-left, 390px mobile, forms, and every internal link.
+P1, parity with OLIO, Freecycle and Buy Nothing
+6. In-app notification inbox stored in the database: read/unread, newest first, generated by the same events as push.
+7. Safe in-request messaging: short message thread per accepted request, visible only to the two participants, with contact details blocked or flagged by pattern. No public direct messages.
+8. Email notifications: these need a verified sender domain, which the owner must supply.
+9. Bookmarks or saved items: owner-only table.
+10. Block a user, and hide a user's content, which is the standard user control on Buy Nothing and OLIO.
+11. Moderation extras: hide or close a reported listing, a resolution note, an audit log of admin actions, and a manual-only role management view (no self-grant).
+12. Public profile card: display name, general area, member since, completed handovers. No email or phone.
 
-## Order of work
-1. Screenshot the badge on desktop and at 390px, and fix it if anything is still off.
-2. Check that public listings and needs carry no exact address or contact details.
-3. Add roles, reports, the admin evidence-validation function and an admin review page.
-4. Add profiles and the My ReLoop page (my listings and needs, incoming and outgoing requests, handover status).
-5. Add notifications, the request thread and bookmarks.
-6. Add spam protection to the contact and report forms.
-7. Run the full audit, a security scan and browser checks.
-8. Test the signed-in flows with a real test account: post, request, accept, both parties confirm, validate, report.
+P2, quality
+13. Translate the sign-in dialog, report dialog and contact form into all 7 languages.
+14. sitemap.xml once a public URL exists; `hreflang` only if localized routes are added.
+15. Accessibility pass: focus order in dialogs, keyboard checks, colour contrast audit with axe.
+16. Policy pages need a legal review (owner action) and an update to describe any new data fields.
 
-## Tests (one per rule)
-- Hazardous categories are rejected from listings.
-- Only FREE and EXCHANGE are accepted.
-- Unvalidated evidence is hidden from signed-out visitors.
-- A non-admin can't validate evidence or resolve a report.
-- A user can't set their own role.
-- A request alone doesn't count as a completed exchange; only two-party confirmation does.
-- Public listings never include exact-address fields.
-- Contact form rules (length limits, honeypot).
-- Plus the existing route and impact tests.
+## 3. Signup field recommendation
 
-## Your decisions
-- The email address to make the first admin.
-- Permission to create one test account for signed-in checks.
-- Whether to include bookmarks.
+- **Required:** email (verified) and password (at least 8 characters). Google users skip the password.
+- **Required checkbox:** "I agree to the Terms and Privacy Policy". The version and time are stored in a `consents` table after the session exists. This is the same post-session path for Google and email, and the app is gated until it is accepted.
+- **Optional:** first name and last name, which can produce the display name, and a general area.
+- **Phone:** do not collect it at launch. Phone verification needs a paid SMS provider and adds privacy risk. If it is wanted later, it should be optional, verified, private, and never shown or exchanged. This needs the owner's approval because of cost.
+- **Never collect:** exact address, ID documents, date of birth.
 
-## Status (23 Oct)
-Steps 1–6 are implemented. Step 8 (signed-in end-to-end testing) is blocked until there's a registered account and the first admin is set up. See the verification file.
+## 4. Phased plan
+
+**Phase 1, account basics and consent**
+- `consents` table plus a consent gate step after first sign-in. Record the terms version.
+- Signup: optional first and last name fields, then the profile is created after verification.
+- Account settings section: change password (current password required), change email, sign out everywhere, and a "delete my account" request that admins process. Explain the data that is kept.
+- Edit, close and delete own listings and needs directly from My ReLoop, reusing existing actions.
+
+**Phase 2, notifications and safe messaging**
+- `notifications` table, owner-read and service-insert, written in the same place as push events. Inbox UI in My ReLoop with an unread badge in the nav.
+- `request_messages` table: participants only, length limits, contact-pattern warning, no attachments. RLS uses the request participant check.
+
+**Phase 3, user controls and moderation**
+- `bookmarks` and `user_blocks` tables, owner-only.
+- Admin: hide or close a reported item (admin-checked database function), resolution note, `moderation_log` (admin read, written by the database function), read-only role list. Admin assignment stays manual, run as SQL only after owner confirmation.
+- Optional database-based rate limits: a per-user count per hour checked inside the insert functions.
+
+**Phase 4, polish**
+- Translate the remaining dialogs, run an axe accessibility pass, add the sitemap once there is a URL, update the policies to match the new data.
+
+**Optional, n8n:** only if the owner creates an n8n connection (https://lovable.dev/connectors/n8n/connect?workspace=LiOeQlwpGxp5ZNRw1dMp). Use: forward new reports or contact messages to an n8n webhook from a server function, with no personal data beyond what is needed. Nothing is built until a connection exists.
+
+## 5. Architecture and data flow
+
+```text
+Browser (React, TanStack Router)
+  |-- public pages ---- publishable client --> reloop_records (shared listings/needs, validated evidence)
+  |-- sign-in -------- Cloud Auth (Google managed, email+password w/ verification)
+  |-- My ReLoop/Admin - server functions (requireSupabaseAuth)
+  |                        |-- reloop_commit / reloop_workflow (service, revision-checked)
+  |                        |-- profiles, reports, push_tokens (RLS as user)
+  |                        |-- reloop_admin_* (has_role check inside DB)
+  |                        `-- push.server -> Firebase Cloud Messaging (no contact data)
+  |-- photos --------- private bucket reloop-photos (owner/participant read)
+  `-- contact/report form -> contact_messages (insert only, validated)
+
+Proposed: consents, notifications, request_messages, bookmarks, user_blocks,
+          moderation_log; optional n8n webhook from server functions.
+```
+
+## 6. File-level map (existing, then proposed)
+
+- Auth UI: `components/reloop/AccountButton.tsx` (add consent step and name fields), `routes/reset-password.tsx`
+- Dashboard: `routes/account.tsx` (add settings, inbox, listing controls), `lib/i18n-dash.ts`
+- Admin: `routes/admin.tsx`, `lib/reloop/account.functions.ts`, `lib/reloop/moderation.ts`
+- Workflow: `lib/reloop/cloud.functions.ts`, `lib/reloop/store.ts`, `lib/reloop/types.ts`
+- Push: `lib/reloop/push.server.ts`, `push.functions.ts`, `push-client.ts`, `components/reloop/PushToggle.tsx`
+- Shell and nav: `components/reloop/AppShell.tsx`, `Footer.tsx`
+- Proposed new: `lib/reloop/notifications.functions.ts`, `lib/reloop/messages.functions.ts`, `routes/account.tsx` sections, new migrations 0010+
+
+## 7. Test criteria
+
+- Unit tests: consent required before app writes, message contact-pattern filter, rate-limit threshold, block hides content.
+- Database checks: a non-participant cannot read messages, a non-admin calling admin functions gets 42501, a user cannot insert into `user_roles`, notifications are readable only by their owner.
+- Browser checks at 1280px and 390px in English, Urdu and Arabic: no overflow, right-to-left direction where expected, no page errors.
+- End to end with two real accounts, which the owner creates: request, accept, both confirm, completed; one report followed by admin review.
+
+## 8. Blockers and owner decisions
+
+- A second real account is needed for two-party tests. No fake users will be created.
+- Email notifications need a verified sender domain.
+- Phone verification needs an SMS provider, which is a cost and needs approval.
+- n8n is not connected: a connection must be created first.
+- Legal review of the policies.
+- A public URL is needed for the sitemap. No publishing without a request.
+- Any further admin assignment needs explicit owner confirmation.
