@@ -363,10 +363,7 @@ function MaterialLibrary() {
                 src={img.src}
                 alt={img.alt}
                 loading="lazy"
-                className={cn(
-                  "h-44 w-full object-cover md:h-full",
-                  i % 2 === 1 && "md:order-2",
-                )}
+                className={cn("h-44 w-full object-cover md:h-full", i % 2 === 1 && "md:order-2")}
               />
             ) : (
               <div

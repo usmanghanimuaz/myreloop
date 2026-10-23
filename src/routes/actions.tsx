@@ -73,7 +73,9 @@ function Actions() {
         <div className="p-6 md:col-span-2">
           <h2 className="text-xl font-semibold">Safe, respectful local handovers</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            <li>Meet in a public, well-lit place during the day, and tell someone where you're going.</li>
+            <li>
+              Meet in a public, well-lit place during the day, and tell someone where you're going.
+            </li>
             <li>Check the item matches its description before taking it home.</li>
             <li>Be on time, be polite, and don't pressure anyone into an exchange.</li>
             <li>

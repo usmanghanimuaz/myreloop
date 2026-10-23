@@ -83,7 +83,10 @@ function About() {
               text: "Burning mixed waste — especially plastic — releases toxic smoke that harms lungs. Communities pay again to clean up what could have been reused, repaired or recycled instead.",
             },
           ].map((b) => (
-            <figure key={b.title} className="overflow-hidden rounded-2xl border bg-card shadow-card">
+            <figure
+              key={b.title}
+              className="overflow-hidden rounded-2xl border bg-card shadow-card"
+            >
               <img
                 src={b.image.src}
                 alt={b.image.alt}

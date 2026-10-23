@@ -227,7 +227,10 @@ function Home() {
         </div>
         <ul className="space-y-3 self-center">
           {TODAY.map((t) => (
-            <li key={t} className="flex items-start gap-3 rounded-xl bg-card p-4 text-sm shadow-card">
+            <li
+              key={t}
+              className="flex items-start gap-3 rounded-xl bg-card p-4 text-sm shadow-card"
+            >
               <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
               <span>{t}</span>
             </li>
@@ -239,8 +242,8 @@ function Home() {
       <section className="mb-12">
         <h2 className="mb-2 text-2xl font-semibold md:text-3xl">Happening in the community</h2>
         <p className="mb-6 max-w-2xl text-muted-foreground">
-          Real records from this ReLoop community. Items marked “Sample data” are fictional
-          examples and never count as real impact.
+          Real records from this ReLoop community. Items marked “Sample data” are fictional examples
+          and never count as real impact.
         </p>
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
