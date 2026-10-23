@@ -29,16 +29,16 @@ export const Route = createFileRoute("/finder")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Find a Better Use — ReLoop" },
+      { title: "Material Guidance — ReLoop" },
       {
         name: "description",
         content:
-          "Get practical reuse, repair, donation and recycling guidance for household materials.",
+          "A visual learning library: how to reuse, repair, recycle and safely handle paper, glass, plastic, metal, textiles, furniture, electronics and hazardous waste.",
       },
-      { property: "og:title", content: "Find a Better Use — ReLoop" },
+      { property: "og:title", content: "Material Guidance — ReLoop" },
       {
         property: "og:description",
-        content: "Practical, local guidance for reusable household materials.",
+        content: "Practical reuse, repair and recycling guidance for everyday materials.",
       },
     ],
   }),
@@ -78,10 +78,12 @@ function Finder() {
   return (
     <div className="animate-rise">
       <PageHeader
-        eyebrow="Waste-to-Value Finder"
-        title="Find a better use"
-        description="Describe what you have. Guidance comes from a built-in, editable dataset of general advice — not live local recycling data or image recognition."
+        eyebrow="Material Guidance"
+        title="Learn what to do with each material"
+        description="A practical library for everyday materials — reuse, repair, recycle or dispose safely. Below the library, a quick tool gives tailored suggestions for an item you have. General advice only; local collection rules vary."
       />
+      <MaterialLibrary />
+      <h2 className="mb-4 mt-12 text-2xl font-semibold">Quick tool: find a better use</h2>
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <form onSubmit={submit} className="grid gap-4" noValidate>
