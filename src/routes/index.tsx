@@ -94,7 +94,7 @@ function Home() {
   const completedExchanges = useMemo(
     () =>
       state.interests
-        .filter((i) => i.status === "completed")
+        .filter((i) => i.status === "completed" && i.origin === "user")
         .map((i) => ({
           interest: i,
           listing: state.listings.find((l) => l.id === i.listingId),
@@ -352,11 +352,14 @@ function Home() {
             <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Clock className="size-5 text-primary" /> Recent community activity
             </h3>
-            {state.activity.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No activity recorded yet.</p>
+            {state.activity.filter((e) => e.origin === "user").length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("home.noActivity")}</p>
             ) : (
               <ul className="divide-y">
-                {state.activity.slice(0, 7).map((e) => (
+                {state.activity
+                  .filter((e) => e.origin === "user")
+                  .slice(0, 7)
+                  .map((e) => (
                   <li key={e.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                     <span>{e.message}</span>
                     <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
