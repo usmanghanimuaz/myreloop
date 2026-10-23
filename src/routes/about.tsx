@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, Notice, PageHeader } from "@/components/reloop/shared";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { wasteSources, sourceRetrievalDate } from "@/lib/reloop/sources";
+import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import type { Evidence } from "@/lib/reloop/types";
 
 export const Route = createFileRoute("/about")({
@@ -53,10 +54,51 @@ function About() {
   return (
     <div className="animate-rise">
       <PageHeader
-        eyebrow="About the Project"
-        title="Why ReLoop"
-        description="ReLoop helps communities reduce avoidable waste by turning reusable household materials into useful local resources — through an exchange board, practical guidance, community actions and honest impact tracking."
+        eyebrow="Waste Problem & Evidence"
+        title="Why waste is a problem — and what the evidence says"
+        description="Littering, open dumping, plastic leakage and burning waste harm air, soil, water and health. This page pairs that explanation with published research from public environmental bodies — kept strictly separate from ReLoop's own impact records."
       />
+
+      <section className="mb-10">
+        <h2 className="mb-2 text-2xl font-semibold">What goes wrong when waste is mishandled</h2>
+        <p className="mb-5 max-w-2xl text-sm text-muted-foreground">
+          The photos below are illustrative stock images, not local observations. The claims are
+          explained in plain language and backed by the published sources further down.
+        </p>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            {
+              image: IMAGES.plasticPollution,
+              title: "Plastic leakage",
+              text: "Plastic that escapes collection does not disappear. It breaks into smaller pieces, reaches rivers and the sea, and is eaten by animals. Reusing containers and bottles slows the flow at the source.",
+            },
+            {
+              image: IMAGES.overflowingBin,
+              title: "Open dumping & littering",
+              text: "Overflowing bins and dumped rubbish attract pests, block drains and worsen flooding. Passing on usable items reduces the volume that collection systems must handle.",
+            },
+            {
+              image: IMAGES.beachCleanup,
+              title: "Burning & cleanup costs",
+              text: "Burning mixed waste — especially plastic — releases toxic smoke that harms lungs. Communities pay again to clean up what could have been reused, repaired or recycled instead.",
+            },
+          ].map((b) => (
+            <figure key={b.title} className="overflow-hidden rounded-2xl border bg-card shadow-card">
+              <img
+                src={b.image.src}
+                alt={b.image.alt}
+                loading="lazy"
+                className="h-44 w-full object-cover"
+              />
+              <figcaption className="p-5">
+                <h3 className="text-lg font-semibold">{b.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{b.text}</p>
+                <p className="mt-3 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
 
       <Card className="mb-8">
         <h2 className="text-xl font-semibold">Community reuse and honest records</h2>
