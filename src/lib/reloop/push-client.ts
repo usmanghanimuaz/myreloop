@@ -1,10 +1,12 @@
-const appId = import.meta.env.VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_APP_ID as string | undefined;
-const vapidKey = import.meta.env.VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_VAPID_KEY as
-  | string
-  | undefined;
+const appId = import.meta.env["VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_APP_ID"] as
+  string | undefined;
+const vapidKey = import.meta.env["VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_VAPID_KEY"] as
+  string | undefined;
 const firebaseConfig = {
-  apiKey: (import.meta.env.VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_WEB_API_KEY as string) ?? "",
-  projectId: (import.meta.env.VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_PROJECT_ID as string) ?? "",
+  apiKey:
+    (import.meta.env["VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_WEB_API_KEY"] as string) ?? "",
+  projectId:
+    (import.meta.env["VITE_LOVABLE_CONNECTOR_FIREBASE_MESSAGING_PROJECT_ID"] as string) ?? "",
   appId: appId ?? "",
   messagingSenderId: appId?.split(":")[1] ?? "",
 };
@@ -14,7 +16,13 @@ export type PushResult =
   | { status: "not-configured" | "unsupported" | "open-in-new-tab" | "denied" };
 
 export async function enablePush(): Promise<PushResult> {
-  if (!firebaseConfig.apiKey || !firebaseConfig.projectId || !appId || !vapidKey || !firebaseConfig.messagingSenderId)
+  if (
+    !firebaseConfig.apiKey ||
+    !firebaseConfig.projectId ||
+    !appId ||
+    !vapidKey ||
+    !firebaseConfig.messagingSenderId
+  )
     return { status: "not-configured" };
   const { initializeApp, getApps } = await import("firebase/app");
   const { getMessaging, getToken, isSupported } = await import("firebase/messaging");
