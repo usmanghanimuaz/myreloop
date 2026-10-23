@@ -254,7 +254,12 @@ function Dashboard({ userId }: { userId: string }) {
                   className="flex items-center justify-between gap-3 rounded-xl border bg-background p-3"
                 >
                   <span className="min-w-0 truncate font-medium">{l.title}</span>
-                  <StatusBadge status={l.status} />
+                  <span className="flex shrink-0 items-center gap-2">
+                    <StatusBadge status={l.status} />
+                    <Link to="/exchange" className="text-xs text-primary underline">
+                      {t("manage")}
+                    </Link>
+                  </span>
                 </li>
               ))}
             </ul>
