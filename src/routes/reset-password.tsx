@@ -27,11 +27,17 @@ function ResetPassword() {
   const navigate = useNavigate();
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) return toast.error("Password must be at least 8 characters");
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (error) return toast.error("Link expired — request a new reset email");
+    if (error) {
+      toast.error("Link expired — request a new reset email");
+      return;
+    }
     toast.success("Password updated");
     navigate({ to: "/account" });
   }
