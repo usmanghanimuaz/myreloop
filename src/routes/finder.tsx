@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, Recycle, RefreshCw, Wrench, HeartHandshake, Info } from "lucide-react";
+import {
+  AlertTriangle,
+  ExternalLink,
+  Recycle,
+  RefreshCw,
+  Wrench,
+  HeartHandshake,
+  Info,
+} from "lucide-react";
 import { useState } from "react";
 import { saved } from "@/components/reloop/CommunityNeeds";
 import { Button } from "@/components/ui/button";
@@ -7,7 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
 import { Card, Notice, PageHeader } from "@/components/reloop/shared";
-import { getRecommendations, type RecommendationGroup } from "@/lib/reloop/guidance";
+import { getRecommendations, GUIDANCE, type RecommendationGroup } from "@/lib/reloop/guidance";
+import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { actions, useStoreMeta } from "@/lib/reloop/store";
 import {
   CATEGORIES,
