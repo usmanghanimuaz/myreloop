@@ -6,7 +6,16 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AccountButton } from "@/components/reloop/AccountButton";
 import { Card, PageHeader, formatDate } from "@/components/reloop/shared";
-import { getModerationQueue, moderateEvidence, reviewReport } from "@/lib/reloop/account.functions";
+import {
+  closeReportedRecord,
+  getModerationLog,
+  getModerationQueue,
+  moderateEvidence,
+  reviewReport,
+  setMemberRestriction,
+} from "@/lib/reloop/account.functions";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import { useStoreMeta } from "@/lib/reloop/store";
 import { useDashT } from "@/lib/i18n-dash";
 
@@ -46,17 +55,26 @@ function Queue() {
   const load = useServerFn(getModerationQueue);
   const validate = useServerFn(moderateEvidence);
   const review = useServerFn(reviewReport);
+  const close = useServerFn(closeReportedRecord);
+  const restrict = useServerFn(setMemberRestriction);
+  const loadLog = useServerFn(getModerationLog);
+  const [notes, setNotes] = useState<Record<string, string>>({});
   const qc = useQueryClient();
   const t = useDashT();
   const q = useQuery({ queryKey: ["reloop-account", "moderation"], queryFn: () => load() });
+  const log = useQuery({
+    queryKey: ["reloop-account", "moderation-log"],
+    queryFn: () => loadLog(),
+    enabled: q.data?.allowed === true,
+  });
   const act = async (fn: () => Promise<unknown>, ok: string) => {
     try {
       await fn();
       toast.success(ok);
       await qc.invalidateQueries({ queryKey: ["reloop-account"] });
       await qc.invalidateQueries({ queryKey: ["reloop-public"] });
-    } catch {
-      toast.error(t("mod.failed"));
+    } catch (e) {
+      toast.error(e instanceof Error && e.message ? e.message : t("mod.failed"));
     }
   };
   if (q.isLoading) return <p className="p-8 text-muted-foreground">{t("mod.loading")}</p>;
@@ -135,12 +153,23 @@ function Queue() {
                   {t(`k.${r.target_kind}`)} · {r.target_id} · {formatDate(r.created_at)}
                 </p>
                 {r.details && <p className="mt-2">{r.details}</p>}
-                <div className="mt-3 flex gap-2">
+                <Input
+                  aria-label={t("mod.note")}
+                  placeholder={t("mod.note")}
+                  maxLength={500}
+                  className="mt-3"
+                  value={notes[r.id] ?? ""}
+                  onChange={(e) => setNotes({ ...notes, [r.id]: e.target.value })}
+                />
+                <div className="mt-3 flex flex-wrap gap-2">
                   <Button
                     size="sm"
                     onClick={() =>
                       void act(
-                        () => review({ data: { id: r.id, decision: "reviewed" } }),
+                        () =>
+                          review({
+                            data: { id: r.id, decision: "reviewed", note: notes[r.id] ?? "" },
+                          }),
                         t("mod.reviewed"),
                       )
                     }
@@ -152,14 +181,99 @@ function Queue() {
                     variant="outline"
                     onClick={() =>
                       void act(
-                        () => review({ data: { id: r.id, decision: "dismissed" } }),
+                        () =>
+                          review({
+                            data: { id: r.id, decision: "dismissed", note: notes[r.id] ?? "" },
+                          }),
                         t("mod.dismissed"),
                       )
                     }
                   >
                     {t("mod.dismiss")}
                   </Button>
+                  {(r.target_kind === "listings" || r.target_kind === "needs") && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() =>
+                        void act(
+                          () =>
+                            close({
+                              data: {
+                                targetKind: r.target_kind as "listings" | "needs",
+                                targetId: r.target_id,
+                                note: notes[r.id] ?? "",
+                              },
+                            }),
+                          t("mod.closed"),
+                        )
+                      }
+                    >
+                      {t("mod.closeItem")}
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() =>
+                      void act(
+                        () =>
+                          restrict({
+                            data: {
+                              targetKind: r.target_kind as "listings" | "needs" | "fieldEvidence",
+                              targetId: r.target_id,
+                              restrict: true,
+                              reason: notes[r.id] ?? "",
+                            },
+                          }),
+                        t("mod.restrictedOk"),
+                      )
+                    }
+                  >
+                    {t("mod.restrict")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() =>
+                      void act(
+                        () =>
+                          restrict({
+                            data: {
+                              targetKind: r.target_kind as "listings" | "needs" | "fieldEvidence",
+                              targetId: r.target_id,
+                              restrict: false,
+                              reason: notes[r.id] ?? "",
+                            },
+                          }),
+                        t("mod.unrestrictedOk"),
+                      )
+                    }
+                  >
+                    {t("mod.unrestrict")}
+                  </Button>
                 </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t("mod.log")}</h2>
+        {log.isLoading ? (
+          <p className="text-sm text-muted-foreground">{t("loading")}</p>
+        ) : !log.data?.length ? (
+          <p className="text-sm text-muted-foreground">{t("mod.logEmpty")}</p>
+        ) : (
+          <ul className="divide-y rounded-xl border bg-background text-sm">
+            {log.data.map((l) => (
+              <li key={l.id} className="flex flex-wrap gap-x-3 gap-y-1 p-3">
+                <span className="font-medium">{l.action.replace(/_/g, " ")}</span>
+                <span className="text-muted-foreground">
+                  {l.target_kind} · {l.target_id.slice(0, 24)}
+                </span>
+                <span className="text-muted-foreground">{formatDate(l.created_at)}</span>
+                {l.note && <span className="w-full">{l.note}</span>}
               </li>
             ))}
           </ul>

@@ -67,7 +67,9 @@ export const executeCommand = createServerFn({ method: "POST" })
         .maybeSingle(),
     ]);
     if (restriction)
-      throw new Error("Your account is restricted from posting. Contact ReLoop via the Contact page.");
+      throw new Error(
+        "Your account is restricted from posting. Contact ReLoop via the Contact page.",
+      );
     if (!profile?.terms_accepted_at)
       throw new Error("Please accept the Terms and Privacy Policy in My ReLoop before posting.");
     const rows: CloudRecord[] = [];
@@ -108,7 +110,12 @@ export const executeCommand = createServerFn({ method: "POST" })
       const other = request.owner_id === context.userId ? target.owner_id : request.owner_id;
       if (other) {
         const { notifyUser } = await import("./push.server");
-        await notifyUser(other, "ReLoop handover update", "A request you're part of was updated.", "updates");
+        await notifyUser(
+          other,
+          "ReLoop handover update",
+          "A request you're part of was updated.",
+          "updates",
+        );
       }
       return { listing: undefined };
     }

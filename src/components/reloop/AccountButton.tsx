@@ -89,7 +89,13 @@ export function AccountButton() {
   async function signUpEmail(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const parsed = SignupSchema.safeParse({ firstName, lastName, email, password, acceptTerms: agree });
+    const parsed = SignupSchema.safeParse({
+      firstName,
+      lastName,
+      email,
+      password,
+      acceptTerms: agree,
+    });
     if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Check the form");
     setBusy(true);
     const { data, error: err } = await supabase.auth.signUp({
@@ -364,8 +370,8 @@ export function AccountButton() {
                     </Button>
                     <p className="text-xs text-muted-foreground">
                       New accounts are regular members. A verification email is sent to confirm your
-                      address. Your name and profile are private to you; you can add an
-                      optional private phone later in My ReLoop.
+                      address. Your name and profile are private to you; you can add an optional
+                      private phone later in My ReLoop.
                     </p>
                   </form>
                 </TabsContent>

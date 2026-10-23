@@ -205,7 +205,12 @@ export const setMemberRestriction = createServerFn({ method: "POST" })
       restrict: data.restrict,
       reason: data.reason,
     });
-    if (error) throw new Error(error.message.includes("yourself") ? "You cannot restrict yourself." : "Not allowed or failed.");
+    if (error)
+      throw new Error(
+        error.message.includes("yourself")
+          ? "You cannot restrict yourself."
+          : "Not allowed or failed.",
+      );
     return { ok: true };
   });
 

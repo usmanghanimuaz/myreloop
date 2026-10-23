@@ -37,7 +37,10 @@ export const PhoneSchema = z
   .string()
   .trim()
   .max(20)
-  .refine((s) => s === "" || /^\+?[0-9 ()-]{7,20}$/.test(s), "Use digits, spaces, + ( ) or - only.");
+  .refine(
+    (s) => s === "" || /^\+?[0-9 ()-]{7,20}$/.test(s),
+    "Use digits, spaces, + ( ) or - only.",
+  );
 
 export const AccountInputSchema = ProfileInputSchema.extend({
   firstName: nameField,
@@ -53,7 +56,9 @@ export const SignupSchema = z.object({
   lastName: nameField,
   email: z.string().trim().email("Enter a valid email address").max(254),
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
-  acceptTerms: z.literal(true, { errorMap: () => ({ message: "Please accept the Terms and Privacy Policy." }) }),
+  acceptTerms: z.literal(true, {
+    errorMap: () => ({ message: "Please accept the Terms and Privacy Policy." }),
+  }),
 });
 
 export const REPORT_REASONS = [
