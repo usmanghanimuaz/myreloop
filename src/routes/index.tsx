@@ -145,18 +145,23 @@ function Home() {
 
       {/* 2 — How ReLoop works */}
       <section className="mb-12">
-        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">How ReLoop works</h2>
-        <p className="mb-6 max-w-2xl text-muted-foreground">
-          Three simple steps turn would-be waste into someone else's useful find.
-        </p>
-        <ol className="grid gap-4 md:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <li key={s.title} className="rounded-2xl border bg-card p-6 shadow-card">
+        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">{t("home.howTitle")}</h2>
+        <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.howText")}</p>
+        <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {STEP_KEYS.map((n) => (
+            <li
+              key={n}
+              className="rounded-2xl border bg-card p-6 shadow-card"
+            >
               <span className="mb-3 grid size-10 place-items-center rounded-full bg-primary font-display text-lg font-semibold text-primary-foreground">
-                {i + 1}
+                {n}
               </span>
-              <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+              <h3 className="text-lg font-semibold">
+                {t(`home.step${n}Title` as const)}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t(`home.step${n}Text` as const)}
+              </p>
             </li>
           ))}
         </ol>
