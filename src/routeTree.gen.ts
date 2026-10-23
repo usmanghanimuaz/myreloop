@@ -29,6 +29,7 @@ import { Route as MissionRouteImport } from './routes/mission'
 import { Route as NeedsRouteImport } from './routes/needs'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -134,6 +135,11 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SafetyRoute = SafetyRouteImport.update({
   id: '/safety',
   path: '/safety',
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/needs': typeof NeedsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/needs': typeof NeedsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   '/needs': typeof NeedsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/needs'
     | '/privacy'
     | '/report'
+    | '/reset-password'
     | '/safety'
     | '/stories'
     | '/terms'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/needs'
     | '/privacy'
     | '/report'
+    | '/reset-password'
     | '/safety'
     | '/stories'
     | '/terms'
@@ -309,6 +320,7 @@ export interface FileRouteTypes {
     | '/needs'
     | '/privacy'
     | '/report'
+    | '/reset-password'
     | '/safety'
     | '/stories'
     | '/terms'
@@ -336,6 +348,7 @@ export interface RootRouteChildren {
   NeedsRoute: typeof NeedsRoute
   PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SafetyRoute: typeof SafetyRoute
   StoriesRoute: typeof StoriesRoute
   TermsRoute: typeof TermsRoute
@@ -483,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/safety': {
       id: '/safety'
       path: '/safety'
@@ -545,6 +565,7 @@ const rootRouteChildren: RootRouteChildren = {
   NeedsRoute: NeedsRoute,
   PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SafetyRoute: SafetyRoute,
   StoriesRoute: StoriesRoute,
   TermsRoute: TermsRoute,
