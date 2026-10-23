@@ -13,7 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as ActionsRouteImport } from './routes/actions'
+import { Route as CommunityGuidelinesRouteImport } from './routes/community-guidelines'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ExchangeRouteImport } from './routes/exchange'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinderRouteImport } from './routes/finder'
@@ -21,7 +24,10 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as NeedsRouteImport } from './routes/needs'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as SafetyRouteImport } from './routes/safety'
+import { Route as TermsRouteImport } from './routes/terms'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -43,9 +49,24 @@ const ActionsRoute = ActionsRouteImport.update({
   path: '/actions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
+  id: '/community-guidelines',
+  path: '/community-guidelines',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExchangeRoute = ExchangeRouteImport.update({
@@ -83,9 +104,24 @@ const NeedsRoute = NeedsRouteImport.update({
   path: '/needs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyRoute = SafetyRouteImport.update({
+  id: '/safety',
+  path: '/safety',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -94,7 +130,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
   '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
@@ -102,14 +141,20 @@ export interface FileRoutesByFullPath {
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
   '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
@@ -117,7 +162,10 @@ export interface FileRoutesByTo {
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,7 +173,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/exchange': typeof ExchangeRoute
   '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
@@ -133,7 +184,10 @@ export interface FileRoutesById {
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -142,7 +196,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/community-guidelines'
     | '/contact'
+    | '/cookies'
+    | '/disclaimer'
     | '/exchange'
     | '/faq'
     | '/finder'
@@ -150,14 +207,20 @@ export interface FileRouteTypes {
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/privacy'
     | '/report'
+    | '/safety'
+    | '/terms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/community-guidelines'
     | '/contact'
+    | '/cookies'
+    | '/disclaimer'
     | '/exchange'
     | '/faq'
     | '/finder'
@@ -165,14 +228,20 @@ export interface FileRouteTypes {
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/privacy'
     | '/report'
+    | '/safety'
+    | '/terms'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/community-guidelines'
     | '/contact'
+    | '/cookies'
+    | '/disclaimer'
     | '/exchange'
     | '/faq'
     | '/finder'
@@ -180,7 +249,10 @@ export interface FileRouteTypes {
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/privacy'
     | '/report'
+    | '/safety'
+    | '/terms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -188,7 +260,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AboutUsRoute: typeof AboutUsRoute
   ActionsRoute: typeof ActionsRoute
+  CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
   ContactRoute: typeof ContactRoute
+  CookiesRoute: typeof CookiesRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   ExchangeRoute: typeof ExchangeRoute
   FaqRoute: typeof FaqRoute
   FinderRoute: typeof FinderRoute
@@ -196,7 +271,10 @@ export interface RootRouteChildren {
   ImpactRoute: typeof ImpactRoute
   MissionRoute: typeof MissionRoute
   NeedsRoute: typeof NeedsRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
+  SafetyRoute: typeof SafetyRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -229,11 +307,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community-guidelines': {
+      id: '/community-guidelines'
+      path: '/community-guidelines'
+      fullPath: '/community-guidelines'
+      preLoaderRoute: typeof CommunityGuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exchange': {
@@ -285,11 +384,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NeedsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/report': {
       id: '/report'
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety': {
+      id: '/safety'
+      path: '/safety'
+      fullPath: '/safety'
+      preLoaderRoute: typeof SafetyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -300,7 +420,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AboutUsRoute: AboutUsRoute,
   ActionsRoute: ActionsRoute,
+  CommunityGuidelinesRoute: CommunityGuidelinesRoute,
   ContactRoute: ContactRoute,
+  CookiesRoute: CookiesRoute,
+  DisclaimerRoute: DisclaimerRoute,
   ExchangeRoute: ExchangeRoute,
   FaqRoute: FaqRoute,
   FinderRoute: FinderRoute,
@@ -308,7 +431,10 @@ const rootRouteChildren: RootRouteChildren = {
   ImpactRoute: ImpactRoute,
   MissionRoute: MissionRoute,
   NeedsRoute: NeedsRoute,
+  PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
+  SafetyRoute: SafetyRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
