@@ -16,6 +16,8 @@ import {
 import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
 import { useStoreMeta } from "@/lib/reloop/store";
+import { SignupSchema, TERMS_VERSION } from "@/lib/reloop/moderation";
+import { Link } from "@tanstack/react-router";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -28,6 +30,9 @@ export function AccountButton() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [agree, setAgree] = useState(false);
   const [awaitingCode, setAwaitingCode] = useState(false);
   const [error, setError] = useState("");
 
@@ -84,12 +89,27 @@ export function AccountButton() {
   async function signUpEmail(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!validate()) return;
+    const parsed = SignupSchema.safeParse({
+      firstName,
+      lastName,
+      email,
+      password,
+      acceptTerms: agree,
+    });
+    if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Check the form");
     setBusy(true);
     const { data, error: err } = await supabase.auth.signUp({
-      email: email.trim(),
+      email: parsed.data.email,
       password,
-      options: { emailRedirectTo: window.location.origin },
+      options: {
+        emailRedirectTo: window.location.origin,
+        // Profile fields only; roles are never derived from signup data.
+        data: {
+          first_name: parsed.data.firstName,
+          last_name: parsed.data.lastName,
+          terms_version: TERMS_VERSION,
+        },
+      },
     });
     setBusy(false);
     if (err) return fail(err.message);
@@ -297,7 +317,49 @@ export function AccountButton() {
                 </TabsContent>
                 <TabsContent value="signup">
                   <form onSubmit={signUpEmail} className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="auth-first">First name</Label>
+                        <Input
+                          id="auth-first"
+                          autoComplete="given-name"
+                          maxLength={60}
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="auth-last">Last name (optional)</Label>
+                        <Input
+                          id="auth-last"
+                          autoComplete="family-name"
+                          maxLength={60}
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                        />
+                      </div>
+                    </div>
                     {fields}
+                    <label className="flex items-start gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        className="mt-1 size-4 accent-primary"
+                        checked={agree}
+                        onChange={(e) => setAgree(e.target.checked)}
+                      />
+                      <span>
+                        I agree to the{" "}
+                        <Link to="/terms" className="underline">
+                          Terms
+                        </Link>{" "}
+                        and{" "}
+                        <Link to="/privacy" className="underline">
+                          Privacy Policy
+                        </Link>
+                        .
+                      </span>
+                    </label>
                     {error && (
                       <p className="text-sm text-destructive" role="alert">
                         {error}
@@ -308,7 +370,8 @@ export function AccountButton() {
                     </Button>
                     <p className="text-xs text-muted-foreground">
                       New accounts are regular members. A verification email is sent to confirm your
-                      address.
+                      address. Your name and profile are private to you; you can add an optional
+                      private phone later in My ReLoop.
                     </p>
                   </form>
                 </TabsContent>

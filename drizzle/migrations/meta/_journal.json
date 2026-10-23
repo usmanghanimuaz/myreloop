@@ -71,6 +71,13 @@
       "when": 1792754959118,
       "tag": "0009_tighten_contact_and_role_exec",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792755633887,
+      "tag": "0010_profiles_signup_moderation_log_restrictions",
+      "breakpoints": true
     }
   ]
 }

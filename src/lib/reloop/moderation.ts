@@ -23,6 +23,44 @@ export const ProfileInputSchema = z.object({
 });
 export type ProfileInput = z.infer<typeof ProfileInputSchema>;
 
+/** Current Terms/Privacy version users accept. Bump when policies change materially. */
+export const TERMS_VERSION = "2026-10-23";
+
+const nameField = z
+  .string()
+  .trim()
+  .max(60, "Keep names under 60 characters.")
+  .refine(noContact, "Don't include emails or phone numbers.");
+
+/** Private phone: optional, never shown publicly, not verified (no SMS service). */
+export const PhoneSchema = z
+  .string()
+  .trim()
+  .max(20)
+  .refine(
+    (s) => s === "" || /^\+?[0-9 ()-]{7,20}$/.test(s),
+    "Use digits, spaces, + ( ) or - only.",
+  );
+
+export const AccountInputSchema = ProfileInputSchema.extend({
+  firstName: nameField,
+  lastName: nameField,
+  phone: PhoneSchema,
+  notifyRequests: z.boolean(),
+  notifyUpdates: z.boolean(),
+});
+export type AccountInput = z.infer<typeof AccountInputSchema>;
+
+export const SignupSchema = z.object({
+  firstName: nameField.pipe(z.string().min(1, "Enter your first name.")),
+  lastName: nameField,
+  email: z.string().trim().email("Enter a valid email address").max(254),
+  password: z.string().min(8, "Password must be at least 8 characters").max(72),
+  acceptTerms: z.literal(true, {
+    errorMap: () => ({ message: "Please accept the Terms and Privacy Policy." }),
+  }),
+});
+
 export const REPORT_REASONS = [
   "hazardous",
   "unsafe",
