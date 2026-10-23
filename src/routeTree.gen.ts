@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as ActionsRouteImport } from './routes/actions'
 import { Route as ExchangeRouteImport } from './routes/exchange'
 import { Route as FinderRouteImport } from './routes/finder'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImpactRouteImport } from './routes/impact'
+import { Route as MissionRouteImport } from './routes/mission'
+import { Route as NeedsRouteImport } from './routes/needs'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +28,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutUsRoute = AboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActionsRoute = ActionsRouteImport.update({
@@ -41,59 +50,114 @@ const FinderRoute = FinderRouteImport.update({
   path: '/finder',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ImpactRoute = ImpactRouteImport.update({
   id: '/impact',
   path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NeedsRoute = NeedsRouteImport.update({
+  id: '/needs',
+  path: '/needs',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
   '/exchange': typeof ExchangeRoute
   '/finder': typeof FinderRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
+  '/mission': typeof MissionRoute
+  '/needs': typeof NeedsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/about-us'
+    | '/actions'
+    | '/exchange'
+    | '/finder'
+    | '/how-it-works'
+    | '/impact'
+    | '/mission'
+    | '/needs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/actions' | '/exchange' | '/finder' | '/impact'
+  to:
+    | '/'
+    | '/about'
+    | '/about-us'
+    | '/actions'
+    | '/exchange'
+    | '/finder'
+    | '/how-it-works'
+    | '/impact'
+    | '/mission'
+    | '/needs'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/about-us'
     | '/actions'
     | '/exchange'
     | '/finder'
+    | '/how-it-works'
     | '/impact'
+    | '/mission'
+    | '/needs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AboutUsRoute: typeof AboutUsRoute
   ActionsRoute: typeof ActionsRoute
   ExchangeRoute: typeof ExchangeRoute
   FinderRoute: typeof FinderRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   ImpactRoute: typeof ImpactRoute
+  MissionRoute: typeof MissionRoute
+  NeedsRoute: typeof NeedsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -110,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about-us': {
+      id: '/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof AboutUsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/actions': {
@@ -133,11 +204,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/impact': {
       id: '/impact'
       path: '/impact'
       fullPath: '/impact'
       preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/needs': {
+      id: '/needs'
+      path: '/needs'
+      fullPath: '/needs'
+      preLoaderRoute: typeof NeedsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -146,10 +238,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AboutUsRoute: AboutUsRoute,
   ActionsRoute: ActionsRoute,
   ExchangeRoute: ExchangeRoute,
   FinderRoute: FinderRoute,
+  HowItWorksRoute: HowItWorksRoute,
   ImpactRoute: ImpactRoute,
+  MissionRoute: MissionRoute,
+  NeedsRoute: NeedsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
