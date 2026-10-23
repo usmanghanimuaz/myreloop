@@ -36,6 +36,7 @@ import {
   formatDate,
 } from "@/components/reloop/shared";
 import { looksLikeContactDetails } from "@/lib/reloop/schema";
+import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import {
   CATEGORIES,
@@ -52,14 +53,17 @@ export const Route = createFileRoute("/exchange")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Reuse Exchange — ReLoop" },
+      { title: "Available Items & Community Needs — ReLoop" },
       {
         name: "description",
         content:
-          "Browse, list and request reusable materials from neighbours in your general area.",
+          "Browse, list and request reusable materials from neighbours — free or in exchange, never for sale.",
       },
-      { property: "og:title", content: "Reuse Exchange — ReLoop" },
-      { property: "og:description", content: "A local board for passing on reusable materials." },
+      { property: "og:title", content: "Available Items & Community Needs — ReLoop" },
+      {
+        property: "og:description",
+        content: "A local board for passing on reusable materials, free or in exchange.",
+      },
     ],
   }),
   component: Exchange,
@@ -119,6 +123,34 @@ function Exchange() {
           <Plus /> I Have — List an item
         </Button>
       </PageHeader>
+
+      <section className="mb-8 grid overflow-hidden rounded-2xl border bg-card shadow-card md:grid-cols-3">
+        <img
+          src={IMAGES.communitySorting.src}
+          alt={IMAGES.communitySorting.alt}
+          loading="lazy"
+          className="h-44 w-full object-cover md:h-full"
+        />
+        <div className="p-6 md:col-span-2">
+          <h2 className="text-xl font-semibold">What belongs here?</h2>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+            <li>
+              Usable, clean items you no longer need — boxes, jars, clothes, furniture, working
+              electronics — offered <strong>FREE</strong> or for <strong>EXCHANGE</strong>. Nothing
+              is sold here.
+            </li>
+            <li>
+              Describe the condition honestly: like new, good, worn but usable, or damaged. Wash or
+              wipe items before handover.
+            </li>
+            <li>
+              Never list hazardous waste (batteries, paint, chemicals, medicines, gas canisters) —
+              those belong at designated collection points.
+            </li>
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
+        </div>
+      </section>
 
       <Card className="mb-6 grid gap-3 p-4 md:grid-cols-[1fr_auto_auto]">
         <div className="relative">
