@@ -419,7 +419,10 @@ function MaterialLibrary() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">Avoid</p>
               <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                <li>Never put batteries, paint, chemicals, medicines, sharps or gas canisters in household bins.</li>
+                <li>
+                  Never put batteries, paint, chemicals, medicines, sharps or gas canisters in
+                  household bins.
+                </li>
                 <li>Never burn them or pour them into drains — smoke and runoff are toxic.</li>
                 <li>Do not offer them on the exchange or attempt DIY reuse.</li>
               </ul>
@@ -429,10 +432,19 @@ function MaterialLibrary() {
                 Dispose safely
               </p>
               <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                <li>Batteries: take to a battery collection point; tape the terminals of loose lithium batteries.</li>
+                <li>
+                  Batteries: take to a battery collection point; tape the terminals of loose lithium
+                  batteries.
+                </li>
                 <li>Medicines: return to a pharmacy take-back scheme where available.</li>
-                <li>Paint, chemicals, sharps and gas canisters: use your local hazardous-waste collection point.</li>
-                <li>Swollen, leaking or hot batteries are a fire risk — isolate them and seek specialist collection.</li>
+                <li>
+                  Paint, chemicals, sharps and gas canisters: use your local hazardous-waste
+                  collection point.
+                </li>
+                <li>
+                  Swollen, leaking or hot batteries are a fire risk — isolate them and seek
+                  specialist collection.
+                </li>
               </ul>
             </div>
           </div>
