@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useI18n } from "@/lib/i18n";
 import { NeedInputSchema } from "@/lib/reloop/schema";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORIES, CATEGORY_LABEL, UNITS } from "@/lib/reloop/types";
@@ -22,6 +23,7 @@ export async function saved(action: () => Promise<unknown>, message: string) {
 export function CommunityNeeds() {
   const { needs } = useAppState();
   const { userId, busy } = useStoreMeta();
+  const { t } = useI18n();
   const [draft, setDraft] = useState({
     title: "",
     description: "",
@@ -45,7 +47,7 @@ export function CommunityNeeds() {
   );
   return (
     <section id="community-needs" className="mt-10 scroll-mt-20">
-      <h2 className="mb-4 text-2xl font-semibold">I Need — Community needs</h2>
+      <h2 className="mb-4 text-2xl font-semibold">{t("needs.heading")}</h2>
       <form
         className="mb-6 grid gap-3 border-y py-5 sm:grid-cols-2"
         onSubmit={async (e) => {
@@ -70,12 +72,12 @@ export function CommunityNeeds() {
           <div key={k} className="grid gap-1.5">
             <Label htmlFor={`need-${k}`}>
               {k === "area"
-                ? "General area"
+                ? t("needs.area")
                 : k === "title"
-                  ? "Wanted item title"
+                  ? t("needs.title")
                   : k === "quantity"
-                    ? "Quantity needed"
-                    : "Description"}
+                    ? t("needs.quantity")
+                    : t("needs.description")}
             </Label>
             <Input
               id={`need-${k}`}
@@ -87,7 +89,7 @@ export function CommunityNeeds() {
           </div>
         ))}
         <div>
-          <Label htmlFor="need-category">Material needed</Label>
+          <Label htmlFor="need-category">{t("needs.category")}</Label>
           <select
             id="need-category"
             className="field"
@@ -102,7 +104,7 @@ export function CommunityNeeds() {
           </select>
         </div>
         <div>
-          <Label htmlFor="need-unit">Unit</Label>
+          <Label htmlFor="need-unit">{t("needs.unit")}</Label>
           <select
             id="need-unit"
             className="field"
@@ -115,7 +117,7 @@ export function CommunityNeeds() {
           </select>
         </div>
         <div>
-          <Label htmlFor="need-mode">Preference</Label>
+          <Label htmlFor="need-mode">{t("needs.preference")}</Label>
           <select
             id="need-mode"
             className="field"
@@ -128,7 +130,7 @@ export function CommunityNeeds() {
         </div>
         {draft.mode === "EXCHANGE" && (
           <div>
-            <Label htmlFor="need-exchange">Optional exchange offer</Label>
+            <Label htmlFor="need-exchange">{t("needs.exchangeOffer")}</Label>
             <Input
               id="need-exchange"
               value={exchangePreference}
@@ -138,7 +140,7 @@ export function CommunityNeeds() {
           </div>
         )}
         <Button type="submit" disabled={!userId || busy}>
-          {editing ? "Save need" : "Post need"}
+          {editing ? t("needs.save") : t("needs.post")}
         </Button>
         {editing && (
           <Button
@@ -150,7 +152,7 @@ export function CommunityNeeds() {
               setExchangePreference("");
             }}
           >
-            Cancel edit
+            {t("needs.cancelEdit")}
           </Button>
         )}
         {err && (
@@ -158,22 +160,22 @@ export function CommunityNeeds() {
             {err}
           </p>
         )}
-        {!userId && <p className="text-sm text-muted-foreground">Sign in to post a need.</p>}
+        {!userId && <p className="text-sm text-muted-foreground">{t("needs.signIn")}</p>}
       </form>
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <div>
-          <Label htmlFor="need-search">Search needs or area</Label>
+          <Label htmlFor="need-search">{t("needs.search")}</Label>
           <Input id="need-search" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <div>
-          <Label htmlFor="need-filter-category">Category</Label>
+          <Label htmlFor="need-filter-category">{t("needs.category")}</Label>
           <select
             id="need-filter-category"
             className="field"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="all">All categories</option>
+            <option value="all">{t("needs.allCategories")}</option>
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {CATEGORY_LABEL[c]}
@@ -182,14 +184,14 @@ export function CommunityNeeds() {
           </select>
         </div>
         <div>
-          <Label htmlFor="need-filter-mode">Mode</Label>
+          <Label htmlFor="need-filter-mode">{t("needs.preference")}</Label>
           <select
             id="need-filter-mode"
             className="field"
             value={mode}
             onChange={(e) => setMode(e.target.value)}
           >
-            <option value="all">All modes</option>
+            <option value="all">{t("needs.allModes")}</option>
             <option>FREE</option>
             <option>EXCHANGE</option>
           </select>
@@ -213,7 +215,9 @@ export function CommunityNeeds() {
               )}
             </p>
             {n.mode === "EXCHANGE" && n.exchangePreference && (
-              <p className="mt-2 text-sm">Offering: {n.exchangePreference}</p>
+              <p className="mt-2 text-sm">
+                {t("needs.offering")} {n.exchangePreference}
+              </p>
             )}
             {userId === n.ownerId && n.status === "open" && (
               <Button
@@ -223,7 +227,7 @@ export function CommunityNeeds() {
                 disabled={busy}
                 onClick={() => void saved(() => actions.closeNeed(n.id), "Need closed")}
               >
-                Close need
+                {t("needs.close")}
               </Button>
             )}
             {userId === n.ownerId && ["open", "closed"].includes(n.status ?? "open") && (
@@ -247,7 +251,7 @@ export function CommunityNeeds() {
                     document.getElementById("community-needs")?.scrollIntoView();
                   }}
                 >
-                  Edit need
+                  {t("needs.edit")}
                 </Button>
                 <Button
                   size="sm"
@@ -258,7 +262,7 @@ export function CommunityNeeds() {
                       void saved(() => actions.deleteNeed(n.id), "Need deleted");
                   }}
                 >
-                  Delete need
+                  {t("needs.delete")}
                 </Button>
               </div>
             )}
@@ -268,7 +272,7 @@ export function CommunityNeeds() {
           </Card>
         ))}
       </div>
-      {!filtered.length && <p className="text-muted-foreground">No matching community needs.</p>}
+      {!filtered.length && <p className="text-muted-foreground">{t("needs.none")}</p>}
     </section>
   );
 }
@@ -283,6 +287,7 @@ function OfferForm({
 }) {
   const [note, setNote] = useState("");
   const { busy } = useStoreMeta();
+  const { t } = useI18n();
   return (
     <form
       className="mt-3 space-y-2"
@@ -292,16 +297,16 @@ function OfferForm({
           setNote("");
       }}
     >
-      <Label htmlFor={`offer-${id}`}>Offer and handover note</Label>
+      <Label htmlFor={`offer-${id}`}>{t("needs.offerNote")}</Label>
       <Textarea
         id={`offer-${id}`}
         value={note}
         maxLength={200}
         onChange={(e) => setNote(e.target.value)}
-        placeholder="Describe your matching item; no contact details"
+        placeholder={t("needs.offerPlaceholder")}
       />
       <Button size="sm" disabled={busy}>
-        Offer {quantity} {unit}
+        {t("req.offer")} {quantity} {unit}
       </Button>
     </form>
   );
@@ -310,14 +315,15 @@ function OfferForm({
 export function RequestBoard() {
   const state = useAppState();
   const { userId, busy } = useStoreMeta();
+  const { t } = useI18n();
   const requests = state.interests.filter((i) => i.origin !== "sample");
   return (
     <section className="mt-10">
-      <h2 className="mb-4 text-2xl font-semibold">Requests & handovers</h2>
+      <h2 className="mb-4 text-2xl font-semibold">{t("req.heading")}</h2>
       {!userId ? (
-        <p className="text-muted-foreground">Sign in to see your requests and offers.</p>
+        <p className="text-muted-foreground">{t("req.signIn")}</p>
       ) : !requests.length ? (
-        <p className="text-muted-foreground">No requests or offers yet.</p>
+        <p className="text-muted-foreground">{t("req.none")}</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {requests.map((i) => {
@@ -331,10 +337,10 @@ export function RequestBoard() {
               <Card key={i.id}>
                 <h3 className="font-semibold">{target?.title ?? "Item unavailable"}</h3>
                 <p className="mt-2 text-sm">
-                  {i.targetKind === "needs" ? "Offer" : "Interest"} · {own ? "Received" : "Sent"} ·{" "}
-                  {status}
+                  {i.targetKind === "needs" ? t("req.offer") : t("req.interest")} ·{" "}
+                  {own ? t("req.received") : t("req.sent")} · {status}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">{i.note || "No note"}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{i.note || t("req.noNote")}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {own && status === "pending" && (
                     <>
@@ -348,7 +354,7 @@ export function RequestBoard() {
                           )
                         }
                       >
-                        Accept
+                        {t("req.accept")}
                       </Button>
                       <Button
                         size="sm"
@@ -361,7 +367,7 @@ export function RequestBoard() {
                           )
                         }
                       >
-                        Reject
+                        {t("req.reject")}
                       </Button>
                     </>
                   )}
@@ -376,13 +382,11 @@ export function RequestBoard() {
                         )
                       }
                     >
-                      Confirm handover
+                      {t("req.confirm")}
                     </Button>
                   )}
                   {i.confirmedBy === userId && status === "handover" && (
-                    <p className="text-sm text-muted-foreground">
-                      Waiting for the other participant.
-                    </p>
+                    <p className="text-sm text-muted-foreground">{t("req.waiting")}</p>
                   )}
                   {["pending", "accepted", "handover"].includes(status) && (
                     <Button
@@ -396,7 +400,7 @@ export function RequestBoard() {
                         )
                       }
                     >
-                      Cancel request
+                      {t("req.cancel")}
                     </Button>
                   )}
                 </div>

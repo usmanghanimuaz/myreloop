@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Code2, Leaf, Lightbulb, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, PageHeader } from "@/components/reloop/shared";
+import { Card, LangNote, PageHeader } from "@/components/reloop/shared";
 
 export const Route = createFileRoute("/about-us")({
   head: () => ({
@@ -34,6 +34,7 @@ function AboutUs() {
         title="Why ReLoop exists"
         description="An environmental waste-prevention initiative that helps people reuse usable items instead of throwing them away."
       />
+      <LangNote />
 
       <Card className="mb-8">
         <h2 className="text-xl font-semibold">How it started</h2>

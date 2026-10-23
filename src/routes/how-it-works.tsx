@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Leaf, Recycle, Search, HandHeart, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, PageHeader } from "@/components/reloop/shared";
+import { Card, LangNote, PageHeader } from "@/components/reloop/shared";
 import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 
 export const Route = createFileRoute("/how-it-works")({
@@ -58,6 +58,7 @@ function HowItWorks() {
         title="Four steps that keep useful things out of the bin"
         description="ReLoop exists to prevent waste first. Helping a neighbour is the direct, welcome result of keeping usable items in use."
       />
+      <LangNote />
 
       <ol className="mb-12 grid gap-4 md:grid-cols-2">
         {STEPS.map((s, i) => (

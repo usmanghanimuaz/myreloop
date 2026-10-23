@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, PageHeader } from "@/components/reloop/shared";
+import { Card, LangNote, PageHeader } from "@/components/reloop/shared";
 import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 
 export const Route = createFileRoute("/mission")({
@@ -35,6 +35,7 @@ function Mission() {
         title="Don't waste it. Reuse it. Keep our environment clean."
         description="ReLoop is primarily an environmental waste-prevention and reuse initiative. Community assistance is an important outcome — environmental protection is the purpose."
       />
+      <LangNote />
 
       <section className="relative mb-10 overflow-hidden rounded-3xl">
         <img

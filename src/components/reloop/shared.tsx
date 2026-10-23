@@ -1,6 +1,18 @@
 import type { ReactNode } from "react";
+import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import type { ListingStatus, Origin } from "@/lib/reloop/types";
+
+/** Shown on long-form pages when the visitor browses in a non-English language. */
+export function LangNote() {
+  const { longFormIsEnglish, t } = useI18n();
+  if (!longFormIsEnglish) return null;
+  return (
+    <p className="mb-6 rounded-xl bg-secondary px-4 py-3 text-sm text-secondary-foreground">
+      {t("common.langNote")}
+    </p>
+  );
+}
 
 export function PageHeader({
   eyebrow,
@@ -114,6 +126,7 @@ export function PolicyPage({
   return (
     <div className="animate-rise">
       <PageHeader eyebrow={eyebrow} title={title} description={`Last updated: ${updated}`} />
+      <LangNote />
       <div className="max-w-3xl space-y-6">{children}</div>
       <Notice className="mt-8 max-w-3xl">
         This page explains how ReLoop works in plain language. It is not legal advice and has not

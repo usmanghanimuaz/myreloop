@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Card, PageHeader } from "@/components/reloop/shared";
+import { Card, LangNote, PageHeader } from "@/components/reloop/shared";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
@@ -61,6 +61,7 @@ function Faq() {
         title="Frequently asked questions"
         description="Straight answers about how ReLoop works and what it does — and doesn't — do."
       />
+      <LangNote />
       <div className="grid gap-4 md:grid-cols-2">
         {QA.map((item) => (
           <Card key={item.q}>

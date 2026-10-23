@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useI18n } from "@/lib/i18n";
 import { CommunityNeeds, RequestBoard, saved } from "@/components/reloop/CommunityNeeds";
 import { ListingPhoto } from "@/components/reloop/ListingPhoto";
 import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
@@ -73,6 +74,7 @@ export const Route = createFileRoute("/exchange")({
 function Exchange() {
   const state = useAppState();
   const meta = useStoreMeta();
+  const { t } = useI18n();
   const [mode, setMode] = useState("all");
   const [condition, setCondition] = useState("all");
   const [area, setArea] = useState("");
@@ -246,7 +248,7 @@ function Exchange() {
       {filtered.length === 0 ? (
         <EmptyState
           icon={<PackageOpen className="size-6" />}
-          title={state.listings.length ? "No listings match" : "No listings yet"}
+          title={state.listings.length ? t("empty.noMatch") : t("empty.listings")}
         >
           {state.listings.length
             ? "Try a different keyword or clear the filters."

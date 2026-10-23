@@ -3,6 +3,7 @@ import { CheckCircle2, Clock, Target, Undo2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { saved } from "@/components/reloop/CommunityNeeds";
+import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -52,6 +53,7 @@ export const Route = createFileRoute("/actions")({
 
 function Actions() {
   const state = useAppState();
+  const { t } = useI18n();
   const [completing, setCompleting] = useState<CommunityAction | null>(null);
   const open = state.actions.filter((a) => a.status === "open");
   const done = state.actions.filter((a) => a.status === "completed");
@@ -92,9 +94,7 @@ function Actions() {
         {open.map((a) => (
           <ActionCard key={a.id} a={a} onComplete={() => setCompleting(a)} />
         ))}
-        {open.length === 0 && (
-          <p className="text-sm text-muted-foreground">All actions are completed — nice work.</p>
-        )}
+        {open.length === 0 && <p className="text-sm text-muted-foreground">{t("empty.actions")}</p>}
       </div>
       <h2 className="mb-3 text-xl font-semibold">Completed ({done.length})</h2>
       <div className="grid gap-4 md:grid-cols-2">

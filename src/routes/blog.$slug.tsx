@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { Notice, UNSPLASH_NOTE } from "@/components/reloop/shared";
+import { LangNote, Notice, UNSPLASH_NOTE } from "@/components/reloop/shared";
 import { getArticle } from "@/lib/reloop/articles";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -34,6 +34,18 @@ export const Route = createFileRoute("/blog/$slug")({
               dateModified: "2026-10-23",
             }),
           },
+          {
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "/" },
+                { "@type": "ListItem", position: 2, name: "Learning Blog", item: "/blog" },
+                { "@type": "ListItem", position: 3, name: loaderData.title },
+              ],
+            }),
+          },
         ]
       : [],
   }),
@@ -60,6 +72,7 @@ function ArticlePage() {
           By the ReLoop project builder · Published {article.published} · Updated {article.updated}
         </p>
       </header>
+      <LangNote />
       <figure className="mb-8">
         <img
           src={article.image.src}
