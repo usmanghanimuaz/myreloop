@@ -120,21 +120,41 @@ function Dashboard({ userId }: { userId: string }) {
         <div className="mt-3 flex flex-wrap gap-2">
           {incomingRow && status === "pending" && (
             <>
-              <Button size="sm" disabled={busy} onClick={() => void run(() => actions.respondRequest(i.id, "accept"), "Accepted")}>
+              <Button
+                size="sm"
+                disabled={busy}
+                onClick={() => void run(() => actions.respondRequest(i.id, "accept"), "Accepted")}
+              >
                 Accept
               </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => void run(() => actions.respondRequest(i.id, "reject"), "Declined")}>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={busy}
+                onClick={() => void run(() => actions.respondRequest(i.id, "reject"), "Declined")}
+              >
                 Decline
               </Button>
             </>
           )}
           {(status === "accepted" || status === "handover") && i.confirmedBy !== userId && (
-            <Button size="sm" disabled={busy} onClick={() => void run(() => actions.respondRequest(i.id, "confirm"), "Handover confirmed")}>
+            <Button
+              size="sm"
+              disabled={busy}
+              onClick={() =>
+                void run(() => actions.respondRequest(i.id, "confirm"), "Handover confirmed")
+              }
+            >
               Confirm handover happened
             </Button>
           )}
           {!incomingRow && status === "pending" && (
-            <Button size="sm" variant="outline" disabled={busy} onClick={() => void run(() => actions.respondRequest(i.id, "cancel"), "Cancelled")}>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy}
+              onClick={() => void run(() => actions.respondRequest(i.id, "cancel"), "Cancelled")}
+            >
               Cancel request
             </Button>
           )}
@@ -153,7 +173,10 @@ function Dashboard({ userId }: { userId: string }) {
       <ProfileCard />
 
       <section aria-labelledby="inbox-h">
-        <h2 id="inbox-h" className="mb-3 flex items-center gap-2 font-display text-2xl font-semibold">
+        <h2
+          id="inbox-h"
+          className="mb-3 flex items-center gap-2 font-display text-2xl font-semibold"
+        >
           <Bell className="size-5" aria-hidden /> Needs your attention
         </h2>
         {attention.length === 0 ? (
@@ -175,7 +198,11 @@ function Dashboard({ userId }: { userId: string }) {
           {incoming.length === 0 ? (
             <p className="text-sm text-muted-foreground">No one has requested your items yet.</p>
           ) : (
-            <ul className="grid gap-3">{incoming.map((i) => <RequestRow key={i.id} i={i} incomingRow />)}</ul>
+            <ul className="grid gap-3">
+              {incoming.map((i) => (
+                <RequestRow key={i.id} i={i} incomingRow />
+              ))}
+            </ul>
           )}
         </section>
         <section aria-labelledby="out-h">
@@ -185,22 +212,36 @@ function Dashboard({ userId }: { userId: string }) {
           {outgoing.length === 0 ? (
             <p className="text-sm text-muted-foreground">You haven't requested anything yet.</p>
           ) : (
-            <ul className="grid gap-3">{outgoing.map((i) => <RequestRow key={i.id} i={i} incomingRow={false} />)}</ul>
+            <ul className="grid gap-3">
+              {outgoing.map((i) => (
+                <RequestRow key={i.id} i={i} incomingRow={false} />
+              ))}
+            </ul>
           )}
         </section>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="ml-h">
-          <h2 id="ml-h" className="mb-3 text-xl font-semibold">Your listings</h2>
+          <h2 id="ml-h" className="mb-3 text-xl font-semibold">
+            Your listings
+          </h2>
           {myListings.length === 0 ? (
-            <EmptyState title="No listings yet" description="Before you throw something usable away, list it for FREE or EXCHANGE.">
-              <Button asChild size="sm"><Link to="/exchange">Share an item</Link></Button>
+            <EmptyState
+              title="No listings yet"
+              description="Before you throw something usable away, list it for FREE or EXCHANGE."
+            >
+              <Button asChild size="sm">
+                <Link to="/exchange">Share an item</Link>
+              </Button>
             </EmptyState>
           ) : (
             <ul className="grid gap-2">
               {myListings.map((l) => (
-                <li key={l.id} className="flex items-center justify-between gap-3 rounded-xl border bg-background p-3">
+                <li
+                  key={l.id}
+                  className="flex items-center justify-between gap-3 rounded-xl border bg-background p-3"
+                >
                   <span className="min-w-0 truncate font-medium">{l.title}</span>
                   <StatusBadge status={l.status} />
                 </li>
@@ -209,17 +250,26 @@ function Dashboard({ userId }: { userId: string }) {
           )}
         </section>
         <section aria-labelledby="mn-h">
-          <h2 id="mn-h" className="mb-3 text-xl font-semibold">Your needs</h2>
+          <h2 id="mn-h" className="mb-3 text-xl font-semibold">
+            Your needs
+          </h2>
           {myNeeds.length === 0 ? (
             <EmptyState title="No needs posted" description="Ask for an item before buying new.">
-              <Button asChild size="sm"><Link to="/needs">Post a need</Link></Button>
+              <Button asChild size="sm">
+                <Link to="/needs">Post a need</Link>
+              </Button>
             </EmptyState>
           ) : (
             <ul className="grid gap-2">
               {myNeeds.map((n) => (
-                <li key={n.id} className="flex items-center justify-between gap-3 rounded-xl border bg-background p-3">
+                <li
+                  key={n.id}
+                  className="flex items-center justify-between gap-3 rounded-xl border bg-background p-3"
+                >
                   <span className="min-w-0 truncate font-medium">{n.title ?? n.description}</span>
-                  <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{n.status ?? "open"}</span>
+                  <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                    {n.status ?? "open"}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -241,7 +291,14 @@ function ProfileCard() {
   useEffect(() => {
     if (q.data) setForm({ displayName: q.data.displayName, generalArea: q.data.generalArea });
   }, [q.data]);
-  if (q.isError) return <Card><p role="alert" className="text-sm text-destructive">Could not load your profile.</p></Card>;
+  if (q.isError)
+    return (
+      <Card>
+        <p role="alert" className="text-sm text-destructive">
+          Could not load your profile.
+        </p>
+      </Card>
+    );
   return (
     <Card>
       <form
@@ -265,16 +322,37 @@ function ProfileCard() {
       >
         <div className="grid gap-1.5">
           <Label htmlFor="pf-name">Display name</Label>
-          <Input id="pf-name" maxLength={60} value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
+          <Input
+            id="pf-name"
+            maxLength={60}
+            value={form.displayName}
+            onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+          />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="pf-area">General area (neighbourhood or city)</Label>
-          <Input id="pf-area" maxLength={80} value={form.generalArea} onChange={(e) => setForm({ ...form, generalArea: e.target.value })} />
+          <Input
+            id="pf-area"
+            maxLength={80}
+            value={form.generalArea}
+            onChange={(e) => setForm({ ...form, generalArea: e.target.value })}
+          />
         </div>
-        <Button type="submit" disabled={saving || q.isLoading}>{saving ? "Saving…" : "Save profile"}</Button>
-        {err && <p role="alert" className="text-sm text-destructive sm:col-span-3">{err}</p>}
+        <Button type="submit" disabled={saving || q.isLoading}>
+          {saving ? "Saving…" : "Save profile"}
+        </Button>
+        {err && (
+          <p role="alert" className="text-sm text-destructive sm:col-span-3">
+            {err}
+          </p>
+        )}
         <p className="text-xs text-muted-foreground sm:col-span-3">
-          Never add your email, phone number or exact address. {q.data?.isAdmin && (<Link to="/admin" className="font-medium text-primary underline">Open moderation</Link>)}
+          Never add your email, phone number or exact address.{" "}
+          {q.data?.isAdmin && (
+            <Link to="/admin" className="font-medium text-primary underline">
+              Open moderation
+            </Link>
+          )}
         </p>
       </form>
     </Card>

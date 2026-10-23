@@ -14,7 +14,10 @@ export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Moderation — ReLoop" },
-      { name: "description", content: "ReLoop moderation for evidence review and reports. Admins only." },
+      {
+        name: "description",
+        content: "ReLoop moderation for evidence review and reports. Admins only.",
+      },
       { property: "og:title", content: "Moderation — ReLoop" },
       { property: "og:description", content: "Admins only." },
       { property: "og:type", content: "website" },
@@ -55,22 +58,35 @@ function Queue() {
     }
   };
   if (q.isLoading) return <p className="p-8 text-muted-foreground">Loading moderation queue…</p>;
-  if (q.isError) return <p role="alert" className="p-8 text-destructive">Could not load the queue.</p>;
+  if (q.isError)
+    return (
+      <p role="alert" className="p-8 text-destructive">
+        Could not load the queue.
+      </p>
+    );
   if (!q.data?.allowed)
     return (
       <Card className="max-w-lg">
         <p className="flex items-center gap-2 font-semibold">
           <ShieldAlert className="size-5" aria-hidden /> Access denied
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">This area is only for ReLoop moderators.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This area is only for ReLoop moderators.
+        </p>
       </Card>
     );
   const open = q.data.reports.filter((r) => r.status === "open");
   return (
     <div className="animate-rise space-y-8">
-      <PageHeader eyebrow="Moderation" title="Evidence review and reports" description="Every action is re-checked on the server." />
+      <PageHeader
+        eyebrow="Moderation"
+        title="Evidence review and reports"
+        description="Every action is re-checked on the server."
+      />
       <section>
-        <h2 className="mb-3 text-xl font-semibold">Evidence awaiting review ({q.data.evidence.length})</h2>
+        <h2 className="mb-3 text-xl font-semibold">
+          Evidence awaiting review ({q.data.evidence.length})
+        </h2>
         {q.data.evidence.length === 0 ? (
           <p className="text-sm text-muted-foreground">No submissions waiting.</p>
         ) : (
@@ -85,8 +101,23 @@ function Queue() {
                   {data["rejected"] ? " · previously rejected" : ""}
                 </p>
                 <div className="mt-3 flex gap-2">
-                  <Button size="sm" onClick={() => void act(() => validate({ data: { key, approve: true } }), "Published")}>Approve</Button>
-                  <Button size="sm" variant="outline" onClick={() => void act(() => validate({ data: { key, approve: false } }), "Rejected")}>Reject</Button>
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      void act(() => validate({ data: { key, approve: true } }), "Published")
+                    }
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      void act(() => validate({ data: { key, approve: false } }), "Rejected")
+                    }
+                  >
+                    Reject
+                  </Button>
                 </div>
               </li>
             ))}
@@ -101,14 +132,37 @@ function Queue() {
           <ul className="grid gap-3">
             {open.map((r) => (
               <li key={r.id} className="rounded-xl border bg-background p-4 text-sm">
-                <p className="font-semibold">{REPORT_REASON_LABEL[r.reason as keyof typeof REPORT_REASON_LABEL] ?? r.reason}</p>
+                <p className="font-semibold">
+                  {REPORT_REASON_LABEL[r.reason as keyof typeof REPORT_REASON_LABEL] ?? r.reason}
+                </p>
                 <p className="text-xs text-muted-foreground">
                   {r.target_kind} · {r.target_id} · {formatDate(r.created_at)}
                 </p>
                 {r.details && <p className="mt-2">{r.details}</p>}
                 <div className="mt-3 flex gap-2">
-                  <Button size="sm" onClick={() => void act(() => review({ data: { id: r.id, decision: "reviewed" } }), "Marked reviewed")}>Mark reviewed</Button>
-                  <Button size="sm" variant="outline" onClick={() => void act(() => review({ data: { id: r.id, decision: "dismissed" } }), "Dismissed")}>Dismiss</Button>
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      void act(
+                        () => review({ data: { id: r.id, decision: "reviewed" } }),
+                        "Marked reviewed",
+                      )
+                    }
+                  >
+                    Mark reviewed
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      void act(
+                        () => review({ data: { id: r.id, decision: "dismissed" } }),
+                        "Dismissed",
+                      )
+                    }
+                  >
+                    Dismiss
+                  </Button>
                 </div>
               </li>
             ))}

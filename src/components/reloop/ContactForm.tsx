@@ -20,9 +20,15 @@ export function ContactForm({ kind }: { kind: "contact" | "report" }) {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("idle");
+  const [trap, setTrap] = useState("");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    // Honeypot: real people never see or fill this field.
+    if (trap) {
+      setStatus("sent");
+      return;
+    }
     const parsed = MessageSchema.safeParse(form);
     if (!parsed.success) {
       const next: Record<string, string> = {};
@@ -79,6 +85,16 @@ export function ContactForm({ kind }: { kind: "contact" | "report" }) {
   return (
     <Card>
       <form className="grid gap-4" onSubmit={submit} noValidate>
+        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+          <label htmlFor="cf-website">Website</label>
+          <input
+            id="cf-website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={trap}
+            onChange={(e) => setTrap(e.target.value)}
+          />
+        </div>
         {field("name", "Your name")}
         {field("email", "Your email", false, "email")}
         {field("subject", kind === "report" ? "What is the problem?" : "Subject")}

@@ -25,7 +25,12 @@ export function ReportButton({
   if (!userId) return null;
   if (!open)
     return (
-      <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => setOpen(true)}>
+      <Button
+        size="sm"
+        variant="ghost"
+        className="text-muted-foreground"
+        onClick={() => setOpen(true)}
+      >
         <Flag aria-hidden /> Report
       </Button>
     );
