@@ -17,3 +17,5 @@
 - Derive handover verification from service-created record keys, not editable payload flags; preserve those keys in patches so ordinary edits cannot recreate completion records.
 - Curated environmental source metadata lives separately from private observation notes; source media is linked rather than copied without confirmed reuse rights.
 - Keep correctness linting on Cloud-managed integrations but exclude their generated formatting from Prettier enforcement, because regeneration owns those files.
+- Profiles are created by a database trigger on signup (email or Google) that copies only name and terms-version metadata, never roles; this keeps profile creation consistent across sign-in methods without trusting metadata for privileges.
+- Posting writes are refused server-side when the member is restricted or has not accepted the current terms version; moderation actions run only through admin-checked database functions that write to an append-only moderation log.

@@ -5,7 +5,7 @@
 - [x] Add ownership checks and separate two-party verified metrics from self-reported records.
 - [x] Add curated reliable source-linked evidence inside existing pages.
 - [x] Run 15 rule tests and verify six public pages, filters, form controls and mobile sign-in dialog.
-- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account.
+- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account. (still needs a second real account)
 - [x] Resolve application lint formatting without rewriting Cloud-managed generated files; lint exits 0 with eight existing refresh warnings.
 - [x] Recheck current tests, preview compilation and six-page public workflows: 20 tests pass, automatic build OK, six routes HTTP 200 and no browser page errors.
 - [x] Document verification and blockers; do not publish.
@@ -22,7 +22,7 @@
 - [x] SEO: unique head()+canonical per route, WebSite/Article JSON-LD, robots.txt kept; sitemap deferred (no public URL).
 - [x] Contact/report forms: zod validation (4 alerts verified), saved to contact_messages table (insert-only RLS).
 - [x] 38/38 tests pass, lint 0 errors, build OK, no broken images, no page errors.
-- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account.
+- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account. (still needs a second real account)
 
 # Enhancement pass (23 Oct 2026, 07:27 brief)
 - [x] Fix Waste & Evidence "Awaiting validation" badges: field cards, aligned label/status row, neutral small badge, 2-col desktop / 1-col mobile, no 390px overlap.
@@ -46,3 +46,11 @@
 - [x] Installable app (manifest + icons)
 - [ ] Email notifications — blocked: needs owner's email domain
 - [ ] Push notifications — needs Firebase connection decision
+
+# 11:39 brief — signup/dashboard/moderation (no n8n)
+- [x] Signup first/last name + terms; trigger-created profiles for email and Google; optional private unverified phone.
+- [x] My ReLoop: profile, notification prefs, consent, restriction notice, handover history, manage links.
+- [x] Moderation: review notes, close item, restrict/unrestrict poster, audit log, DB-checked.
+- [x] Server checks: restricted / no-consent members cannot post.
+- [ ] Two-account end-to-end tests — blocked: needs a second real account.
+- [ ] Phone verification — blocked: SMS service approval. Email alerts — blocked: sender domain.

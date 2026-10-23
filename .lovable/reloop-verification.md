@@ -40,3 +40,11 @@ Remaining / blocked:
 - Sign-in dialog and sitewide long-form pages still English-only in other languages (honest fallback note shown).
 - Not tested: second real account for two-party handover, non-admin "Access denied" view with a real non-admin, email code delivery, push delivery on a real device, contact form rate limiting (no reliable server-side limiter).
 - Legal review of policies; no deployment.
+
+## Update 11:50 UTC — signup, dashboard, moderation
+Passed (run this turn): 56/56 tests (10 new signup/phone/profile rules); typecheck clean; lint 0 errors; build OK; security scan 0 findings.
+DB: profile trigger present; 1 user = 1 profile (backfilled); roles unchanged (1 admin, the owner); anon REST reads of profiles/moderation_log return nothing.
+Browser (owner session): /account and /admin render in English and Arabic at 1280px and 390px, no overflow, no page errors; signup form blocks empty submit.
+Not verified: real email signup + trigger with a new account (no fake users created); non-admin denied view with a real second account; close/restrict actions (no reports exist); two-party handover; push delivery.
+Owner action: the owner's profile has not accepted the current Terms version, so posting is blocked until "I accept" is pressed in My ReLoop (left for the owner; not clicked on their behalf).
+Blocked: phone verification (needs paid SMS service + approval); email notifications (needs sender domain); legal review; sitemap (no public URL).
