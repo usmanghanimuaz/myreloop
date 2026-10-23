@@ -13,6 +13,7 @@ import {
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, OriginBadge, formatDate } from "@/components/reloop/shared";
+import { useI18n } from "@/lib/i18n";
 import { HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
 import { useAppState, useStoreMeta } from "@/lib/reloop/store";
@@ -243,11 +244,8 @@ function Home() {
 
       {/* 5 — Live community sections (secondary) */}
       <section className="mb-12">
-        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">Happening in the community</h2>
-        <p className="mb-6 max-w-2xl text-muted-foreground">
-          Real records from this ReLoop community. Items marked “Sample data” are fictional examples
-          and never count as real impact.
-        </p>
+        <h2 className="mb-2 text-2xl font-semibold md:text-3xl">{t("home.communityTitle")}</h2>
+        <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.communityText")}</p>
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <p className="text-sm text-muted-foreground">Two-party confirmed handovers</p>
@@ -263,10 +261,7 @@ function Home() {
             <p className="mt-2 font-display text-3xl font-semibold">{activeListings.length}</p>
             <p className="mt-2 text-xs text-muted-foreground">
               Yours:{" "}
-              <strong>
-                {activeListings.filter((l) => l.ownerId === userId && l.origin === "user").length}
-              </strong>{" "}
-              · Sample: {activeListings.filter((l) => l.origin === "sample").length}
+              <strong>{activeListings.filter((l) => l.ownerId === userId).length}</strong>
             </p>
           </Card>
           <Card>
@@ -285,7 +280,7 @@ function Home() {
             </h3>
             {activeListings.length === 0 ? (
               <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-                Nothing listed yet — be the first to pass something on.
+                {t("home.noListings")}
               </p>
             ) : (
               activeListings.slice(0, 3).map((l) => (
@@ -298,7 +293,7 @@ function Home() {
               ))
             )}
             <Button asChild variant="outline" size="sm" className="mt-4">
-              <Link to="/exchange">Browse all items</Link>
+              <Link to="/exchange">{t("common.browseAll")}</Link>
             </Button>
           </div>
           <div>
@@ -307,12 +302,12 @@ function Home() {
             </h3>
             {openNeeds.length === 0 ? (
               <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-                No open needs right now — post one if you're looking for something.
+                {t("home.noNeeds")}
               </p>
             ) : (
               openNeeds.slice(0, 3).map((n) => (
                 <p key={n.id} className="border-b py-3">
-                  <Link to="/exchange" hash="community-needs" className="font-medium text-primary">
+                  <Link to="/needs" className="font-medium text-primary">
                     {n.title ?? n.description}
                   </Link>{" "}
                   · {n.mode ?? "FREE"} <OriginBadge origin={n.origin} />
@@ -320,9 +315,7 @@ function Home() {
               ))
             )}
             <Button asChild variant="outline" size="sm" className="mt-4">
-              <Link to="/exchange" hash="community-needs">
-                See all needs
-              </Link>
+              <Link to="/needs">{t("common.seeAllNeeds")}</Link>
             </Button>
           </div>
         </div>
