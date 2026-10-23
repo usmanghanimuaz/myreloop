@@ -1,8 +1,8 @@
 import type { AppState } from "./types";
 
 /**
- * Fictional demonstration data. Every record is marked origin: "sample".
- * Names, areas and quantities are invented and do not describe a real community.
+ * Empty initial state. ReLoop shows only real community records — no fictional
+ * sample listings, needs, actions or impact are seeded anywhere.
  */
 export function createSeedState(): AppState {
   return {

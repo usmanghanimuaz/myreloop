@@ -205,8 +205,12 @@ export function CommunityNeeds() {
             <p className="mt-2 text-sm">{n.description}</p>
             <p className="mt-2 text-sm text-muted-foreground">
               {n.quantity ?? 1} {n.unit ?? "items"} · {n.mode ?? "FREE"} · {n.status ?? "open"}
-              <br />
-              {n.area ?? "Fictional sample area"}
+              {n.area && (
+                <>
+                  <br />
+                  {n.area}
+                </>
+              )}
             </p>
             {n.mode === "EXCHANGE" && n.exchangePreference && (
               <p className="mt-2 text-sm">Offering: {n.exchangePreference}</p>
