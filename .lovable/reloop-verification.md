@@ -20,3 +20,10 @@
 - Contact form rate limiting is not in place: there's no reliable free per-sender limit without storing IP addresses. Only the honeypot and length limits apply.
 - My ReLoop and Moderation text is English only for now. The menu label is translated into all 7 languages.
 - No sitemap yet: it needs a public web address. Policy pages have not had legal review.
+
+## Update 08:05 UTC
+- The owner account (usmanghanimuaz@gmail.com) now has the admin role. No other accounts exist, and new accounts are ordinary users.
+- Checked while signed in as the owner: the profile saved "Usman / Lahore" and still showed it after a page refresh; the My ReLoop menu link appears; /admin opened the moderation queue (empty), with no page errors.
+- Phone home-screen install: added the app manifest, 192/512 icons, an Apple touch icon and the theme colour. No offline mode or service worker.
+- Email notifications are blocked: there is no sender domain yet.
+- Push notifications are deferred: they need a free Firebase account connected.

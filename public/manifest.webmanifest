@@ -1,0 +1,14 @@
+{
+  "name": "ReLoop — reuse before you throw away",
+  "short_name": "ReLoop",
+  "description": "Environmental waste prevention: share usable items FREE or by EXCHANGE and learn safe reuse, repair and recycling.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ec",
+  "theme_color": "#1f3d2b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
