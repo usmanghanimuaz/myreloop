@@ -57,12 +57,13 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   return (
     <nav aria-label="Main" className="flex flex-col gap-1">
-      {NAV.map(({ to, label, icon: Icon }) => {
+      {NAV.map(({ to, label, icon: Icon, ...rest }) => {
         const active = to === "/" ? path === "/" : path.startsWith(to);
         return (
           <Link
-            key={to}
+            key={label}
             to={to}
+            {...rest}
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
