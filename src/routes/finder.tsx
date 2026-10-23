@@ -290,3 +290,147 @@ function Finder() {
     </div>
   );
 }
+
+/** Verified external education links (checked 23 October 2026). */
+const GUIDE_LINKS = [
+  {
+    title: "Recycling basics and benefits",
+    org: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/recycle/recycling-basics-and-benefits",
+    note: "How recycling works and why reduction and reuse come first.",
+  },
+  {
+    title: "Sustainable Materials Management",
+    org: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/smm",
+    note: "Using and reusing materials more productively across their whole life cycle.",
+  },
+  {
+    title: "Household hazardous waste",
+    org: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/hw",
+    note: "Safe handling of paints, chemicals, batteries and other hazardous household items.",
+  },
+  {
+    title: "Global E-waste Monitor 2024",
+    org: "ITU / UNITAR",
+    url: "https://www.itu.int/en/ITU-D/Environment/Pages/Publications/The-Global-E-Waste-Monitor-2024.aspx",
+    note: "Why discarded electronics need formal, environmentally sound recycling.",
+  },
+  {
+    title: "Global Waste Management Outlook 2024",
+    org: "UN Environment Programme",
+    url: "https://www.unep.org/resources/global-waste-management-outlook-2024",
+    note: "Global waste scenarios and the case for prevention within a circular economy.",
+  },
+  {
+    title: "WRAP — circular living resources",
+    org: "WRAP (UK climate action NGO)",
+    url: "https://wrap.org.uk",
+    note: "Practical campaigns on food waste, textiles and recycling.",
+  },
+] as const;
+
+const CATEGORY_IMAGE: Partial<Record<Category, (typeof IMAGES)[keyof typeof IMAGES]>> = {
+  cardboard: IMAGES.cardboard,
+  paper: IMAGES.paper,
+  plastic: IMAGES.reusableBottle,
+  textiles: IMAGES.textiles,
+  electronics: IMAGES.electronics,
+  organic: IMAGES.organic,
+  other: IMAGES.woodFurniture,
+};
+
+function MaterialLibrary() {
+  return (
+    <section aria-label="Material guidance library" className="space-y-6">
+      {CATEGORIES.map((cat, i) => {
+        const g = GUIDANCE[cat];
+        const img = CATEGORY_IMAGE[cat];
+        const blocks: { label: string; tips: string[] }[] = [
+          { label: "Reuse", tips: g.reuse },
+          { label: "Repair", tips: g.repair },
+          { label: "Donate / share", tips: g.donate },
+          { label: "Recycle", tips: g.recycle },
+        ];
+        return (
+          <article
+            key={cat}
+            className="grid overflow-hidden rounded-2xl border bg-card shadow-card md:grid-cols-3"
+          >
+            {img ? (
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                className={cn(
+                  "h-44 w-full object-cover md:h-full",
+                  i % 2 === 1 && "md:order-2",
+                )}
+              />
+            ) : (
+              <div
+                className={cn(
+                  "grid h-44 place-items-center bg-secondary text-primary md:h-full",
+                  i % 2 === 1 && "md:order-2",
+                )}
+              >
+                <Recycle className="size-10" aria-hidden />
+              </div>
+            )}
+            <div className="p-6 md:col-span-2">
+              <h3 className="text-xl font-semibold">{CATEGORY_LABEL[cat]}</h3>
+              <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                {blocks
+                  .filter((b) => b.tips.length > 0)
+                  .map((b) => (
+                    <div key={b.label}>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                        {b.label}
+                      </p>
+                      <ul className="mt-1 list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                        {b.tips.map((t) => (
+                          <li key={t}>{t}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+              </div>
+              {g.safety.length > 0 && (
+                <p className="mt-4 rounded-xl bg-warning/50 px-4 py-3 text-sm text-warning-foreground">
+                  <AlertTriangle className="mr-1 inline size-4" aria-hidden />{" "}
+                  <strong>Safety:</strong> {g.safety.join(" ")}
+                </p>
+              )}
+            </div>
+          </article>
+        );
+      })}
+      <p className="text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
+
+      <Card>
+        <h2 className="mb-1 text-xl font-semibold">Learn more from authoritative sources</h2>
+        <p className="mb-4 text-sm text-muted-foreground">
+          General advice from public environmental bodies. Your local collection rules always come
+          first.
+        </p>
+        <ul className="grid gap-3 md:grid-cols-2">
+          {GUIDE_LINKS.map((l) => (
+            <li key={l.url} className="rounded-xl border bg-background p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">{l.org}</p>
+              <a
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 flex items-center gap-1 font-medium underline underline-offset-4"
+              >
+                {l.title} <ExternalLink className="size-3.5 shrink-0" aria-hidden />
+              </a>
+              <p className="mt-1 text-sm text-muted-foreground">{l.note}</p>
+            </li>
+          ))}
+        </ul>
+      </Card>
+    </section>
+  );
+}
