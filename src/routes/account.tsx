@@ -39,7 +39,6 @@ export const Route = createFileRoute("/account")({
   component: Account,
 });
 
-
 function Account() {
   const { userId, hydrated } = useStoreMeta();
   const t = useDashT();
@@ -53,9 +52,7 @@ function Account() {
           description={t("signedOutDesc")}
         />
         <Card className="max-w-md">
-          <p className="mb-4 text-sm text-muted-foreground">
-{t("privacyNote")}
-          </p>
+          <p className="mb-4 text-sm text-muted-foreground">{t("privacyNote")}</p>
           <AccountButton />
         </Card>
       </div>
@@ -118,7 +115,9 @@ function Dashboard({ userId }: { userId: string }) {
               <Button
                 size="sm"
                 disabled={busy}
-                onClick={() => void run(() => actions.respondRequest(i.id, "accept"), t("accepted"))}
+                onClick={() =>
+                  void run(() => actions.respondRequest(i.id, "accept"), t("accepted"))
+                }
               >
                 {t("accept")}
               </Button>
@@ -126,7 +125,9 @@ function Dashboard({ userId }: { userId: string }) {
                 size="sm"
                 variant="outline"
                 disabled={busy}
-                onClick={() => void run(() => actions.respondRequest(i.id, "reject"), t("declined"))}
+                onClick={() =>
+                  void run(() => actions.respondRequest(i.id, "reject"), t("declined"))
+                }
               >
                 {t("decline")}
               </Button>
@@ -160,11 +161,7 @@ function Dashboard({ userId }: { userId: string }) {
 
   return (
     <div className="animate-rise space-y-8">
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t("title")}
-        description={t("desc")}
-      />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
       <ProfileCard />
       <PushToggle />
 
@@ -224,9 +221,7 @@ function Dashboard({ userId }: { userId: string }) {
           </h2>
           {myListings.length === 0 ? (
             <EmptyState icon={<Inbox className="size-5" aria-hidden />} title={t("listingsEmpty")}>
-              <p className="mb-3">
-{t("listingsHint")}
-              </p>
+              <p className="mb-3">{t("listingsHint")}</p>
               <Button asChild size="sm">
                 <Link to="/exchange">{t("shareItem")}</Link>
               </Button>
@@ -265,7 +260,11 @@ function Dashboard({ userId }: { userId: string }) {
                 >
                   <span className="min-w-0 truncate font-medium">{n.title ?? n.description}</span>
                   <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                    {n.status ? t(`st.${n.status}`) === `st.${n.status}` ? n.status : t(`st.${n.status}`) : t("open")}
+                    {n.status
+                      ? t(`st.${n.status}`) === `st.${n.status}`
+                        ? n.status
+                        : t(`st.${n.status}`)
+                      : t("open")}
                   </span>
                 </li>
               ))}
@@ -293,7 +292,7 @@ function ProfileCard() {
     return (
       <Card>
         <p role="alert" className="text-sm text-destructive">
-{t("profileError")}
+          {t("profileError")}
         </p>
       </Card>
     );
@@ -348,7 +347,7 @@ function ProfileCard() {
           {t("neverShare")}{" "}
           {q.data?.isAdmin && (
             <Link to="/admin" className="font-medium text-primary underline">
-{t("openModeration")}
+              {t("openModeration")}
             </Link>
           )}
         </p>

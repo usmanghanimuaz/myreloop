@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useDashT } from "@/lib/i18n-dash";
 import { registerPushToken, unregisterPushTokens } from "@/lib/reloop/push.functions";
 
-
 export function PushToggle() {
   const register = useServerFn(registerPushToken);
   const unregister = useServerFn(unregisterPushTokens);
@@ -45,12 +44,10 @@ export function PushToggle() {
       <h2 id="push-h" className="flex items-center gap-2 text-lg font-semibold">
         <BellRing className="size-5" aria-hidden /> {t("push.title")}
       </h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-{t("push.desc")}
-      </p>
+      <p className="mt-1 text-sm text-muted-foreground">{t("push.desc")}</p>
       <div className="mt-3 flex flex-wrap gap-2">
         <Button onClick={on} disabled={busy}>
-{t("push.on")}
+          {t("push.on")}
         </Button>
         <Button variant="outline" onClick={off} disabled={busy}>
           {t("push.off")}

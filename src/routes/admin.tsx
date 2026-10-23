@@ -72,19 +72,13 @@ function Queue() {
         <p className="flex items-center gap-2 font-semibold">
           <ShieldAlert className="size-5" aria-hidden /> {t("mod.denied")}
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("mod.deniedDesc")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("mod.deniedDesc")}</p>
       </Card>
     );
   const open = q.data.reports.filter((r) => r.status === "open");
   return (
     <div className="animate-rise space-y-8">
-      <PageHeader
-        eyebrow={t("mod.eyebrow")}
-        title={t("mod.title")}
-        description={t("mod.desc")}
-      />
+      <PageHeader eyebrow={t("mod.eyebrow")} title={t("mod.title")} description={t("mod.desc")} />
       <section>
         <h2 className="mb-3 text-xl font-semibold">
           {t("mod.evidence")} ({q.data.evidence.length})
@@ -98,7 +92,8 @@ function Queue() {
                 <p className="font-semibold">{data.title}</p>
                 <p className="mt-1 text-muted-foreground">{data.description}</p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {data.area} · {data.date} · {data.consent ? t("mod.consentGiven") : t("mod.consentMissing")}
+                  {data.area} · {data.date} ·{" "}
+                  {data.consent ? t("mod.consentGiven") : t("mod.consentMissing")}
                   {data.rejected ? ` · ${t("mod.prevRejected")}` : ""}
                 </p>
                 <div className="mt-3 flex gap-2">
@@ -108,7 +103,7 @@ function Queue() {
                       void act(() => validate({ data: { key, approve: true } }), t("mod.published"))
                     }
                   >
-{t("mod.approve")}
+                    {t("mod.approve")}
                   </Button>
                   <Button
                     size="sm"
@@ -126,16 +121,16 @@ function Queue() {
         )}
       </section>
       <section>
-        <h2 className="mb-3 text-xl font-semibold">{t("mod.reports")} ({open.length})</h2>
+        <h2 className="mb-3 text-xl font-semibold">
+          {t("mod.reports")} ({open.length})
+        </h2>
         {open.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("mod.reportsEmpty")}</p>
         ) : (
           <ul className="grid gap-3">
             {open.map((r) => (
               <li key={r.id} className="rounded-xl border bg-background p-4 text-sm">
-                <p className="font-semibold">
-                  {t(`r.${r.reason}`)}
-                </p>
+                <p className="font-semibold">{t(`r.${r.reason}`)}</p>
                 <p className="text-xs text-muted-foreground">
                   {t(`k.${r.target_kind}`)} · {r.target_id} · {formatDate(r.created_at)}
                 </p>
@@ -150,7 +145,7 @@ function Queue() {
                       )
                     }
                   >
-{t("mod.markReviewed")}
+                    {t("mod.markReviewed")}
                   </Button>
                   <Button
                     size="sm"

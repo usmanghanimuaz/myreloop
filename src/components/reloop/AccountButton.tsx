@@ -113,7 +113,11 @@ export function AccountButton() {
       type: "signup",
     });
     if (err) {
-      ({ error: err } = await supabase.auth.verifyOtp({ email: email.trim(), token, type: "email" }));
+      ({ error: err } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token,
+        type: "email",
+      }));
     }
     setBusy(false);
     if (err) return fail("That code is invalid or expired");
@@ -225,8 +229,8 @@ export function AccountButton() {
           {awaitingCode ? (
             <form onSubmit={verifyCode} className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                We emailed a verification message to <strong>{email}</strong>. Enter the code
-                from it below, or simply click the verification link in that email.
+                We emailed a verification message to <strong>{email}</strong>. Enter the code from
+                it below, or simply click the verification link in that email.
               </p>
               <div className="space-y-1.5">
                 <Label htmlFor="auth-code">Verification code</Label>
@@ -239,7 +243,11 @@ export function AccountButton() {
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 />
               </div>
-              {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+              {error && (
+                <p className="text-sm text-destructive" role="alert">
+                  {error}
+                </p>
+              )}
               <Button type="submit" className="w-full" disabled={busy}>
                 Verify and continue
               </Button>
@@ -270,11 +278,19 @@ export function AccountButton() {
                 <TabsContent value="signin">
                   <form onSubmit={signInEmail} className="space-y-3">
                     {fields}
-                    {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+                    {error && (
+                      <p className="text-sm text-destructive" role="alert">
+                        {error}
+                      </p>
+                    )}
                     <Button type="submit" className="w-full" disabled={busy}>
                       Log in
                     </Button>
-                    <button type="button" className="text-sm underline" onClick={() => void forgot()}>
+                    <button
+                      type="button"
+                      className="text-sm underline"
+                      onClick={() => void forgot()}
+                    >
                       Forgot password?
                     </button>
                   </form>
@@ -282,12 +298,17 @@ export function AccountButton() {
                 <TabsContent value="signup">
                   <form onSubmit={signUpEmail} className="space-y-3">
                     {fields}
-                    {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+                    {error && (
+                      <p className="text-sm text-destructive" role="alert">
+                        {error}
+                      </p>
+                    )}
                     <Button type="submit" className="w-full" disabled={busy}>
                       Create account
                     </Button>
                     <p className="text-xs text-muted-foreground">
-                      New accounts are regular members. A verification email is sent to confirm your address.
+                      New accounts are regular members. A verification email is sent to confirm your
+                      address.
                     </p>
                   </form>
                 </TabsContent>

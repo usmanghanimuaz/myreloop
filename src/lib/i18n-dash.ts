@@ -109,8 +109,10 @@ const ur: D = {
   loading: "لوڈ ہو رہا ہے…",
   eyebrow: "میرا ری لوپ",
   signedOutTitle: "آپ کی دوبارہ استعمال کی سرگرمی ایک جگہ",
-  signedOutDesc: "سائن اِن کریں تاکہ آپ اپنی دی گئی اشیاء، ضروریات اور پڑوسیوں کی درخواستیں سنبھال سکیں۔",
-  privacyNote: "آپ کی پروفائل میں صرف نام اور عمومی علاقہ دکھتا ہے — کبھی ای میل، فون یا مکمل پتہ نہیں۔",
+  signedOutDesc:
+    "سائن اِن کریں تاکہ آپ اپنی دی گئی اشیاء، ضروریات اور پڑوسیوں کی درخواستیں سنبھال سکیں۔",
+  privacyNote:
+    "آپ کی پروفائل میں صرف نام اور عمومی علاقہ دکھتا ہے — کبھی ای میل، فون یا مکمل پتہ نہیں۔",
   title: "آپ کی اشیاء، ضروریات اور حوالگیاں",
   desc: "یہ صرف آپ کے لیے ہے۔ تبادلہ تب ہی مکمل شمار ہوتا ہے جب دونوں افراد حوالگی کی تصدیق کریں۔",
   "st.pending": "جواب کا انتظار",
@@ -208,8 +210,10 @@ const hi: D = {
   loading: "लोड हो रहा है…",
   eyebrow: "मेरा ReLoop",
   signedOutTitle: "आपकी पुनः उपयोग गतिविधि एक जगह",
-  signedOutDesc: "साइन इन करें ताकि आप अपनी साझा चीज़ें, ज़रूरतें और पड़ोसियों के अनुरोध संभाल सकें।",
-  privacyNote: "आपकी प्रोफ़ाइल में केवल नाम और सामान्य क्षेत्र दिखता है — कभी ईमेल, फ़ोन या पूरा पता नहीं।",
+  signedOutDesc:
+    "साइन इन करें ताकि आप अपनी साझा चीज़ें, ज़रूरतें और पड़ोसियों के अनुरोध संभाल सकें।",
+  privacyNote:
+    "आपकी प्रोफ़ाइल में केवल नाम और सामान्य क्षेत्र दिखता है — कभी ईमेल, फ़ोन या पूरा पता नहीं।",
   title: "आपकी चीज़ें, ज़रूरतें और हैंडओवर",
   desc: "यह केवल आपके लिए है। आदान-प्रदान तभी पूरा माना जाता है जब दोनों लोग हैंडओवर की पुष्टि करें।",
   "st.pending": "जवाब की प्रतीक्षा",
@@ -406,8 +410,10 @@ const es: D = {
   loading: "Cargando…",
   eyebrow: "Mi ReLoop",
   signedOutTitle: "Tu actividad de reutilización en un solo lugar",
-  signedOutDesc: "Inicia sesión para gestionar lo que compartes, lo que necesitas y las solicitudes de tus vecinos.",
-  privacyNote: "Tu perfil solo muestra un nombre y una zona general, nunca tu correo, teléfono o dirección exacta.",
+  signedOutDesc:
+    "Inicia sesión para gestionar lo que compartes, lo que necesitas y las solicitudes de tus vecinos.",
+  privacyNote:
+    "Tu perfil solo muestra un nombre y una zona general, nunca tu correo, teléfono o dirección exacta.",
   title: "Tus artículos, necesidades y entregas",
   desc: "Privado para ti. Un intercambio solo cuenta como completado cuando ambas personas confirman la entrega.",
   "st.pending": "Esperando respuesta",
@@ -463,7 +469,8 @@ const es: D = {
   "push.offOk": "Notificaciones desactivadas en todos tus dispositivos.",
   "push.offErr": "No se pudieron desactivar las notificaciones.",
   "push.open-in-new-tab": "Abre ReLoop en su propia pestaña para permitir notificaciones.",
-  "push.denied": "Las notificaciones están bloqueadas. Permítelas en la configuración del navegador.",
+  "push.denied":
+    "Las notificaciones están bloqueadas. Permítelas en la configuración del navegador.",
   "push.not-configured": "Las notificaciones aún no están configuradas.",
   "push.unsupported": "Este navegador no admite notificaciones web.",
   "mod.signIn": "Los moderadores deben iniciar sesión.",
@@ -505,8 +512,10 @@ const fr: D = {
   loading: "Chargement…",
   eyebrow: "Mon ReLoop",
   signedOutTitle: "Votre activité de réemploi au même endroit",
-  signedOutDesc: "Connectez-vous pour gérer ce que vous partagez, ce dont vous avez besoin et les demandes de vos voisins.",
-  privacyNote: "Votre profil n'affiche qu'un nom et une zone générale — jamais votre e-mail, téléphone ou adresse exacte.",
+  signedOutDesc:
+    "Connectez-vous pour gérer ce que vous partagez, ce dont vous avez besoin et les demandes de vos voisins.",
+  privacyNote:
+    "Votre profil n'affiche qu'un nom et une zone générale — jamais votre e-mail, téléphone ou adresse exacte.",
   title: "Vos objets, besoins et remises",
   desc: "Privé. Un échange n'est compté comme terminé que lorsque les deux personnes confirment la remise.",
   "st.pending": "En attente de réponse",
@@ -562,7 +571,8 @@ const fr: D = {
   "push.offOk": "Notifications désactivées sur tous vos appareils.",
   "push.offErr": "Impossible de désactiver les notifications.",
   "push.open-in-new-tab": "Ouvrez ReLoop dans son propre onglet pour autoriser les notifications.",
-  "push.denied": "Les notifications sont bloquées. Autorisez-les dans les paramètres du navigateur.",
+  "push.denied":
+    "Les notifications sont bloquées. Autorisez-les dans les paramètres du navigateur.",
   "push.not-configured": "Les notifications ne sont pas encore configurées.",
   "push.unsupported": "Ce navigateur ne prend pas en charge les notifications web.",
   "mod.signIn": "Les modérateurs doivent se connecter.",
@@ -652,7 +662,8 @@ const zh: D = {
   neverShare: "请勿填写邮箱、电话号码或详细地址。",
   openModeration: "打开审核",
   "push.title": "通知",
-  "push.desc": "当有人请求你的物品、为你的需求提供物品或回复你的请求时收到提醒。只发送事件，不含联系方式。",
+  "push.desc":
+    "当有人请求你的物品、为你的需求提供物品或回复你的请求时收到提醒。只发送事件，不含联系方式。",
   "push.on": "在此设备上开启",
   "push.off": "关闭",
   "push.onOk": "已在此设备上开启通知。",
