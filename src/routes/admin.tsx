@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { AccountButton } from "@/components/reloop/AccountButton";
 import { Card, PageHeader, formatDate } from "@/components/reloop/shared";
 import { getModerationQueue, moderateEvidence, reviewReport } from "@/lib/reloop/account.functions";
-import { REPORT_REASON_LABEL } from "@/lib/reloop/moderation";
 import { useStoreMeta } from "@/lib/reloop/store";
+import { useDashT } from "@/lib/i18n-dash";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -30,11 +30,12 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const { userId, hydrated } = useStoreMeta();
-  if (!hydrated) return <p className="p-8 text-muted-foreground">Loading…</p>;
+  const t = useDashT();
+  if (!hydrated) return <p className="p-8 text-muted-foreground">{t("loading")}</p>;
   if (!userId)
     return (
       <Card className="max-w-md">
-        <p className="mb-4 text-sm">Moderators must sign in.</p>
+        <p className="mb-4 text-sm">{t("mod.signIn")}</p>
         <AccountButton />
       </Card>
     );
@@ -46,6 +47,7 @@ function Queue() {
   const validate = useServerFn(moderateEvidence);
   const review = useServerFn(reviewReport);
   const qc = useQueryClient();
+  const t = useDashT();
   const q = useQuery({ queryKey: ["reloop-account", "moderation"], queryFn: () => load() });
   const act = async (fn: () => Promise<unknown>, ok: string) => {
     try {
@@ -54,41 +56,35 @@ function Queue() {
       await qc.invalidateQueries({ queryKey: ["reloop-account"] });
       await qc.invalidateQueries({ queryKey: ["reloop-public"] });
     } catch {
-      toast.error("Action failed");
+      toast.error(t("mod.failed"));
     }
   };
-  if (q.isLoading) return <p className="p-8 text-muted-foreground">Loading moderation queue…</p>;
+  if (q.isLoading) return <p className="p-8 text-muted-foreground">{t("mod.loading")}</p>;
   if (q.isError)
     return (
       <p role="alert" className="p-8 text-destructive">
-        Could not load the queue.
+        {t("mod.loadError")}
       </p>
     );
   if (!q.data?.allowed)
     return (
       <Card className="max-w-lg">
         <p className="flex items-center gap-2 font-semibold">
-          <ShieldAlert className="size-5" aria-hidden /> Access denied
+          <ShieldAlert className="size-5" aria-hidden /> {t("mod.denied")}
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This area is only for ReLoop moderators.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("mod.deniedDesc")}</p>
       </Card>
     );
   const open = q.data.reports.filter((r) => r.status === "open");
   return (
     <div className="animate-rise space-y-8">
-      <PageHeader
-        eyebrow="Moderation"
-        title="Evidence review and reports"
-        description="Every action is re-checked on the server."
-      />
+      <PageHeader eyebrow={t("mod.eyebrow")} title={t("mod.title")} description={t("mod.desc")} />
       <section>
         <h2 className="mb-3 text-xl font-semibold">
-          Evidence awaiting review ({q.data.evidence.length})
+          {t("mod.evidence")} ({q.data.evidence.length})
         </h2>
         {q.data.evidence.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No submissions waiting.</p>
+          <p className="text-sm text-muted-foreground">{t("mod.evidenceEmpty")}</p>
         ) : (
           <ul className="grid gap-3 md:grid-cols-2">
             {q.data.evidence.map(({ key, ...data }) => (
@@ -96,26 +92,27 @@ function Queue() {
                 <p className="font-semibold">{data.title}</p>
                 <p className="mt-1 text-muted-foreground">{data.description}</p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {data.area} · {data.date} · consent {data.consent ? "given" : "missing"}
-                  {data.rejected ? " · previously rejected" : ""}
+                  {data.area} · {data.date} ·{" "}
+                  {data.consent ? t("mod.consentGiven") : t("mod.consentMissing")}
+                  {data.rejected ? ` · ${t("mod.prevRejected")}` : ""}
                 </p>
                 <div className="mt-3 flex gap-2">
                   <Button
                     size="sm"
                     onClick={() =>
-                      void act(() => validate({ data: { key, approve: true } }), "Published")
+                      void act(() => validate({ data: { key, approve: true } }), t("mod.published"))
                     }
                   >
-                    Approve
+                    {t("mod.approve")}
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() =>
-                      void act(() => validate({ data: { key, approve: false } }), "Rejected")
+                      void act(() => validate({ data: { key, approve: false } }), t("mod.rejected"))
                     }
                   >
-                    Reject
+                    {t("mod.reject")}
                   </Button>
                 </div>
               </li>
@@ -124,18 +121,18 @@ function Queue() {
         )}
       </section>
       <section>
-        <h2 className="mb-3 text-xl font-semibold">Open reports ({open.length})</h2>
+        <h2 className="mb-3 text-xl font-semibold">
+          {t("mod.reports")} ({open.length})
+        </h2>
         {open.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No open reports.</p>
+          <p className="text-sm text-muted-foreground">{t("mod.reportsEmpty")}</p>
         ) : (
           <ul className="grid gap-3">
             {open.map((r) => (
               <li key={r.id} className="rounded-xl border bg-background p-4 text-sm">
-                <p className="font-semibold">
-                  {REPORT_REASON_LABEL[r.reason as keyof typeof REPORT_REASON_LABEL] ?? r.reason}
-                </p>
+                <p className="font-semibold">{t(`r.${r.reason}`)}</p>
                 <p className="text-xs text-muted-foreground">
-                  {r.target_kind} · {r.target_id} · {formatDate(r.created_at)}
+                  {t(`k.${r.target_kind}`)} · {r.target_id} · {formatDate(r.created_at)}
                 </p>
                 {r.details && <p className="mt-2">{r.details}</p>}
                 <div className="mt-3 flex gap-2">
@@ -144,11 +141,11 @@ function Queue() {
                     onClick={() =>
                       void act(
                         () => review({ data: { id: r.id, decision: "reviewed" } }),
-                        "Marked reviewed",
+                        t("mod.reviewed"),
                       )
                     }
                   >
-                    Mark reviewed
+                    {t("mod.markReviewed")}
                   </Button>
                   <Button
                     size="sm"
@@ -156,11 +153,11 @@ function Queue() {
                     onClick={() =>
                       void act(
                         () => review({ data: { id: r.id, decision: "dismissed" } }),
-                        "Dismissed",
+                        t("mod.dismissed"),
                       )
                     }
                   >
-                    Dismiss
+                    {t("mod.dismiss")}
                   </Button>
                 </div>
               </li>

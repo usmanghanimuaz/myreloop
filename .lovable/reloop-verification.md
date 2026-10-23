@@ -27,3 +27,16 @@
 - Phone home-screen install: added the app manifest, 192/512 icons, an Apple touch icon and the theme colour. No offline mode or service worker.
 - Email notifications are blocked: there is no sender domain yet.
 - Push notifications are deferred: they need a free Firebase account connected.
+
+## Update 11:35 UTC — translations, privacy, security
+Passed (actually run):
+- My ReLoop, notifications box and Moderation now use translated text in all 7 languages (en, ur, hi, ar, es, fr, zh). Browser check signed in as the owner: both pages loaded in every language at 1280px and 390px; `dir=rtl` for Urdu/Arabic, `ltr` for the rest; no horizontal overflow; no page errors.
+- 11 public routes at 1280px and 390px: no horizontal overflow, no page errors.
+- Security scan: 0 findings after fix. Contact/report insert rule now requires valid kind, name/email/subject/message lengths and email format (was "anyone can insert anything"). Role-check function no longer callable by signed-out visitors.
+- Admin-only database functions refuse non-admins internally (checked function definitions). Only one admin exists (owner); no role assigned this turn.
+- Tests 46/46; lint clean after formatting; preview build OK.
+Remaining / blocked:
+- Remaining linter warnings: signed-in users can call admin functions (they reject non-admins inside — intentional), and the listing-owner lookup is callable publicly (needed by the read rule; owner IDs of public listings are already visible).
+- Sign-in dialog and sitewide long-form pages still English-only in other languages (honest fallback note shown).
+- Not tested: second real account for two-party handover, non-admin "Access denied" view with a real non-admin, email code delivery, push delivery on a real device, contact form rate limiting (no reliable server-side limiter).
+- Legal review of policies; no deployment.

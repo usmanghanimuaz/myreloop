@@ -46,8 +46,18 @@ function ResetPassword() {
       <h1 className="font-display text-3xl">Set a new password</h1>
       <form onSubmit={submit} className="mt-6 space-y-3">
         <Label htmlFor="new-pass">New password</Label>
-        <Input id="new-pass" type="password" autoComplete="new-password" minLength={8} maxLength={72} value={password} onChange={(e) => setPassword(e.target.value)} />
-        <Button type="submit" disabled={busy} className="w-full">Save password</Button>
+        <Input
+          id="new-pass"
+          type="password"
+          autoComplete="new-password"
+          minLength={8}
+          maxLength={72}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button type="submit" disabled={busy} className="w-full">
+          Save password
+        </Button>
       </form>
     </main>
   );

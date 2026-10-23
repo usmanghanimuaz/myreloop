@@ -14,6 +14,7 @@ import { getMyProfile, saveMyProfile } from "@/lib/reloop/account.functions";
 import { ProfileInputSchema } from "@/lib/reloop/moderation";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import type { InterestRequest } from "@/lib/reloop/types";
+import { useDashT } from "@/lib/i18n-dash";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
@@ -38,31 +39,20 @@ export const Route = createFileRoute("/account")({
   component: Account,
 });
 
-const STATUS_TEXT: Record<string, string> = {
-  pending: "Waiting for a reply",
-  accepted: "Accepted — arrange a safe handover",
-  rejected: "Declined",
-  handover: "Handover confirmed by one person",
-  completed: "Completed — confirmed by both people",
-  cancelled: "Cancelled",
-};
-
 function Account() {
   const { userId, hydrated } = useStoreMeta();
-  if (!hydrated) return <p className="p-8 text-muted-foreground">Loading…</p>;
+  const t = useDashT();
+  if (!hydrated) return <p className="p-8 text-muted-foreground">{t("loading")}</p>;
   if (!userId)
     return (
       <div className="animate-rise">
         <PageHeader
-          eyebrow="My ReLoop"
-          title="Your reuse activity in one place"
-          description="Sign in to manage what you share, what you need, and requests from neighbours."
+          eyebrow={t("eyebrow")}
+          title={t("signedOutTitle")}
+          description={t("signedOutDesc")}
         />
         <Card className="max-w-md">
-          <p className="mb-4 text-sm text-muted-foreground">
-            Your profile only shows a display name and a general area — never your email, phone or
-            exact address.
-          </p>
+          <p className="mb-4 text-sm text-muted-foreground">{t("privacyNote")}</p>
           <AccountButton />
         </Card>
       </div>
@@ -73,12 +63,13 @@ function Account() {
 function Dashboard({ userId }: { userId: string }) {
   const state = useAppState();
   const { busy } = useStoreMeta();
+  const t = useDashT();
   const myListings = state.listings.filter((l) => l.ownerId === userId);
   const myNeeds = state.needs.filter((n) => n.ownerId === userId);
   const targetTitle = (i: InterestRequest) =>
     (i.targetKind === "needs"
       ? state.needs.find((n) => n.id === i.listingId)?.title
-      : state.listings.find((l) => l.id === i.listingId)?.title) ?? "Item";
+      : state.listings.find((l) => l.id === i.listingId)?.title) ?? t("item");
   const targetOwner = (i: InterestRequest) =>
     i.targetKind === "needs"
       ? state.needs.find((n) => n.id === i.listingId)?.ownerId
@@ -97,7 +88,7 @@ function Dashboard({ userId }: { userId: string }) {
       await fn();
       toast.success(ok);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Something went wrong");
+      toast.error(e instanceof Error ? e.message : t("error"));
     }
   }
 
@@ -109,12 +100,12 @@ function Dashboard({ userId }: { userId: string }) {
           <div className="min-w-0">
             <p className="font-medium">{targetTitle(i)}</p>
             <p className="text-xs text-muted-foreground">
-              {i.targetKind === "needs" ? "Offer for a need" : "Request for an item"} ·{" "}
+              {i.targetKind === "needs" ? t("offerForNeed") : t("requestForItem")} ·{" "}
               {formatDate(i.createdAt)}
             </p>
           </div>
           <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-            {STATUS_TEXT[status] ?? status}
+            {t(`st.${status}`)}
           </span>
         </div>
         {i.note && <p className="mt-2 text-sm">“{i.note}”</p>}
@@ -124,17 +115,21 @@ function Dashboard({ userId }: { userId: string }) {
               <Button
                 size="sm"
                 disabled={busy}
-                onClick={() => void run(() => actions.respondRequest(i.id, "accept"), "Accepted")}
+                onClick={() =>
+                  void run(() => actions.respondRequest(i.id, "accept"), t("accepted"))
+                }
               >
-                Accept
+                {t("accept")}
               </Button>
               <Button
                 size="sm"
                 variant="outline"
                 disabled={busy}
-                onClick={() => void run(() => actions.respondRequest(i.id, "reject"), "Declined")}
+                onClick={() =>
+                  void run(() => actions.respondRequest(i.id, "reject"), t("declined"))
+                }
               >
-                Decline
+                {t("decline")}
               </Button>
             </>
           )}
@@ -143,10 +138,10 @@ function Dashboard({ userId }: { userId: string }) {
               size="sm"
               disabled={busy}
               onClick={() =>
-                void run(() => actions.respondRequest(i.id, "confirm"), "Handover confirmed")
+                void run(() => actions.respondRequest(i.id, "confirm"), t("confirmed"))
               }
             >
-              Confirm handover happened
+              {t("confirm")}
             </Button>
           )}
           {!incomingRow && status === "pending" && (
@@ -154,9 +149,9 @@ function Dashboard({ userId }: { userId: string }) {
               size="sm"
               variant="outline"
               disabled={busy}
-              onClick={() => void run(() => actions.respondRequest(i.id, "cancel"), "Cancelled")}
+              onClick={() => void run(() => actions.respondRequest(i.id, "cancel"), t("cancelled"))}
             >
-              Cancel request
+              {t("cancelReq")}
             </Button>
           )}
         </div>
@@ -166,11 +161,7 @@ function Dashboard({ userId }: { userId: string }) {
 
   return (
     <div className="animate-rise space-y-8">
-      <PageHeader
-        eyebrow="My ReLoop"
-        title="Your items, needs and handovers"
-        description="Private to you. An exchange only counts as completed once both people confirm the handover."
-      />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("desc")} />
       <ProfileCard />
       <PushToggle />
 
@@ -179,10 +170,10 @@ function Dashboard({ userId }: { userId: string }) {
           id="inbox-h"
           className="mb-3 flex items-center gap-2 font-display text-2xl font-semibold"
         >
-          <Bell className="size-5" aria-hidden /> Needs your attention
+          <Bell className="size-5" aria-hidden /> {t("attention")}
         </h2>
         {attention.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nothing waiting on you right now.</p>
+          <p className="text-sm text-muted-foreground">{t("attentionEmpty")}</p>
         ) : (
           <ul className="grid gap-3 md:grid-cols-2">
             {attention.map((i) => (
@@ -195,10 +186,10 @@ function Dashboard({ userId }: { userId: string }) {
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="in-h">
           <h2 id="in-h" className="mb-3 flex items-center gap-2 text-xl font-semibold">
-            <Inbox className="size-5" aria-hidden /> Incoming requests
+            <Inbox className="size-5" aria-hidden /> {t("incoming")}
           </h2>
           {incoming.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No one has requested your items yet.</p>
+            <p className="text-sm text-muted-foreground">{t("incomingEmpty")}</p>
           ) : (
             <ul className="grid gap-3">
               {incoming.map((i) => (
@@ -209,10 +200,10 @@ function Dashboard({ userId }: { userId: string }) {
         </section>
         <section aria-labelledby="out-h">
           <h2 id="out-h" className="mb-3 flex items-center gap-2 text-xl font-semibold">
-            <Send className="size-5" aria-hidden /> Your requests and offers
+            <Send className="size-5" aria-hidden /> {t("outgoing")}
           </h2>
           {outgoing.length === 0 ? (
-            <p className="text-sm text-muted-foreground">You haven't requested anything yet.</p>
+            <p className="text-sm text-muted-foreground">{t("outgoingEmpty")}</p>
           ) : (
             <ul className="grid gap-3">
               {outgoing.map((i) => (
@@ -226,15 +217,13 @@ function Dashboard({ userId }: { userId: string }) {
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="ml-h">
           <h2 id="ml-h" className="mb-3 text-xl font-semibold">
-            Your listings
+            {t("listings")}
           </h2>
           {myListings.length === 0 ? (
-            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title="No listings yet">
-              <p className="mb-3">
-                Before you throw something usable away, list it for FREE or EXCHANGE.
-              </p>
+            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title={t("listingsEmpty")}>
+              <p className="mb-3">{t("listingsHint")}</p>
               <Button asChild size="sm">
-                <Link to="/exchange">Share an item</Link>
+                <Link to="/exchange">{t("shareItem")}</Link>
               </Button>
             </EmptyState>
           ) : (
@@ -253,13 +242,13 @@ function Dashboard({ userId }: { userId: string }) {
         </section>
         <section aria-labelledby="mn-h">
           <h2 id="mn-h" className="mb-3 text-xl font-semibold">
-            Your needs
+            {t("needs")}
           </h2>
           {myNeeds.length === 0 ? (
-            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title="No needs posted">
-              <p className="mb-3">Ask for an item before buying new.</p>
+            <EmptyState icon={<Inbox className="size-5" aria-hidden />} title={t("needsEmpty")}>
+              <p className="mb-3">{t("needsHint")}</p>
               <Button asChild size="sm">
-                <Link to="/needs">Post a need</Link>
+                <Link to="/needs">{t("postNeed")}</Link>
               </Button>
             </EmptyState>
           ) : (
@@ -271,7 +260,11 @@ function Dashboard({ userId }: { userId: string }) {
                 >
                   <span className="min-w-0 truncate font-medium">{n.title ?? n.description}</span>
                   <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                    {n.status ?? "open"}
+                    {n.status
+                      ? t(`st.${n.status}`) === `st.${n.status}`
+                        ? n.status
+                        : t(`st.${n.status}`)
+                      : t("open")}
                   </span>
                 </li>
               ))}
@@ -287,6 +280,7 @@ function ProfileCard() {
   const load = useServerFn(getMyProfile);
   const save = useServerFn(saveMyProfile);
   const qc = useQueryClient();
+  const t = useDashT();
   const q = useQuery({ queryKey: ["reloop-account", "profile"], queryFn: () => load() });
   const [form, setForm] = useState({ displayName: "", generalArea: "" });
   const [err, setErr] = useState("");
@@ -298,7 +292,7 @@ function ProfileCard() {
     return (
       <Card>
         <p role="alert" className="text-sm text-destructive">
-          Could not load your profile.
+          {t("profileError")}
         </p>
       </Card>
     );
@@ -309,22 +303,22 @@ function ProfileCard() {
         onSubmit={async (e) => {
           e.preventDefault();
           const parsed = ProfileInputSchema.safeParse(form);
-          if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? "Invalid");
+          if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? t("invalid"));
           setErr("");
           setSaving(true);
           try {
             await save({ data: parsed.data });
             await qc.invalidateQueries({ queryKey: ["reloop-account", "profile"] });
-            toast.success("Profile saved");
+            toast.success(t("profileSaved"));
           } catch {
-            toast.error("Could not save your profile");
+            toast.error(t("profileSaveError"));
           } finally {
             setSaving(false);
           }
         }}
       >
         <div className="grid gap-1.5">
-          <Label htmlFor="pf-name">Display name</Label>
+          <Label htmlFor="pf-name">{t("displayName")}</Label>
           <Input
             id="pf-name"
             maxLength={60}
@@ -333,7 +327,7 @@ function ProfileCard() {
           />
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor="pf-area">General area (neighbourhood or city)</Label>
+          <Label htmlFor="pf-area">{t("area")}</Label>
           <Input
             id="pf-area"
             maxLength={80}
@@ -342,7 +336,7 @@ function ProfileCard() {
           />
         </div>
         <Button type="submit" disabled={saving || q.isLoading}>
-          {saving ? "Saving…" : "Save profile"}
+          {saving ? t("saving") : t("saveProfile")}
         </Button>
         {err && (
           <p role="alert" className="text-sm text-destructive sm:col-span-3">
@@ -350,10 +344,10 @@ function ProfileCard() {
           </p>
         )}
         <p className="text-xs text-muted-foreground sm:col-span-3">
-          Never add your email, phone number or exact address.{" "}
+          {t("neverShare")}{" "}
           {q.data?.isAdmin && (
             <Link to="/admin" className="font-medium text-primary underline">
-              Open moderation
+              {t("openModeration")}
             </Link>
           )}
         </p>
