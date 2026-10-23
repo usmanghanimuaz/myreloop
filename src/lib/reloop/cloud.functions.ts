@@ -108,7 +108,7 @@ export const executeCommand = createServerFn({ method: "POST" })
       const other = request.owner_id === context.userId ? target.owner_id : request.owner_id;
       if (other) {
         const { notifyUser } = await import("./push.server");
-        await notifyUser(other, "ReLoop handover update", "A request you're part of was updated.");
+        await notifyUser(other, "ReLoop handover update", "A request you're part of was updated.", "updates");
       }
       return { listing: undefined };
     }
@@ -351,6 +351,7 @@ export const executeCommand = createServerFn({ method: "POST" })
           command.type === "sendInterest"
             ? "Someone is interested in your item."
             : "Someone offered an item for your need.",
+          "requests",
         );
       }
     }

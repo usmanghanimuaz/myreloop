@@ -2,7 +2,13 @@
 // Failures never block the user's action; stale tokens are removed.
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/firebase_messaging";
 
-export async function notifyUser(userId: string, title: string, body: string, path = "/account") {
+export async function notifyUser(
+  userId: string,
+  title: string,
+  body: string,
+  kind: "requests" | "updates" = "updates",
+  path = "/account",
+) {
   const lovableKey = process.env["LOVABLE_API_KEY"];
   const connKey = process.env["FIREBASE_MESSAGING_API_KEY"];
   if (!lovableKey || !connKey) return;
@@ -12,6 +18,12 @@ export async function notifyUser(userId: string, title: string, body: string, pa
       .from("push_tokens")
       .select("token")
       .eq("user_id", userId);
+    const { data: prefs } = await supabaseAdmin
+      .from("profiles")
+      .select("notify_requests, notify_updates")
+      .eq("id", userId)
+      .maybeSingle();
+    if (prefs && (kind === "requests" ? !prefs.notify_requests : !prefs.notify_updates)) return;
     for (const { token } of tokens ?? []) {
       const res = await fetch(`${GATEWAY_URL}/v1/projects/_/messages:send`, {
         method: "POST",
