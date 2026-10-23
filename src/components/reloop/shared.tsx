@@ -100,6 +100,38 @@ export function Notice({ children, className }: { children: ReactNode; className
   );
 }
 
+export function PolicyPage({
+  eyebrow,
+  title,
+  updated,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  updated: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="animate-rise">
+      <PageHeader eyebrow={eyebrow} title={title} description={`Last updated: ${updated}`} />
+      <div className="max-w-3xl space-y-6">{children}</div>
+      <Notice className="mt-8 max-w-3xl">
+        This page explains how ReLoop works in plain language. It is not legal advice and has not
+        been reviewed by a lawyer.
+      </Notice>
+    </div>
+  );
+}
+
+export function PolicySection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section>
+      <h2 className="mb-2 text-xl font-semibold">{title}</h2>
+      <div className="space-y-2 text-sm text-muted-foreground">{children}</div>
+    </section>
+  );
+}
+
 export function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",

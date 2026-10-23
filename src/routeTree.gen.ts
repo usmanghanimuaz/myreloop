@@ -13,12 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as ActionsRouteImport } from './routes/actions'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ExchangeRouteImport } from './routes/exchange'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinderRouteImport } from './routes/finder'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as NeedsRouteImport } from './routes/needs'
+import { Route as ReportRouteImport } from './routes/report'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,9 +43,19 @@ const ActionsRoute = ActionsRouteImport.update({
   path: '/actions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExchangeRoute = ExchangeRouteImport.update({
   id: '/exchange',
   path: '/exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinderRoute = FinderRouteImport.update({
@@ -70,30 +83,41 @@ const NeedsRoute = NeedsRouteImport.update({
   path: '/needs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/contact': typeof ContactRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/contact': typeof ContactRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,12 +125,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/actions': typeof ActionsRoute
+  '/contact': typeof ContactRoute
   '/exchange': typeof ExchangeRoute
+  '/faq': typeof FaqRoute
   '/finder': typeof FinderRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
   '/needs': typeof NeedsRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -115,36 +142,45 @@ export interface FileRouteTypes {
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/contact'
     | '/exchange'
+    | '/faq'
     | '/finder'
     | '/how-it-works'
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/report'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/contact'
     | '/exchange'
+    | '/faq'
     | '/finder'
     | '/how-it-works'
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/report'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/about-us'
     | '/actions'
+    | '/contact'
     | '/exchange'
+    | '/faq'
     | '/finder'
     | '/how-it-works'
     | '/impact'
     | '/mission'
     | '/needs'
+    | '/report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -152,12 +188,15 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AboutUsRoute: typeof AboutUsRoute
   ActionsRoute: typeof ActionsRoute
+  ContactRoute: typeof ContactRoute
   ExchangeRoute: typeof ExchangeRoute
+  FaqRoute: typeof FaqRoute
   FinderRoute: typeof FinderRoute
   HowItWorksRoute: typeof HowItWorksRoute
   ImpactRoute: typeof ImpactRoute
   MissionRoute: typeof MissionRoute
   NeedsRoute: typeof NeedsRoute
+  ReportRoute: typeof ReportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -190,11 +229,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/exchange': {
       id: '/exchange'
       path: '/exchange'
       fullPath: '/exchange'
       preLoaderRoute: typeof ExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/finder': {
@@ -232,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NeedsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -240,12 +300,15 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AboutUsRoute: AboutUsRoute,
   ActionsRoute: ActionsRoute,
+  ContactRoute: ContactRoute,
   ExchangeRoute: ExchangeRoute,
+  FaqRoute: FaqRoute,
   FinderRoute: FinderRoute,
   HowItWorksRoute: HowItWorksRoute,
   ImpactRoute: ImpactRoute,
   MissionRoute: MissionRoute,
   NeedsRoute: NeedsRoute,
+  ReportRoute: ReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
