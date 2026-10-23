@@ -1,5 +1,16 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BarChart3, Info, LayoutGrid, Menu, Recycle, RotateCcw, Search, Users } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  HandHeart,
+  Home,
+  Info,
+  Menu,
+  PackageOpen,
+  Recycle,
+  RotateCcw,
+  Users,
+} from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
@@ -19,12 +30,13 @@ import { cn } from "@/lib/utils";
 import { AccountButton } from "./AccountButton";
 
 const NAV = [
-  { to: "/", label: "Overview", icon: LayoutGrid },
-  { to: "/finder", label: "Find a Better Use", icon: Search },
-  { to: "/exchange", label: "Reuse Exchange", icon: Recycle },
-  { to: "/actions", label: "Community Actions", icon: Users },
+  { to: "/", label: "Home", icon: Home },
+  { to: "/exchange", label: "Available Items — I Have", icon: PackageOpen },
+  { to: "/exchange", hash: "community-needs", label: "Community Needs — I Need", icon: HandHeart },
+  { to: "/finder", label: "Material Guidance", icon: BookOpen },
+  { to: "/about", label: "Waste & Evidence", icon: Info },
+  { to: "/actions", label: "Community Activity", icon: Users },
   { to: "/impact", label: "Impact Tracker", icon: BarChart3 },
-  { to: "/about", label: "About the Project", icon: Info },
 ] as const;
 
 function Logo() {
