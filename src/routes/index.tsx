@@ -84,9 +84,12 @@ const TODAY = [
 function Home() {
   const state = useAppState();
   const { userId } = useStoreMeta();
+  const { t } = useI18n();
   const impact = useMemo(() => summarizeImpact(state), [state]);
-  const activeListings = state.listings.filter((l) => l.status === "available");
-  const openNeeds = state.needs.filter((n) => n.status === "open");
+  const activeListings = state.listings.filter(
+    (l) => l.status === "available" && l.origin === "user",
+  );
+  const openNeeds = state.needs.filter((n) => n.status === "open" && n.origin === "user");
   const completedExchanges = useMemo(
     () =>
       state.interests
@@ -114,28 +117,22 @@ function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-sidebar/95 via-sidebar/80 to-sidebar/30" />
         <div className="relative max-w-2xl p-8 text-sidebar-foreground md:p-14">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">ReLoop</p>
-          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
-            Don't throw useful things away. Pass them on.
-          </h1>
-          <p className="mt-4 text-lg opacity-90">
-            ReLoop is a community waste-to-value platform. Share surplus items with neighbours for
-            free or in exchange, learn how to repair and recycle safely, and record what actually
-            got reused — so less ends up in bins, drains and dumps.
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">
+            {t("home.eyebrow")}
           </p>
+          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">{t("home.heroTitle")}</h1>
+          <p className="mt-4 text-lg opacity-90">{t("home.heroText")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild variant="lime" size="lg">
               <Link to="/exchange">
-                Explore available items <ArrowRight />
+                {t("home.ctaExplore")} <ArrowRight className="rtl:rotate-180" />
               </Link>
             </Button>
             <Button asChild variant="lime" size="lg">
-              <Link to="/exchange">Share an item</Link>
+              <Link to="/exchange">{t("home.ctaShare")}</Link>
             </Button>
             <Button asChild variant="lime" size="lg">
-              <Link to="/exchange" hash="community-needs">
-                Post a need
-              </Link>
+              <Link to="/needs">{t("home.ctaNeed")}</Link>
             </Button>
           </div>
           <p className="mt-6 text-xs opacity-60">
