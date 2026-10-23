@@ -338,6 +338,33 @@ function Home() {
           </div>
         </div>
 
+        <div className="mt-6">
+          <h3 className="mb-3 flex items-center gap-2 text-xl font-semibold">
+            <CheckCircle2 className="size-5 text-primary" /> Recently completed exchanges
+          </h3>
+          {completedExchanges.length === 0 ? (
+            <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
+              No completed exchanges yet. When two neighbours confirm a handover, it appears here —
+              and only then does it count as verified impact.
+            </p>
+          ) : (
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {completedExchanges.map(({ interest, listing }) => (
+                <li key={interest.id} className="rounded-xl border bg-card p-4 text-sm shadow-card">
+                  <p className="font-medium">{listing?.title ?? "Exchange"}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {interest.quantity != null && interest.unit
+                      ? `${interest.quantity} ${interest.unit} · `
+                      : ""}
+                    Confirmed by both participants · {formatDate(interest.createdAt)}{" "}
+                    <OriginBadge origin={interest.origin} />
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div className="mt-6 grid gap-6 lg:grid-cols-5">
           <Card className="lg:col-span-3">
             <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
