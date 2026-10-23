@@ -147,11 +147,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CloudStoreProvider>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      </CloudStoreProvider>
+      <I18nProvider>
+        <CloudStoreProvider>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </CloudStoreProvider>
+      </I18nProvider>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
