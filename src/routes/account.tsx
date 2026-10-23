@@ -10,8 +10,8 @@ import { Label } from "@/components/ui/label";
 import { AccountButton } from "@/components/reloop/AccountButton";
 import { PushToggle } from "@/components/reloop/PushToggle";
 import { Card, EmptyState, PageHeader, StatusBadge, formatDate } from "@/components/reloop/shared";
-import { getMyProfile, saveMyProfile } from "@/lib/reloop/account.functions";
-import { ProfileInputSchema } from "@/lib/reloop/moderation";
+import { acceptTerms, getMyProfile, saveMyProfile } from "@/lib/reloop/account.functions";
+import { AccountInputSchema } from "@/lib/reloop/moderation";
 import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
 import type { InterestRequest } from "@/lib/reloop/types";
 import { useDashT } from "@/lib/i18n-dash";
@@ -77,6 +77,11 @@ function Dashboard({ userId }: { userId: string }) {
   const sorted = [...state.interests].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   const incoming = sorted.filter((i) => i.ownerId !== userId && targetOwner(i) === userId);
   const outgoing = sorted.filter((i) => i.ownerId === userId);
+  const isDone = (i: InterestRequest) =>
+    ["completed", "rejected", "cancelled"].includes(i.status ?? "pending");
+  const history = [...incoming, ...outgoing].filter(isDone);
+  const activeIncoming = incoming.filter((i) => !isDone(i));
+  const activeOutgoing = outgoing.filter((i) => !isDone(i));
   const attention = [...incoming, ...outgoing].filter(
     (i) =>
       (i.status === "pending" && incoming.includes(i)) ||
@@ -188,11 +193,11 @@ function Dashboard({ userId }: { userId: string }) {
           <h2 id="in-h" className="mb-3 flex items-center gap-2 text-xl font-semibold">
             <Inbox className="size-5" aria-hidden /> {t("incoming")}
           </h2>
-          {incoming.length === 0 ? (
+          {activeIncoming.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t("incomingEmpty")}</p>
           ) : (
             <ul className="grid gap-3">
-              {incoming.map((i) => (
+              {activeIncoming.map((i) => (
                 <RequestRow key={i.id} i={i} incomingRow />
               ))}
             </ul>
@@ -202,17 +207,32 @@ function Dashboard({ userId }: { userId: string }) {
           <h2 id="out-h" className="mb-3 flex items-center gap-2 text-xl font-semibold">
             <Send className="size-5" aria-hidden /> {t("outgoing")}
           </h2>
-          {outgoing.length === 0 ? (
+          {activeOutgoing.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t("outgoingEmpty")}</p>
           ) : (
             <ul className="grid gap-3">
-              {outgoing.map((i) => (
+              {activeOutgoing.map((i) => (
                 <RequestRow key={i.id} i={i} incomingRow={false} />
               ))}
             </ul>
           )}
         </section>
       </div>
+
+      <section aria-labelledby="hist-h">
+        <h2 id="hist-h" className="mb-3 text-xl font-semibold">
+          {t("history")}
+        </h2>
+        {history.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t("historyEmpty")}</p>
+        ) : (
+          <ul className="grid gap-3 md:grid-cols-2">
+            {history.map((i) => (
+              <RequestRow key={i.id} i={i} incomingRow={incoming.includes(i)} />
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="ml-h">
@@ -279,79 +299,163 @@ function Dashboard({ userId }: { userId: string }) {
 function ProfileCard() {
   const load = useServerFn(getMyProfile);
   const save = useServerFn(saveMyProfile);
+  const accept = useServerFn(acceptTerms);
   const qc = useQueryClient();
   const t = useDashT();
   const q = useQuery({ queryKey: ["reloop-account", "profile"], queryFn: () => load() });
-  const [form, setForm] = useState({ displayName: "", generalArea: "" });
+  const [form, setForm] = useState({
+    displayName: "",
+    generalArea: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    notifyRequests: true,
+    notifyUpdates: true,
+  });
   const [err, setErr] = useState("");
   const [saving, setSaving] = useState(false);
   useEffect(() => {
-    if (q.data) setForm({ displayName: q.data.displayName, generalArea: q.data.generalArea });
+    if (q.data)
+      setForm({
+        displayName: q.data.displayName,
+        generalArea: q.data.generalArea,
+        firstName: q.data.firstName,
+        lastName: q.data.lastName,
+        phone: q.data.phone,
+        notifyRequests: q.data.notifyRequests,
+        notifyUpdates: q.data.notifyUpdates,
+      });
   }, [q.data]);
+  if (q.isLoading)
+    return (
+      <Card>
+        <p className="text-sm text-muted-foreground">{t("loading")}</p>
+      </Card>
+    );
   if (q.isError)
     return (
       <Card>
         <p role="alert" className="text-sm text-destructive">
           {t("profileError")}
         </p>
+        <Button size="sm" variant="outline" className="mt-3" onClick={() => void q.refetch()}>
+          {t("retry")}
+        </Button>
       </Card>
     );
+  const field = (id: keyof typeof form, label: string, max: number, extra?: object) => (
+    <div className="grid gap-1.5">
+      <Label htmlFor={`pf-${id}`}>{label}</Label>
+      <Input
+        id={`pf-${id}`}
+        maxLength={max}
+        value={form[id] as string}
+        onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+        {...extra}
+      />
+    </div>
+  );
   return (
-    <Card>
-      <form
-        className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const parsed = ProfileInputSchema.safeParse(form);
-          if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? t("invalid"));
-          setErr("");
-          setSaving(true);
-          try {
-            await save({ data: parsed.data });
-            await qc.invalidateQueries({ queryKey: ["reloop-account", "profile"] });
-            toast.success(t("profileSaved"));
-          } catch {
-            toast.error(t("profileSaveError"));
-          } finally {
-            setSaving(false);
-          }
-        }}
-      >
-        <div className="grid gap-1.5">
-          <Label htmlFor="pf-name">{t("displayName")}</Label>
-          <Input
-            id="pf-name"
-            maxLength={60}
-            value={form.displayName}
-            onChange={(e) => setForm({ ...form, displayName: e.target.value })}
-          />
-        </div>
-        <div className="grid gap-1.5">
-          <Label htmlFor="pf-area">{t("area")}</Label>
-          <Input
-            id="pf-area"
-            maxLength={80}
-            value={form.generalArea}
-            onChange={(e) => setForm({ ...form, generalArea: e.target.value })}
-          />
-        </div>
-        <Button type="submit" disabled={saving || q.isLoading}>
-          {saving ? t("saving") : t("saveProfile")}
-        </Button>
-        {err && (
-          <p role="alert" className="text-sm text-destructive sm:col-span-3">
-            {err}
+    <div className="space-y-4">
+      {q.data?.restricted && (
+        <Card className="border-destructive/40">
+          <p role="alert" className="text-sm text-destructive">
+            {t("restricted")}
           </p>
-        )}
-        <p className="text-xs text-muted-foreground sm:col-span-3">
-          {t("neverShare")}{" "}
-          {q.data?.isAdmin && (
-            <Link to="/admin" className="font-medium text-primary underline">
-              {t("openModeration")}
+        </Card>
+      )}
+      {!q.data?.termsAccepted && (
+        <Card className="border-primary/40">
+          <p className="text-sm">
+            {t("termsNeeded")}{" "}
+            <Link to="/terms" className="underline">
+              {t("terms")}
+            </Link>{" "}
+            ·{" "}
+            <Link to="/privacy" className="underline">
+              {t("privacy")}
             </Link>
+          </p>
+          <Button
+            size="sm"
+            className="mt-3"
+            onClick={async () => {
+              try {
+                await accept();
+                await qc.invalidateQueries({ queryKey: ["reloop-account", "profile"] });
+                toast.success(t("termsOk"));
+              } catch {
+                toast.error(t("error"));
+              }
+            }}
+          >
+            {t("acceptTerms")}
+          </Button>
+        </Card>
+      )}
+      <Card>
+        <form
+          className="grid gap-4 sm:grid-cols-2"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const parsed = AccountInputSchema.safeParse(form);
+            if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? t("invalid"));
+            setErr("");
+            setSaving(true);
+            try {
+              await save({ data: parsed.data });
+              await qc.invalidateQueries({ queryKey: ["reloop-account", "profile"] });
+              toast.success(t("profileSaved"));
+            } catch {
+              toast.error(t("profileSaveError"));
+            } finally {
+              setSaving(false);
+            }
+          }}
+        >
+          <h2 className="font-display text-xl font-semibold sm:col-span-2">{t("profileTitle")}</h2>
+          {field("firstName", t("firstName"), 60, { autoComplete: "given-name" })}
+          {field("lastName", t("lastName"), 60, { autoComplete: "family-name" })}
+          {field("displayName", t("displayName"), 60)}
+          {field("generalArea", t("area"), 80)}
+          <div className="sm:col-span-2">
+            {field("phone", t("phone"), 20, { type: "tel", autoComplete: "tel", inputMode: "tel" })}
+            <p className="mt-1 text-xs text-muted-foreground">{t("phoneNote")}</p>
+          </div>
+          <fieldset className="grid gap-2 sm:col-span-2">
+            <legend className="mb-1 text-sm font-medium">{t("prefs")}</legend>
+            {(["notifyRequests", "notifyUpdates"] as const).map((k) => (
+              <label key={k} className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  className="size-4 accent-primary"
+                  checked={form[k]}
+                  onChange={(e) => setForm({ ...form, [k]: e.target.checked })}
+                />
+                {t(k)}
+              </label>
+            ))}
+          </fieldset>
+          {err && (
+            <p role="alert" className="text-sm text-destructive sm:col-span-2">
+              {err}
+            </p>
           )}
-        </p>
-      </form>
-    </Card>
+          <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+            <Button type="submit" disabled={saving}>
+              {saving ? t("saving") : t("saveProfile")}
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              {t("neverShare")}{" "}
+              {q.data?.isAdmin && (
+                <Link to="/admin" className="font-medium text-primary underline">
+                  {t("openModeration")}
+                </Link>
+              )}
+            </p>
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 }
