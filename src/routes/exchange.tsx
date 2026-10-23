@@ -110,9 +110,9 @@ function Exchange() {
   return (
     <div className="animate-rise">
       <PageHeader
-        eyebrow="Community Reuse Exchange"
-        title="Reuse Exchange"
-        description="Pass usable items on for FREE or EXCHANGE. Reduce waste together."
+        eyebrow="Available Items — I Have"
+        title="Available items near you"
+        description="Usable things neighbours are giving away for FREE or offering in EXCHANGE. Scroll down for Community Needs — what people are looking for."
       >
         <Button
           onClick={() => {
