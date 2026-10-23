@@ -23,3 +23,13 @@
 - [x] Contact/report forms: zod validation (4 alerts verified), saved to contact_messages table (insert-only RLS).
 - [x] 38/38 tests pass, lint 0 errors, build OK, no broken images, no page errors.
 - [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account.
+
+# Enhancement pass (23 Oct 2026, 07:27 brief)
+- [x] Fix Waste & Evidence "Awaiting validation" badges: field cards, aligned label/status row, neutral small badge, 2-col desktop / 1-col mobile, no 390px overlap.
+- [x] Community Activity: real visual feed w/ filters (item offered, need posted, confirmed exchange, evidence submitted), newest first, honest empty state + CTAs.
+- [x] /impact: 1-2 licensed images, methodology, metric cards only with real data, honest empty state.
+- [x] Material Guidance: expand to 18+ categories, quick tool w/ searchable item + units (kg/g/lb/items/litre) + action; hazardous items blocked from exchange.
+- [x] Verify /exchange & /needs real-data rendering + filters.
+- [x] New /stories page: official videos (UNEP/WHO/EPA/UN-Habitat links, attribution), user field evidence (photo/external video URL, consent, validation status, private until validated).
+- [x] Logo: circular reuse arrows + leaf SVG, favicon.
+- [x] QA: tests/lint/build + browser (badges, feed, impact, guidance, stories, RTL, 390px).

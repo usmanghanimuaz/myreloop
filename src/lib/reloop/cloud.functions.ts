@@ -106,6 +106,8 @@ export const executeCommand = createServerFn({ method: "POST" })
       !ownsTarget("needs", command.id)
     )
       throw new Error("Only the need owner can change it.");
+    if (command.type === "deleteFieldEvidence" && !ownsTarget("fieldEvidence", command.id))
+      throw new Error("Only the submitter can remove this evidence.");
     if (command.type === "resetDemo")
       throw new Error("Account-wide clearing is disabled to preserve handover records.");
     if (
@@ -266,10 +268,30 @@ export const executeCommand = createServerFn({ method: "POST" })
       case "saveEvidence":
         a.saveEvidence(command.evidence);
         break;
+      case "submitFieldEvidence":
+        initial.fieldEvidence.unshift({
+          ...command.input,
+          id: crypto.randomUUID(),
+          validated: false,
+          createdAt: new Date().toISOString(),
+          origin: "user",
+        });
+        break;
+      case "deleteFieldEvidence":
+        initial.fieldEvidence = initial.fieldEvidence.filter((e) => e.id !== command.id);
+        break;
     }
     const before = stateRecords(recordsToState(rows), context.userId),
       after = stateRecords(
-        ["postNeed", "closeNeed", "updateNeed", "deleteNeed", "sendOffer"].includes(command.type)
+        [
+          "postNeed",
+          "closeNeed",
+          "updateNeed",
+          "deleteNeed",
+          "sendOffer",
+          "submitFieldEvidence",
+          "deleteFieldEvidence",
+        ].includes(command.type)
           ? initial
           : engine.getState(),
         context.userId,

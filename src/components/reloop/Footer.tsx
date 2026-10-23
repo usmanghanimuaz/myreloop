@@ -41,6 +41,7 @@ export function Footer() {
       heading: t("footer.learn"),
       links: [
         { to: "/about", label: t("footer.evidence") },
+        { to: "/stories", label: t("footer.stories") },
         { to: "/blog", label: t("footer.blog") },
         { to: "/faq", label: t("footer.faq") },
         { to: "/how-it-works", label: t("footer.how") },

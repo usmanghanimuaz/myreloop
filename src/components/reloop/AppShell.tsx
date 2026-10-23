@@ -2,13 +2,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
   BookOpen,
+  Camera,
   HandHeart,
   Home,
   Info,
   Menu,
   Newspaper,
   PackageOpen,
-  Recycle,
   Users,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
@@ -18,6 +18,7 @@ import { useI18n } from "@/lib/i18n";
 import { hydrateStore, useStoreMeta } from "@/lib/reloop/store";
 import { cn } from "@/lib/utils";
 import { AccountButton } from "./AccountButton";
+import { LogoMark } from "./LogoMark";
 import { Footer, LanguageSwitcher } from "./Footer";
 
 const NAV = [
@@ -26,6 +27,7 @@ const NAV = [
   { to: "/needs", key: "nav.needs", icon: HandHeart },
   { to: "/finder", key: "nav.finder", icon: BookOpen },
   { to: "/about", key: "nav.about", icon: Info },
+  { to: "/stories", key: "nav.stories", icon: Camera },
   { to: "/actions", key: "nav.actions", icon: Users },
   { to: "/impact", key: "nav.impact", icon: BarChart3 },
   { to: "/blog", key: "nav.blog", icon: Newspaper },
@@ -36,7 +38,7 @@ function Logo() {
   return (
     <Link to="/" className="flex min-w-0 items-center gap-2.5 rounded-lg">
       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
-        <Recycle className="size-5" aria-hidden />
+        <LogoMark className="size-5" />
       </span>
       <span className="min-w-0">
         <span className="block font-display text-xl font-semibold leading-none">ReLoop</span>

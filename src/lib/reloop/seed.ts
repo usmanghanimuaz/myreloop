@@ -13,6 +13,7 @@ export function createSeedState(): AppState {
     impact: [],
     needs: [],
     activity: [],
+    fieldEvidence: [],
     evidence: {
       problem: "",
       community: "",

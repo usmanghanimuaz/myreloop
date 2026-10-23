@@ -22,6 +22,7 @@ import {
   CONDITION_LABEL,
   UNITS,
   type Listing,
+  isHazardousCategory,
 } from "@/lib/reloop/types";
 
 type Draft = Record<Exclude<keyof ListingInput, "photos">, string>;
@@ -151,12 +152,16 @@ export function ListingFormDialog({
                 value={draft.category}
                 onChange={set("category")}
               >
-                {CATEGORIES.map((c) => (
+                {CATEGORIES.filter((c) => !isHazardousCategory(c)).map((c) => (
                   <option key={c} value={c}>
                     {CATEGORY_LABEL[c]}
                   </option>
                 ))}
               </select>
+              <p className="text-xs text-muted-foreground">
+                Batteries, chemicals, medicines, lamps and hygiene waste can't be listed — see
+                Material Guidance for safe disposal.
+              </p>
             </div>
             <div className="grid gap-1.5">
               <Label htmlFor="condition">Condition</Label>

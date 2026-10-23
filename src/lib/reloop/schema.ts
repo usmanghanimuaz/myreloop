@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CONDITIONS, UNITS } from "./types";
+import { CATEGORIES, CONDITIONS, UNITS, isHazardousCategory } from "./types";
 
 const origin = z.enum(["sample", "user"]);
 const category = z.enum(CATEGORIES);
@@ -98,6 +98,25 @@ export const AppStateSchema = z.object({
   activity: z.array(
     z.object({ id: z.string(), message: z.string(), createdAt: z.string(), origin }),
   ),
+  fieldEvidence: z
+    .array(
+      z.object({
+        id: z.string(),
+        kind: z.enum(["photo", "video-link"]),
+        title: z.string(),
+        description: z.string(),
+        area: z.string(),
+        date: z.string(),
+        mediaPath: z.string().optional(),
+        externalUrl: z.string().optional(),
+        consent: z.boolean(),
+        validated: z.boolean(),
+        createdAt: z.string(),
+        origin,
+        ownerId: z.string().optional(),
+      }),
+    )
+    .default([]),
   evidence: z.object({
     problem: z.string(),
     community: z.string(),
@@ -130,7 +149,10 @@ export const ListingInputSchema = z.object({
     .min(3, "Title needs at least 3 characters")
     .max(80, "Keep the title under 80 characters")
     .refine((t) => !looksLikeContactDetails(t), "Don't include contact details"),
-  category,
+  category: category.refine((c) => !isHazardousCategory(c), {
+    message:
+      "Hazardous items (batteries, chemicals, medicines, lamps, hygiene waste) cannot be offered for casual exchange — see Material Guidance for safe disposal",
+  }),
   quantity: z.coerce
     .number({ invalid_type_error: "Enter a number" })
     .positive("Quantity must be greater than 0")
@@ -155,3 +177,35 @@ export const ListingInputSchema = z.object({
 export type ListingInput = z.infer<typeof ListingInputSchema>;
 
 export const NeedInputSchema = ListingInputSchema.omit({ condition: true, photos: true });
+
+const safeFieldText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .min(3, "Too short")
+    .max(max)
+    .refine((t) => !looksLikeContactDetails(t), "Don't include emails or phone numbers");
+
+export const FieldEvidenceInputSchema = z
+  .object({
+    kind: z.enum(["photo", "video-link"]),
+    title: safeFieldText(80),
+    description: safeFieldText(400),
+    area: safeFieldText(60),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use a valid date"),
+    mediaPath: z.string().max(250).optional(),
+    externalUrl: z
+      .string()
+      .trim()
+      .url("Enter a full https:// link")
+      .max(300)
+      .refine((u) => u.startsWith("https://"), "Only secure https:// links")
+      .optional(),
+    consent: z.literal(true, {
+      errorMap: () => ({ message: "You must confirm you own the media and consent to sharing" }),
+    }),
+  })
+  .refine((v) => (v.kind === "photo" ? !!v.mediaPath : !!v.externalUrl), {
+    message: "A photo upload or a video link is required",
+  });
+export type FieldEvidenceInput = z.infer<typeof FieldEvidenceInputSchema>;

@@ -2,11 +2,23 @@ export const CATEGORIES = [
   "cardboard",
   "paper",
   "plastic",
+  "flexiblePlastic",
   "glass",
   "metal",
   "textiles",
+  "furniture",
   "electronics",
+  "batteries",
+  "lamps",
+  "paint",
+  "medicines",
+  "construction",
   "organic",
+  "tyres",
+  "appliances",
+  "booksToys",
+  "mixedPackaging",
+  "hygiene",
   "other",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
@@ -14,16 +26,41 @@ export type Category = (typeof CATEGORIES)[number];
 export const CATEGORY_LABEL: Record<Category, string> = {
   cardboard: "Cardboard",
   paper: "Paper",
-  plastic: "Plastic",
+  plastic: "Rigid plastic",
+  flexiblePlastic: "Flexible plastic & packaging",
   glass: "Glass",
   metal: "Metal",
-  textiles: "Textiles",
+  textiles: "Clothes, shoes & textiles",
+  furniture: "Furniture & wood",
   electronics: "Electronics",
-  organic: "Organic waste",
+  batteries: "Batteries",
+  lamps: "Lamps & bulbs",
+  paint: "Paint, solvents & chemicals",
+  medicines: "Medicines & sharps",
+  construction: "Construction materials",
+  organic: "Food & organic waste",
+  tyres: "Tyres & rubber",
+  appliances: "Appliances",
+  booksToys: "Books & toys",
+  mixedPackaging: "Mixed packaging",
+  hygiene: "Hygiene waste",
   other: "Other",
 };
 
-export const UNITS = ["kg", "items", "litres"] as const;
+/**
+ * Categories that must never be offered for casual exchange — they need
+ * designated collection points. Enforced in the listing form and server-side.
+ */
+export const HAZARDOUS_CATEGORIES: readonly Category[] = [
+  "batteries",
+  "lamps",
+  "paint",
+  "medicines",
+  "hygiene",
+];
+export const isHazardousCategory = (c: Category) => HAZARDOUS_CATEGORIES.includes(c);
+
+export const UNITS = ["kg", "g", "lb", "items", "litres"] as const;
 export type Unit = (typeof UNITS)[number];
 
 export const CONDITIONS = ["like-new", "good", "worn", "damaged"] as const;
@@ -150,6 +187,33 @@ export interface Evidence {
   howReloopHelps: string;
 }
 
+/**
+ * Community-submitted field evidence (a photo or an external video link).
+ * Private to the submitter until `validated` is set by review — never shown
+ * publicly before that.
+ */
+export interface FieldEvidence {
+  id: string;
+  kind: "photo" | "video-link";
+  title: string;
+  description: string;
+  /** General area only — never an exact address */
+  area: string;
+  /** Date of observation, YYYY-MM-DD */
+  date: string;
+  /** Storage path inside the private evidence bucket (photos only) */
+  mediaPath?: string | undefined;
+  /** External video URL the submitter has rights to share (video-link only) */
+  externalUrl?: string | undefined;
+  /** Submitter confirmed they took/own the media and consent to it being shown */
+  consent: boolean;
+  /** Set only by review; unvalidated evidence stays private */
+  validated: boolean;
+  createdAt: string;
+  origin: Origin;
+  ownerId?: string | undefined;
+}
+
 export interface AppState {
   version: 1;
   listings: Listing[];
@@ -159,4 +223,5 @@ export interface AppState {
   needs: ReuseNeed[];
   activity: ActivityEvent[];
   evidence: Evidence;
+  fieldEvidence: FieldEvidence[];
 }
