@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AccountButton } from "@/components/reloop/AccountButton";
+import { PushToggle } from "@/components/reloop/PushToggle";
 import { Card, EmptyState, PageHeader, StatusBadge, formatDate } from "@/components/reloop/shared";
 import { getMyProfile, saveMyProfile } from "@/lib/reloop/account.functions";
 import { ProfileInputSchema } from "@/lib/reloop/moderation";
@@ -171,6 +172,7 @@ function Dashboard({ userId }: { userId: string }) {
         description="Private to you. An exchange only counts as completed once both people confirm the handover."
       />
       <ProfileCard />
+      <PushToggle />
 
       <section aria-labelledby="inbox-h">
         <h2
