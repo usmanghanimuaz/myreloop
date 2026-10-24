@@ -21,7 +21,7 @@ export const Route = createFileRoute("/about-us")({
           "The story behind ReLoop: from a hackathon spark to an environmental reuse platform.",
       },
     ],
-    links: [{ rel: "canonical", href: "/about-us" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/about-us" }],
   }),
   component: AboutUs,
 });

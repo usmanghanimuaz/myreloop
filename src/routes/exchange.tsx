@@ -69,7 +69,7 @@ export const Route = createFileRoute("/exchange")({
         content: "A local board for passing on usable items, free or in exchange.",
       },
     ],
-    links: [{ rel: "canonical", href: "/exchange" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/exchange" }],
   }),
   component: Exchange,
 });

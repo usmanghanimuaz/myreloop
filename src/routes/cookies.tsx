@@ -19,7 +19,7 @@ export const Route = createFileRoute("/cookies")({
       },
       { property: "og:title", content: "Cookie Policy — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/cookies" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/cookies" }],
   }),
   component: Cookies,
 });

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/how-it-works")({
           "Think before you throw, reuse before you buy, pass it on free or by exchange, and dispose responsibly.",
       },
     ],
-    links: [{ rel: "canonical", href: "/how-it-works" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/how-it-works" }],
   }),
   component: HowItWorks,
 });

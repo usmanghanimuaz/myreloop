@@ -19,7 +19,7 @@ export const Route = createFileRoute("/community-guidelines")({
       },
       { property: "og:title", content: "Community Guidelines — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/community-guidelines" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/community-guidelines" }],
   }),
   component: Guidelines,
 });

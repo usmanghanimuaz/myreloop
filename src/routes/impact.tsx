@@ -39,7 +39,7 @@ export const Route = createFileRoute("/impact")({
         content: "Only what you record counts. No invented CO2 figures.",
       },
     ],
-    links: [{ rel: "canonical", href: "/impact" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/impact" }],
   }),
   component: Impact,
 });

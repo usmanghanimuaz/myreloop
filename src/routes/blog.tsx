@@ -20,7 +20,7 @@ export const Route = createFileRoute("/blog")({
         content: "Practical, source-linked environmental education from the ReLoop project.",
       },
     ],
-    links: [{ rel: "canonical", href: "/blog" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/blog" }],
   }),
   component: Blog,
 });

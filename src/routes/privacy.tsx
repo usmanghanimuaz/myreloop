@@ -19,7 +19,7 @@ export const Route = createFileRoute("/privacy")({
       },
       { property: "og:title", content: "Privacy Policy — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/privacy" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/privacy" }],
   }),
   component: Privacy,
 });
