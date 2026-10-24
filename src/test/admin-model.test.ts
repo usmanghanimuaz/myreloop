@@ -9,7 +9,26 @@ describe("admin privacy and verified activity rules", () => {
     expect(isAdminAllowed({ data: true, error: "failure" })).toBe(false);
     expect(isAdminAllowed({ data: true, error: null })).toBe(true);
   });
-  const row: CloudRecord = { key: "impact:handover:r1", kind: "impact", owner_id: "owner", revision: 1, sample: false, data: { id: "handover-r1", source: "exchange", sourceId: "listing", category: "glass", quantity: 5, unit: "items", diversion: "reuse", completed: true, note: "", createdAt: "2026-10-24", origin: "user" } };
+  const row: CloudRecord = {
+    key: "impact:handover:r1",
+    kind: "impact",
+    owner_id: "owner",
+    revision: 1,
+    sample: false,
+    data: {
+      id: "handover-r1",
+      source: "exchange",
+      sourceId: "listing",
+      category: "glass",
+      quantity: 5,
+      unit: "items",
+      diversion: "reuse",
+      completed: true,
+      note: "",
+      createdAt: "2026-10-24",
+      origin: "user",
+    },
+  };
   it("excludes all sample activity from admin counts", () => {
     expect(adminRecordSummary([{ ...row, sample: true }]).verifiedExchanges).toBe(0);
   });
