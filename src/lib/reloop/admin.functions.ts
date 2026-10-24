@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { adminRecordSummary, isAdminAllowed } from "./admin-model";
 
-/** Privileged, minimal projections: no member email, phone, tokens or exact address. */
+/** Role-checked reads; adminRecordSummary allowlists screen fields before serialization. */
 export const getAdminConsole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -32,7 +32,7 @@ export const getAdminConsole = createServerFn({ method: "POST" })
         })
         .order("created_at", { ascending: false })
         .limit(1000),
-      context.supabase.from("member_restrictions").select("user_id, reason, created_at"),
+      context.supabase.from("member_restrictions").select("user_id"),
       context.supabase
         .from("moderation_log")
         .select("id, actor_id, action, target_kind, target_id, note, created_at")
