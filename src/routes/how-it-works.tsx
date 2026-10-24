@@ -97,7 +97,7 @@ function HowItWorks() {
               </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link to="/about">See the evidence</Link>
+              <Link to="/waste-evidence">See the evidence</Link>
             </Button>
           </div>
         </div>

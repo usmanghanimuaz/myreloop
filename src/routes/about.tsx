@@ -1,269 +1,170 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { School, Store, Users, Recycle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { saved } from "@/components/reloop/CommunityNeeds";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  HandHeart,
+  PackageOpen,
+  Recycle,
+  ShieldCheck,
+  Camera,
+  MessagesSquare,
+} from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, Notice, PageHeader } from "@/components/reloop/shared";
-import { actions, useAppState, useStoreMeta } from "@/lib/reloop/store";
-import { wasteSources, sourceRetrievalDate } from "@/lib/reloop/sources";
-import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
-import type { Evidence } from "@/lib/reloop/types";
+import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
+import { SitePhoto } from "@/components/reloop/SitePhoto";
+import { useAboutT } from "@/lib/i18n-about";
+import { CARDBOARD_SOURCE, IMAGES } from "@/lib/reloop/images";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { title: "Waste Problem & Evidence — ReLoop" },
+      { title: "About Us — ReLoop | Useful things deserve a second life" },
       {
         name: "description",
         content:
-          "Source-linked waste education from UNEP, ITU, EPA and Punjab EPD, with private community observation notes.",
+          "ReLoop connects people with useful surplus items and neighbours who need them. Discover our reuse-first mission, Free and Exchange, and safe, honest handovers.",
       },
-      { property: "og:title", content: "Waste Problem & Evidence — ReLoop" },
+      { property: "og:title", content: "About Us — ReLoop" },
       {
         property: "og:description",
         content:
-          "Published environmental research kept separate from personal observations and ReLoop impact.",
+          "A community reuse platform: pass on useful things, find what you need and reduce avoidable waste.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://myreloop.lovable.app/about" },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/about" }],
   }),
-  component: About,
+  component: AboutUs,
 });
 
-const FIELDS: { key: keyof Evidence; label: string; long?: boolean; type?: string }[] = [
-  { key: "problem", label: "Observed local waste problem", long: true },
-  { key: "community", label: "Neighbourhood or community affected" },
-  { key: "date", label: "Date of observation", type: "date" },
-  { key: "method", label: "Research method", long: true },
-  { key: "interviewed", label: "Number of residents interviewed (if applicable)", type: "number" },
-  { key: "findings", label: "Anonymized findings", long: true },
-  { key: "limitations", label: "Supporting evidence and limitations", long: true },
-  { key: "howReloopHelps", label: "How ReLoop addresses the problem", long: true },
-];
-
-function About() {
-  const state = useAppState();
-  const { userId, busy } = useStoreMeta();
-  const [ev, setEv] = useState<Evidence>(state.evidence);
-  useEffect(() => setEv(state.evidence), [state.evidence]);
-
+function AboutUs() {
+  const t = useAboutT();
+  const [postOpen, setPostOpen] = useState(false);
+  const steps = [
+    { title: "have", text: "haveText", icon: PackageOpen, to: "/exchange" },
+    { title: "need", text: "needText", icon: HandHeart, to: "/needs" },
+    { title: "connect", text: "connectText", icon: Recycle, to: "/account" },
+  ] as const;
+  const principles = [
+    { title: "reuse", text: "reuseText", icon: Recycle },
+    { title: "honest", text: "honestText", icon: Camera },
+    { title: "respect", text: "respectText", icon: MessagesSquare },
+    { title: "safe", text: "safeText", icon: ShieldCheck },
+    { title: "free", text: "freeText", icon: HandHeart },
+  ] as const;
   return (
     <div className="animate-rise">
-      <PageHeader
-        eyebrow="Waste Problem & Evidence"
-        title="Why waste is a problem — and what the evidence says"
-        description="Littering, open dumping, plastic leakage and burning waste harm air, soil, water and health. This page pairs that explanation with published research from public environmental bodies — kept strictly separate from ReLoop's own impact records."
-      />
-
-      <section className="mb-10">
-        <h2 className="mb-2 text-2xl font-semibold">What goes wrong when waste is mishandled</h2>
-        <p className="mb-5 max-w-2xl text-sm text-muted-foreground">
-          The photos below are illustrative stock images, not local observations. The claims are
-          explained in plain language and backed by the published sources further down.
-        </p>
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            {
-              image: IMAGES.plasticPollution,
-              title: "Plastic leakage",
-              text: "Plastic that escapes collection does not disappear. It breaks into smaller pieces, reaches rivers and the sea, and is eaten by animals. Reusing containers and bottles slows the flow at the source.",
-            },
-            {
-              image: IMAGES.overflowingBin,
-              title: "Open dumping & littering",
-              text: "Overflowing bins and dumped rubbish attract pests, block drains and worsen flooding. Passing on usable items reduces the volume that collection systems must handle.",
-            },
-            {
-              image: IMAGES.beachCleanup,
-              title: "Burning & cleanup costs",
-              text: "Burning mixed waste — especially plastic — releases toxic smoke that harms lungs. Communities pay again to clean up what could have been reused, repaired or recycled instead.",
-            },
-          ].map((b) => (
-            <figure
-              key={b.title}
-              className="overflow-hidden rounded-2xl border bg-card shadow-card"
-            >
-              <img
-                src={b.image.src}
-                alt={b.image.alt}
-                loading="lazy"
-                className="h-44 w-full object-cover"
-              />
-              <figcaption className="p-5">
-                <h3 className="text-lg font-semibold">{b.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{b.text}</p>
-                <p className="mt-3 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <Card className="mb-8">
-        <h2 className="text-xl font-semibold">Community reuse and honest records</h2>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-          <li>
-            Listings and needs are shared. Your evidence notes, plans and completion records are
-            saved privately to your account.
-          </li>
-          <li>
-            Only real community records are shown — no fictional or demonstration data is counted
-            anywhere.
-          </li>
-          <li>
-            Guidance is general advice from a built-in dataset — always check local collection
-            rules.
-          </li>
-          <li>No CO₂ or landfill figures are estimated.</li>
-        </ul>
-      </Card>
-      <section className="mb-10">
-        <h2 className="mb-2 text-2xl font-semibold">Waste problem & published evidence</h2>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Published research and government guidance — not neighbourhood observations or ReLoop
-          impact measurements.
-        </p>
-        <div className="grid gap-4 md:grid-cols-2">
-          {wasteSources.map((source) => (
-            <Card key={source.url}>
-              <p className="text-xs font-semibold uppercase text-primary">{source.organization}</p>
-              <h3 className="mt-2 text-lg font-semibold">
-                <a
-                  href={source.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-4"
-                >
-                  {source.title}
-                </a>
-              </h3>
-              <p className="mt-3 text-sm">{source.summary}</p>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Published: {source.published}
-                <br />
-                Retrieved: {sourceRetrievalDate}
-                <br />
-                Attribution: {source.organization}. Original summary with source link; media reuse
-                rights not confirmed.
-              </p>
-            </Card>
-          ))}
-        </div>
-        <Notice className="mt-3">
-          Report images, charts and videos are not reproduced because their reuse permissions have
-          not been confirmed.
-        </Notice>
-      </section>
-
-      <h2 className="mb-1 text-2xl font-semibold">Community evidence</h2>
-      <p className="mb-4 text-sm text-muted-foreground">
-        Fill this in with real research. Empty fields stay marked as awaiting validation — nothing
-        here is pre-filled or invented.
-      </p>
-      <Card>
-        <form
-          className="grid gap-4 md:grid-cols-2"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await saved(() => actions.saveEvidence(ev), "Evidence saved privately to your account");
-          }}
-        >
-          {FIELDS.map((f) => {
-            const empty = !ev[f.key].trim();
-            return (
-              <div
-                key={f.key}
-                className={
-                  f.long
-                    ? "grid gap-2 rounded-xl border bg-background p-4 md:col-span-2"
-                    : "grid gap-2 rounded-xl border bg-background p-4"
-                }
-              >
-                <div className="flex min-w-0 items-start justify-between gap-3">
-                  <Label htmlFor={`ev-${f.key}`} className="min-w-0 leading-snug">
-                    {f.label}
-                  </Label>
-                  <span
-                    className={
-                      empty
-                        ? "shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
-                        : "shrink-0 rounded-full bg-lime/50 px-2 py-0.5 text-[11px] font-medium text-lime-foreground"
-                    }
-                  >
-                    {empty ? "Awaiting validation" : "Recorded"}
-                  </span>
-                </div>
-                {f.long ? (
-                  <Textarea
-                    id={`ev-${f.key}`}
-                    rows={3}
-                    value={ev[f.key]}
-                    onChange={(e) => setEv({ ...ev, [f.key]: e.target.value })}
-                  />
-                ) : (
-                  <Input
-                    id={`ev-${f.key}`}
-                    type={f.type ?? "text"}
-                    min={f.type === "number" ? 0 : undefined}
-                    value={ev[f.key]}
-                    onChange={(e) => setEv({ ...ev, [f.key]: e.target.value })}
-                  />
-                )}
-              </div>
-            );
-          })}
-          <div className="md:col-span-2">
-            <Button type="submit" disabled={!userId || busy}>
-              Save evidence
+      <section className="relative -mx-4 -mt-8 mb-3 overflow-hidden md:-mx-8 md:-mt-12">
+        <SitePhoto
+          image={{ ...IMAGES.cardboardSorting, alt: t("photo") }}
+          eager
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-sidebar/95 via-sidebar/80 to-sidebar/40" />
+        <div className="relative max-w-2xl px-6 py-14 text-sidebar-foreground md:px-12 md:py-16">
+          <p className="mb-3 text-sm font-semibold text-lime">ReLoop · {t("label")}</p>
+          <h1 className="text-4xl font-semibold leading-tight md:text-5xl">{t("title")}</h1>
+          <p className="mt-5 text-lg leading-relaxed">{t("intro")}</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Button asChild variant="lime" size="lg">
+              <Link to="/exchange">
+                {t("browse")}
+                <ArrowRight className="shrink-0 rtl:rotate-180" />
+              </Link>
             </Button>
-            {!userId && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                Sign in to save private evidence notes.
-              </p>
-            )}
+            <Button variant="secondary" size="lg" onClick={() => setPostOpen(true)}>
+              {t("post")}
+            </Button>
           </div>
-        </form>
-      </Card>
-      <Notice className="mt-3">
-        Don't record names or contact details of interviewees. Keep findings anonymized.
-      </Notice>
+        </div>
+      </section>
+      <a
+        href={CARDBOARD_SOURCE}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mb-12 block text-xs text-muted-foreground underline underline-offset-4"
+      >
+        {t("credit")}
+      </a>
 
-      <h2 className="mb-4 mt-10 text-2xl font-semibold">Piloting ReLoop</h2>
-      <div className="grid gap-4 md:grid-cols-2">
-        {[
-          {
-            icon: Users,
-            t: "Residents",
-            d: "Start with one street or building group. Run a 4-week trial of the exchange and one cleanup, recording every completed exchange.",
-          },
-          {
-            icon: School,
-            t: "Schools",
-            d: "Use the textile and paper actions as class projects; let students run the Impact Tracker and present what was actually recorded.",
-          },
-          {
-            icon: Store,
-            t: "Local shops",
-            d: "Partner with a refill or grocery shop to accept clean jars and packaging collected through the action board.",
-          },
-          {
-            icon: Recycle,
-            t: "Local recyclers",
-            d: "Ask recyclers to review the guidance dataset so it matches what is accepted locally, and agree how drop-offs are confirmed.",
-          },
-        ].map(({ icon: Icon, t, d }) => (
-          <Card key={t}>
-            <Icon className="mb-2 size-6 text-primary" />
-            <h3 className="text-lg font-semibold">{t}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-          </Card>
-        ))}
-      </div>
+      <section className="mb-12" aria-labelledby="why-reloop">
+        <h2 id="why-reloop" className="text-3xl font-semibold">
+          {t("why")}
+        </h2>
+        <div className="mt-6 grid gap-8 md:grid-cols-2">
+          <div className="border-s-4 border-primary ps-5">
+            <h3 className="text-xl font-semibold">{t("exampleLabel")}</h3>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{t("example")}</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold">{t("mission")}</h3>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{t("missionText")}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12 border-y py-10" aria-labelledby="community-works">
+        <h2 id="community-works" className="text-3xl font-semibold">
+          {t("how")}
+        </h2>
+        <ol className="mt-7 grid gap-8 md:grid-cols-3">
+          {steps.map((step, i) => (
+            <li key={step.title}>
+              <div className="mb-4 flex items-center gap-3 text-primary">
+                <span className="font-display text-3xl">0{i + 1}</span>
+                <step.icon className="size-6" aria-hidden />
+              </div>
+              <h3 className="text-xl font-semibold">
+                <Link
+                  to={step.to}
+                  className="underline decoration-border underline-offset-4 hover:decoration-primary"
+                >
+                  {t(step.title)}
+                </Link>
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t(step.text)}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mb-12" aria-labelledby="reloop-beliefs">
+        <h2 id="reloop-beliefs" className="text-3xl font-semibold">
+          {t("beliefs")}
+        </h2>
+        <ul className="mt-7 grid gap-x-8 md:grid-cols-2">
+          {principles.map((principle) => (
+            <li key={principle.title} className="flex gap-4 border-b py-5">
+              <principle.icon className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+              <div>
+                <h3 className="text-lg font-semibold">{t(principle.title)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {t(principle.text)}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="bg-secondary px-6 py-10 md:px-10">
+        <h2 className="text-3xl font-semibold">{t("start")}</h2>
+        <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">{t("startText")}</p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link to="/exchange">
+              {t("browse")}
+              <ArrowRight className="rtl:rotate-180" />
+            </Link>
+          </Button>
+          <Button variant="outline" onClick={() => setPostOpen(true)}>
+            {t("post")}
+          </Button>
+        </div>
+      </section>
+      <ListingFormDialog open={postOpen} onOpenChange={setPostOpen} />
     </div>
   );
 }

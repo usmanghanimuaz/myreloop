@@ -40,7 +40,7 @@ export function Footer() {
     {
       heading: t("footer.learn"),
       links: [
-        { to: "/about", label: t("footer.evidence") },
+        { to: "/waste-evidence", label: t("footer.evidence") },
         { to: "/stories", label: t("footer.stories") },
         { to: "/blog", label: t("footer.blog") },
         { to: "/faq", label: t("footer.faq") },
@@ -50,7 +50,7 @@ export function Footer() {
     {
       heading: t("footer.about"),
       links: [
-        { to: "/about-us", label: t("footer.aboutUs") },
+        { to: "/about", label: t("footer.aboutUs") },
         { to: "/mission", label: t("footer.mission") },
         { to: "/contact", label: t("footer.contact") },
         { to: "/report", label: t("footer.report") },
