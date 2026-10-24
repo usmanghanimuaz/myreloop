@@ -20,7 +20,7 @@ export const Route = createFileRoute("/blog")({
         content: "Practical, source-linked environmental education from the ReLoop project.",
       },
     ],
-    links: matches.some((match) => match.routeId === "/blog/$slug")
+    links: matches.some((match) => match.pathname.startsWith("/blog/"))
       ? []
       : [{ rel: "canonical", href: "https://myreloop.lovable.app/blog" }],
   }),
