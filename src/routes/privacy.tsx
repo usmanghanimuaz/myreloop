@@ -6,7 +6,11 @@ export const Route = createFileRoute("/privacy")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:description", content: "What data ReLoop stores: account sign-in, your listings, needs, offers, photos and evidence notes — and what it does not collect." },
+      {
+        property: "og:description",
+        content:
+          "What data ReLoop stores: account sign-in, your listings, needs, offers, photos and evidence notes — and what it does not collect.",
+      },
       { title: "Privacy Policy — ReLoop" },
       {
         name: "description",

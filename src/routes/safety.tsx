@@ -6,7 +6,11 @@ export const Route = createFileRoute("/safety")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:description", content: "How to exchange items safely on ReLoop: public meeting places, item inspection, hazardous-waste rules and reporting problems." },
+      {
+        property: "og:description",
+        content:
+          "How to exchange items safely on ReLoop: public meeting places, item inspection, hazardous-waste rules and reporting problems.",
+      },
       { title: "Safety & Exchange Policy — ReLoop" },
       {
         name: "description",

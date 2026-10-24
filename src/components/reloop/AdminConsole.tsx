@@ -685,18 +685,25 @@ export function AdminConsole() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("confirm")}</AlertDialogTitle>
-            <AlertDialogDescription>{needsNote ? t("confirmText") : d("mod.desc")}</AlertDialogDescription>
+            <AlertDialogDescription>
+              {needsNote ? t("confirmText") : d("mod.desc")}
+            </AlertDialogDescription>
           </AlertDialogHeader>
-          {needsNote && <Input
-            aria-label={t("reason")}
-            placeholder={t("reason")}
-            maxLength={300}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />}
+          {needsNote && (
+            <Input
+              aria-label={t("reason")}
+              placeholder={t("reason")}
+              maxLength={300}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          )}
           <AlertDialogFooter>
             <AlertDialogCancel disabled={busy}>{d("cancelReq")}</AlertDialogCancel>
-            <Button disabled={busy || (needsNote && note.trim().length < 3)} onClick={() => void execute()}>
+            <Button
+              disabled={busy || (needsNote && note.trim().length < 3)}
+              onClick={() => void execute()}
+            >
               {busy ? d("saving") : t("confirm")}
             </Button>
           </AlertDialogFooter>

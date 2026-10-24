@@ -6,7 +6,11 @@ export const Route = createFileRoute("/disclaimer")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:description", content: "How ReLoop handles information: general guidance, cited external research, illustrative photos, and the limits of what we verify." },
+      {
+        property: "og:description",
+        content:
+          "How ReLoop handles information: general guidance, cited external research, illustrative photos, and the limits of what we verify.",
+      },
       { title: "Content Disclaimer — ReLoop" },
       {
         name: "description",

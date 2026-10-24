@@ -10,10 +10,15 @@ export const Route = createFileRoute("/admin")({
       { title: "Admin Console — ReLoop" },
       {
         name: "description",
-        content: "Private ReLoop administration: members, reuse listings, reports, handovers, support and moderation history.",
+        content:
+          "Private ReLoop administration: members, reuse listings, reports, handovers, support and moderation history.",
       },
       { property: "og:title", content: "Admin Console — ReLoop" },
-      { property: "og:description", content: "Private administration of ReLoop reuse activity, safety reports and member controls." },
+      {
+        property: "og:description",
+        content:
+          "Private administration of ReLoop reuse activity, safety reports and member controls.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },

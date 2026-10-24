@@ -6,7 +6,11 @@ export const Route = createFileRoute("/cookies")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:description", content: "ReLoop uses no tracking or advertising cookies — only the storage needed for sign-in and your language preference." },
+      {
+        property: "og:description",
+        content:
+          "ReLoop uses no tracking or advertising cookies — only the storage needed for sign-in and your language preference.",
+      },
       { title: "Cookie Policy — ReLoop" },
       {
         name: "description",

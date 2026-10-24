@@ -6,7 +6,11 @@ export const Route = createFileRoute("/community-guidelines")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:description", content: "How to keep ReLoop useful and trustworthy: honest listings, respectful handovers, and reuse-first behaviour." },
+      {
+        property: "og:description",
+        content:
+          "How to keep ReLoop useful and trustworthy: honest listings, respectful handovers, and reuse-first behaviour.",
+      },
       { title: "Community Guidelines — ReLoop" },
       {
         name: "description",
