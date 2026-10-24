@@ -116,4 +116,5 @@ export const UNSPLASH_CREDIT = {
   url: "https://unsplash.com",
 } as const;
 
-export const CARDBOARD_SOURCE = "https://unsplash.com/photos/a-pile-of-cardboard-sitting-on-top-of-a-wooden-floor-quTvuVu0ghQ";
+export const CARDBOARD_SOURCE =
+  "https://unsplash.com/photos/a-pile-of-cardboard-sitting-on-top-of-a-wooden-floor-quTvuVu0ghQ";

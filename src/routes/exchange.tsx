@@ -132,10 +132,7 @@ function Exchange() {
       </PageHeader>
 
       <section className="mb-8 grid overflow-hidden border-y md:grid-cols-3">
-        <SitePhoto
-          image={IMAGES.cardboard}
-          className="h-48 w-full object-cover md:h-full"
-        />
+        <SitePhoto image={IMAGES.cardboard} className="h-48 w-full object-cover md:h-full" />
         <div className="p-6 md:col-span-2">
           <h2 className="text-xl font-semibold">What belongs here?</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
@@ -280,22 +277,37 @@ function Exchange() {
                         i.ownerId === meta.userId &&
                         ["accepted", "handover", "completed"].includes(i.status ?? "pending"),
                     )) && <ListingPhoto path={l.photos[0]} title={l.title} />}
-                {(!l.photos?.[0] || !meta.userId || !(l.ownerId === meta.userId || state.interests.some(i => i.listingId === l.id && i.ownerId === meta.userId && ["accepted","handover","completed"].includes(i.status ?? "pending")))) && <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 bg-secondary text-primary"><ImageIcon className="size-10" aria-hidden /><span className="text-xs">{CATEGORY_LABEL[l.category]}</span></div>}
+                {(!l.photos?.[0] ||
+                  !meta.userId ||
+                  !(
+                    l.ownerId === meta.userId ||
+                    state.interests.some(
+                      (i) =>
+                        i.listingId === l.id &&
+                        i.ownerId === meta.userId &&
+                        ["accepted", "handover", "completed"].includes(i.status ?? "pending"),
+                    )
+                  )) && (
+                  <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 bg-secondary text-primary">
+                    <ImageIcon className="size-10" aria-hidden />
+                    <span className="text-xs">{CATEGORY_LABEL[l.category]}</span>
+                  </div>
+                )}
                 <div className="p-4">
-                <p className="mb-2 text-xs font-semibold text-primary">{l.mode ?? "FREE"}</p>
-                <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}
-                </p>
-                <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="size-3.5" /> {l.area}
-                </p>
-                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                  <OriginBadge origin={l.origin} />
-                  <span>
-                    {interestCount.get(l.id) ?? 0} interested · {formatDate(l.createdAt)}
-                  </span>
-                </div>
+                  <p className="mb-2 text-xs font-semibold text-primary">{l.mode ?? "FREE"}</p>
+                  <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}
+                  </p>
+                  <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin className="size-3.5" /> {l.area}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                    <OriginBadge origin={l.origin} />
+                    <span>
+                      {interestCount.get(l.id) ?? 0} interested · {formatDate(l.createdAt)}
+                    </span>
+                  </div>
                 </div>
               </Button>
             </li>

@@ -37,8 +37,15 @@ function NeedsPage() {
         description={t("needText")}
       />
       <figure className="mb-8">
-        <SitePhoto image={IMAGES.furniture} className="h-48 w-full rounded-lg object-cover md:h-64" />
-        <figcaption className="mt-2 text-xs text-muted-foreground"><a href={UNSPLASH_CREDIT.url} target="_blank" rel="noopener noreferrer">{UNSPLASH_CREDIT.label}</a></figcaption>
+        <SitePhoto
+          image={IMAGES.furniture}
+          className="h-48 w-full rounded-lg object-cover md:h-64"
+        />
+        <figcaption className="mt-2 text-xs text-muted-foreground">
+          <a href={UNSPLASH_CREDIT.url} target="_blank" rel="noopener noreferrer">
+            {UNSPLASH_CREDIT.label}
+          </a>
+        </figcaption>
       </figure>
       <CommunityNeeds />
       <RequestBoard />

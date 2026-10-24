@@ -176,12 +176,8 @@ function Home() {
       <section className="mb-12">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-semibold md:text-3xl">
-              {c("examples")}
-            </h2>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              {c("examplesText")}
-            </p>
+            <h2 className="text-2xl font-semibold md:text-3xl">{c("examples")}</h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">{c("examplesText")}</p>
           </div>
           <Button asChild variant="outline">
             <Link to="/finder">
@@ -191,14 +187,8 @@ function Home() {
         </div>
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {EVERYDAY.map((e) => (
-            <article
-              key={e.name}
-              className="overflow-hidden rounded-lg border bg-card"
-            >
-              <SitePhoto
-                image={e.image}
-                className="aspect-[4/3] w-full object-cover"
-              />
+            <article key={e.name} className="overflow-hidden rounded-lg border bg-card">
+              <SitePhoto image={e.image} className="aspect-[4/3] w-full object-cover" />
               <div className="p-5">
                 <h3 className="text-xl font-semibold">{e.name}</h3>
                 <p className="mt-2 text-muted-foreground">{e.text}</p>
@@ -215,15 +205,36 @@ function Home() {
       </section>
 
       <section className="relative mb-12 overflow-hidden">
-        <SitePhoto image={IMAGES.cardboardSorting} className="absolute inset-0 h-full w-full object-cover" />
+        <SitePhoto
+          image={IMAGES.cardboardSorting}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         <div className="absolute inset-0 bg-sidebar/80" />
         <div className="relative max-w-xl px-6 py-12 text-sidebar-foreground md:p-10">
           <h2 className="text-3xl font-semibold">{c("reuseAction")}</h2>
           <p className="mt-3 leading-relaxed">{c("reuseText")}</p>
-          <Button asChild variant="secondary" className="mt-5 h-auto whitespace-normal py-3 text-start">
-            <a href="https://www.pexels.com/search/videos/recycling/" target="_blank" rel="noopener noreferrer">{c("watch")}<ArrowRight className="shrink-0 rtl:rotate-180" /></a>
+          <Button
+            asChild
+            variant="secondary"
+            className="mt-5 h-auto whitespace-normal py-3 text-start"
+          >
+            <a
+              href="https://www.pexels.com/search/videos/recycling/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {c("watch")}
+              <ArrowRight className="shrink-0 rtl:rotate-180" />
+            </a>
           </Button>
-          <a href={CARDBOARD_SOURCE} target="_blank" rel="noopener noreferrer" className="mt-5 block text-xs underline">Unsplash · illustrative photo · Unsplash License</a>
+          <a
+            href={CARDBOARD_SOURCE}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 block text-xs underline"
+          >
+            Unsplash · illustrative photo · Unsplash License
+          </a>
         </div>
       </section>
 
@@ -432,8 +443,8 @@ function Home() {
         <div className="relative flex min-h-72 flex-col items-start justify-end p-8 text-sidebar-foreground md:p-12">
           <h2 className="max-w-xl text-3xl font-semibold">Join your local reuse loop</h2>
           <p className="mt-3 max-w-xl opacity-90">
-            Passing on usable items can extend their useful life and prevent unnecessary waste.
-            Sign in, list what you no longer need, and help a neighbour reuse it.
+            Passing on usable items can extend their useful life and prevent unnecessary waste. Sign
+            in, list what you no longer need, and help a neighbour reuse it.
           </p>
           <Button asChild variant="lime" size="lg" className="mt-5">
             <Link to="/exchange">
