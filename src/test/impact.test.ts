@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { createSeedState } from "@/lib/reloop/seed";
-import { summarizeImpact } from "@/lib/reloop/impact";
+import { confirmedInterests, summarizeImpact } from "@/lib/reloop/impact";
 import { getRecommendations } from "@/lib/reloop/guidance";
 import { createEngine } from "@/lib/reloop/engine";
 import type { CommunityAction } from "@/lib/reloop/types";
@@ -118,5 +118,38 @@ describe("guidance safety", () => {
       hazardous: true,
     });
     expect(r.map((g) => g.kind)).toEqual(["safety"]);
+  });
+});
+
+describe("public confirmed handover display", () => {
+  const interest = {
+    id: "r1",
+    listingId: "l1",
+    note: "",
+    createdAt: "2026-10-24",
+    origin: "user" as const,
+    status: "completed" as const,
+  };
+  const entry = {
+    id: "handover-r1",
+    source: "exchange" as const,
+    sourceId: "l1",
+    category: "glass" as const,
+    quantity: 5,
+    unit: "items" as const,
+    diversion: "reuse" as const,
+    completed: true,
+    verified: true,
+    note: "",
+    createdAt: "2026-10-24",
+    origin: "user" as const,
+  };
+  it("does not display a completed status without confirmed service evidence", () => {
+    expect(confirmedInterests([interest], [])).toHaveLength(0);
+    expect(confirmedInterests([interest], [{ ...entry, verified: false }])).toHaveLength(0);
+  });
+  it("displays only the matching real verified handover", () => {
+    expect(confirmedInterests([interest], [entry])).toEqual([interest]);
+    expect(confirmedInterests([{ ...interest, origin: "sample" }], [entry])).toHaveLength(0);
   });
 });

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 import { CommandSchema, recordsToState, stateRecords, type CloudRecord } from "./cloud-model";
+import { TERMS_VERSION } from "./moderation";
 import { createEngine } from "./engine";
 
 export const readPublicRecords = createServerFn({ method: "GET" }).handler(async () => {
@@ -62,7 +63,7 @@ export const executeCommand = createServerFn({ method: "POST" })
         .maybeSingle(),
       context.supabase
         .from("profiles")
-        .select("terms_accepted_at")
+        .select("terms_accepted_at, terms_version")
         .eq("id", context.userId)
         .maybeSingle(),
     ]);
@@ -70,7 +71,7 @@ export const executeCommand = createServerFn({ method: "POST" })
       throw new Error(
         "Your account is restricted from posting. Contact ReLoop via the Contact page.",
       );
-    if (!profile?.terms_accepted_at)
+    if (!profile?.terms_accepted_at || profile.terms_version !== TERMS_VERSION)
       throw new Error("Please accept the Terms and Privacy Policy in My ReLoop before posting.");
     const rows: CloudRecord[] = [];
     for (let offset = 0; ; offset += 1000) {

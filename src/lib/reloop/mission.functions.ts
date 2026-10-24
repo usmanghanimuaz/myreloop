@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { hasMissionDismissal } from "./mission";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /** Owner-only RLS preference. No admin client, input identity or role changes. */
@@ -9,7 +10,7 @@ export const readMissionDismissal = createServerFn({ method: "POST" })
       dismiss: false,
     });
     if (error) throw new Error("Could not read preference.");
-    return { dismissed: data === true };
+    return { dismissed: hasMissionDismissal(data) };
   });
 export const dismissMission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
