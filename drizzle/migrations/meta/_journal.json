@@ -85,6 +85,13 @@
       "when": 1792815398295,
       "tag": "0011_mission_dismissal_preference",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792816795075,
+      "tag": "0012_allow_field_evidence_record_kind",
+      "breakpoints": true
     }
   ]
 }
