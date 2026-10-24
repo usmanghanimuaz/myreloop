@@ -10,11 +10,14 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
+import { SitePhoto } from "@/components/reloop/SitePhoto";
+import { useConsoleT } from "@/lib/i18n-console";
 import { Button } from "@/components/ui/button";
 import { Card, OriginBadge, formatDate } from "@/components/reloop/shared";
 import { useI18n } from "@/lib/i18n";
-import { HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
+import { CARDBOARD_SOURCE, HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
 import { useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORY_LABEL } from "@/lib/reloop/types";
@@ -87,6 +90,8 @@ function Home() {
   const state = useAppState();
   const { userId } = useStoreMeta();
   const { t } = useI18n();
+  const c = useConsoleT();
+  const [postOpen, setPostOpen] = useState(false);
   const impact = useMemo(() => summarizeImpact(state), [state]);
   const activeListings = state.listings.filter(
     (l) => l.status === "available" && l.origin === "user",
@@ -111,19 +116,20 @@ function Home() {
   return (
     <div className="animate-rise">
       {/* 1 — Photographic hero: mission first */}
-      <section className="relative mb-12 overflow-hidden rounded-3xl">
-        <img
-          src={IMAGES.communitySorting.src}
-          alt={IMAGES.communitySorting.alt}
+      <section className="relative -mx-4 -mt-8 mb-12 overflow-hidden md:-mx-8 md:-mt-12">
+        <SitePhoto
+          image={IMAGES.communitySorting}
+          eager
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-sidebar/95 via-sidebar/80 to-sidebar/30" />
-        <div className="relative max-w-2xl p-8 text-sidebar-foreground md:p-14">
+        <div className="relative max-w-2xl px-6 py-14 text-sidebar-foreground md:px-12 md:py-16">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-lime">
             {t("home.eyebrow")}
           </p>
           <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
-            {t("home.heroTitle")}
+            <span className="mb-3 block text-lg text-lime">ReLoop</span>
+            {c("hero")}
           </h1>
           <p className="mt-4 text-lg opacity-90">{t("home.heroText")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -132,10 +138,10 @@ function Home() {
                 {t("home.ctaExplore")} <ArrowRight className="rtl:rotate-180" />
               </Link>
             </Button>
-            <Button asChild variant="lime" size="lg">
-              <Link to="/exchange">{t("home.ctaShare")}</Link>
+            <Button variant="secondary" size="lg" onClick={() => setPostOpen(true)}>
+              {t("home.ctaShare")}
             </Button>
-            <Button asChild variant="lime" size="lg">
+            <Button asChild variant="secondary" size="lg">
               <Link to="/needs">{t("home.ctaNeed")}</Link>
             </Button>
           </div>
@@ -153,8 +159,8 @@ function Home() {
         <p className="mb-6 max-w-2xl text-muted-foreground">{t("home.howText")}</p>
         <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {STEP_KEYS.map((n) => (
-            <li key={n} className="rounded-2xl border bg-card p-6 shadow-card">
-              <span className="mb-3 grid size-10 place-items-center rounded-full bg-primary font-display text-lg font-semibold text-primary-foreground">
+            <li key={n} className="border-t border-border py-5 pe-5">
+              <span className="mb-3 block font-display text-2xl font-semibold text-primary">
                 {n}
               </span>
               <h3 className="text-lg font-semibold">{t(`home.step${n}Title` as const)}</h3>
@@ -171,10 +177,10 @@ function Home() {
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-2xl font-semibold md:text-3xl">
-              Everyday things that deserve a second life
+              {c("examples")}
             </h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Most household “waste” is reusable, repairable or recyclable. A few common examples:
+              {c("examplesText")}
             </p>
           </div>
           <Button asChild variant="outline">
@@ -183,21 +189,17 @@ function Home() {
             </Link>
           </Button>
         </div>
-        <div className="space-y-6">
-          {EVERYDAY.map((e, i) => (
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {EVERYDAY.map((e) => (
             <article
               key={e.name}
-              className="grid overflow-hidden rounded-2xl border bg-card shadow-card md:grid-cols-5"
+              className="overflow-hidden rounded-lg border bg-card"
             >
-              <img
-                src={e.image.src}
-                alt={e.image.alt}
-                loading="lazy"
-                className={`h-48 w-full object-cover md:col-span-2 md:h-full ${
-                  i % 2 === 1 ? "md:order-2" : ""
-                }`}
+              <SitePhoto
+                image={e.image}
+                className="aspect-[4/3] w-full object-cover"
               />
-              <div className="flex flex-col justify-center p-6 md:col-span-3 md:p-8">
+              <div className="p-5">
                 <h3 className="text-xl font-semibold">{e.name}</h3>
                 <p className="mt-2 text-muted-foreground">{e.text}</p>
               </div>
@@ -210,6 +212,19 @@ function Home() {
           </a>
           {" · "}Guidance is general advice — always confirm your local collection rules.
         </p>
+      </section>
+
+      <section className="relative mb-12 overflow-hidden">
+        <SitePhoto image={IMAGES.cardboardSorting} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-sidebar/80" />
+        <div className="relative max-w-xl px-6 py-12 text-sidebar-foreground md:p-10">
+          <h2 className="text-3xl font-semibold">{c("reuseAction")}</h2>
+          <p className="mt-3 leading-relaxed">{c("reuseText")}</p>
+          <Button asChild variant="secondary" className="mt-5 h-auto whitespace-normal py-3 text-start">
+            <a href="https://www.pexels.com/search/videos/recycling/" target="_blank" rel="noopener noreferrer">{c("watch")}<ArrowRight className="shrink-0 rtl:rotate-180" /></a>
+          </Button>
+          <a href={CARDBOARD_SOURCE} target="_blank" rel="noopener noreferrer" className="mt-5 block text-xs underline">Unsplash · illustrative photo · Unsplash License</a>
+        </div>
       </section>
 
       {/* 4 — What you can do today */}
@@ -417,8 +432,8 @@ function Home() {
         <div className="relative flex min-h-72 flex-col items-start justify-end p-8 text-sidebar-foreground md:p-12">
           <h2 className="max-w-xl text-3xl font-semibold">Join your local reuse loop</h2>
           <p className="mt-3 max-w-xl opacity-90">
-            Every item passed on is one less thing burned, dumped or buried. Sign in, list what you
-            don't need, and help a neighbour today.
+            Passing on usable items can extend their useful life and prevent unnecessary waste.
+            Sign in, list what you no longer need, and help a neighbour reuse it.
           </p>
           <Button asChild variant="lime" size="lg" className="mt-5">
             <Link to="/exchange">
@@ -428,6 +443,7 @@ function Home() {
           <p className="mt-4 text-xs opacity-60">{UNSPLASH_CREDIT.label}</p>
         </div>
       </section>
+      <ListingFormDialog open={postOpen} onOpenChange={setPostOpen} />
     </div>
   );
 }
