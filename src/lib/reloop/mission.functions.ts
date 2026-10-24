@@ -1,22 +1,22 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { hasMissionDismissal, MISSION_META_KEY } from "./mission";
 
-/** Auth-owned private preference; no schema, public data, privileges or roles changed. */
+/** Owner-only RLS preference. No admin client, input identity or role changes. */
 export const readMissionDismissal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data, error } = await context.supabase.auth.getUser();
-    if (error || data.user?.id !== context.userId) throw new Error("Could not read preference.");
-    return { dismissed: hasMissionDismissal(data.user.user_metadata) };
+    const { data, error } = await context.supabase.rpc("reloop_mission_preference", {
+      dismiss: false,
+    });
+    if (error) throw new Error("Could not read preference.");
+    return { dismissed: data === true };
   });
-
 export const dismissMission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { error } = await context.supabase.auth.updateUser({
-      data: { [MISSION_META_KEY]: true },
+    const { data, error } = await context.supabase.rpc("reloop_mission_preference", {
+      dismiss: true,
     });
-    if (error) throw new Error("Could not sync preference.");
+    if (error || data !== true) throw new Error("Could not sync preference.");
     return { dismissed: true };
   });

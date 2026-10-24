@@ -30,9 +30,11 @@ function Privacy() {
       <PolicySection title="What we store">
         <p>
           If you sign in with email/password or Google, we store your account identity to keep your
-          records yours. We store the listings, needs, offers, handover confirmations, impact
-          records and evidence notes you create. Listing photos you upload are stored privately and
-          are visible only to you and authorized handover participants.
+          records yours. Your private profile holds your first/last name, display name, general
+          area, optional unverified phone, notification preferences, terms acceptance and
+          mission-popup dismissal. We store the listings, needs, offers, handover confirmations,
+          impact records and evidence notes you create. Listing photos you upload are stored
+          privately and are visible only to you and authorized handover participants.
         </p>
       </PolicySection>
       <PolicySection title="Administration and support">
@@ -47,7 +49,9 @@ function Privacy() {
       <PolicySection title="What is public">
         <p>
           Listings and community needs you post are visible to other visitors so the exchange can
-          work. Your evidence notes, plans and completion records stay private to your account.
+          work. Your private observation notes, plans and completion records stay scoped to your
+          account or handover participants. Submitted field evidence remains private unless
+          validated for public visibility; authorized administrators can review it.
         </p>
       </PolicySection>
       <PolicySection title="What we do not do">
@@ -60,7 +64,9 @@ function Privacy() {
         <p>
           Your chosen interface language is saved in your browser's local storage so it persists
           between visits. Sign-in session data is also kept in browser storage by the authentication
-          service. See the Cookie Policy for details.
+          service. Mission-popup dismissal is also stored per guest or account in this browser;
+          signed-in profiles additionally save dismissal across devices. See the Cookie Policy for
+          details.
         </p>
       </PolicySection>
       <PolicySection title="Your choices">

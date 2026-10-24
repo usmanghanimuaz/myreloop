@@ -24,4 +24,4 @@
 
 - About Us lives at `/about`, with complete seven-language copy in `i18n-about`; Waste & Evidence lives at `/waste-evidence`, while `/about-us` preserves the supplied builder story, so informational purposes are not conflated.
 
-- Mission dismissal is a versioned private auth-metadata preference written through authenticated server functions, not a role or public profile field; per-identity browser storage and session memory avoid interruptions when account sync is unavailable.
+- Mission dismissal is a private owner-scoped profile preference written through an RLS-respecting invoker RPC and authenticated server functions, not a role or public field; per-identity browser storage and session memory avoid interruptions when account sync is unavailable.
