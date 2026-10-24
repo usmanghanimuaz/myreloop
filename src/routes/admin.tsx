@@ -7,13 +7,13 @@ import { useDashT } from "@/lib/i18n-dash";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Moderation — ReLoop" },
+      { title: "Admin Console — ReLoop" },
       {
         name: "description",
-        content: "ReLoop moderation for evidence review and reports. Admins only.",
+        content: "Private ReLoop administration: members, reuse listings, reports, handovers, support and moderation history.",
       },
-      { property: "og:title", content: "Moderation — ReLoop" },
-      { property: "og:description", content: "Admins only." },
+      { property: "og:title", content: "Admin Console — ReLoop" },
+      { property: "og:description", content: "Private administration of ReLoop reuse activity, safety reports and member controls." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },

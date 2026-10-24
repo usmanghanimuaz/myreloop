@@ -5,6 +5,8 @@ export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:description", content: "Frequently asked questions about ReLoop: how free sharing and exchange work, safety, impact tracking and what ReLoop does not do." },
       { title: "FAQ — ReLoop" },
       {
         name: "description",
