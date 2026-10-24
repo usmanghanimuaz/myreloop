@@ -330,7 +330,6 @@ export function AdminConsole() {
           <p>
             {r.quantity ?? "—"} {r.unit ?? ""}
           </p>
-          <p>{r.note || "—"}</p>
           <p>{t("disputesText")}</p>
         </div>
       ),
