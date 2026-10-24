@@ -43,7 +43,7 @@ export interface AdminRecordDTO {
 export function adminRecordSummary(records: CloudRecord[]) {
   const state = recordsToState(records.filter((row) => !row.sample));
   const impact = summarizeImpact(state);
-  const item = (row: AdminRecordDTO["needs"][number]) => ({
+  const item = <T extends AdminRecordDTO["needs"][number] | AdminRecordDTO["listings"][number]>(row: T) => ({
     id: row.id,
     title: row.title,
     description: row.description,
@@ -57,7 +57,7 @@ export function adminRecordSummary(records: CloudRecord[]) {
     ownerId: row.ownerId,
   });
   const adminState: AdminRecordDTO = {
-    listings: state.listings.map((row) => ({ ...item(row), title: row.title, status: row.status })),
+    listings: state.listings.map((row) => ({ ...item(row), title: row.title, status: row.status, quantity: row.quantity, unit: row.unit, mode: row.mode, area: row.area })),
     needs: state.needs.map(item),
     interests: state.interests.map((row) => ({
       id: row.id,
