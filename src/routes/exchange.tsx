@@ -86,6 +86,7 @@ function Exchange() {
   const [cat, setCat] = useState<Category | "all">("all");
   const [status, setStatus] = useState<ListingStatus | "all">("all");
   const [formOpen, setFormOpen] = useState(false);
+  const { userId } = meta;
   const [editing, setEditing] = useState<Listing | undefined>();
   const [viewId, setViewId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<Listing | null>(null);
@@ -121,14 +122,18 @@ function Exchange() {
         title={c("marketplace")}
         description={c("marketText")}
       >
-        <Button
-          onClick={() => {
-            setEditing(undefined);
-            setFormOpen(true);
-          }}
-        >
-          <Plus /> {t("home.ctaShare")}
-        </Button>
+        {userId ? (
+          <Button
+            onClick={() => {
+              setEditing(undefined);
+              setFormOpen(true);
+            }}
+          >
+            <Plus /> {t("home.ctaShare")}
+          </Button>
+        ) : (
+          <p className="text-sm text-muted-foreground">Sign in to share an item.</p>
+        )}
       </PageHeader>
 
       <section className="mb-8 grid overflow-hidden border-y md:grid-cols-3">
@@ -472,7 +477,9 @@ function ListingDetail({
               </div>
             )}
 
-            {listing.status === "available" && !own && listing.origin !== "sample" ? (
+            {!userId && listing.status === "available" && !own ? (
+              <Notice>Sign in to send interest in this item.</Notice>
+            ) : listing.status === "available" && !own && listing.origin !== "sample" ? (
               <form
                 className="space-y-2"
                 onSubmit={async (e) => {

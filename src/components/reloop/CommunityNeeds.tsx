@@ -49,6 +49,11 @@ export function CommunityNeeds() {
   return (
     <section id="community-needs" className="mt-10 scroll-mt-20">
       <h2 className="mb-4 text-2xl font-semibold">{t("needs.heading")}</h2>
+      {!userId ? (
+        <p className="mb-6 rounded-md border-y bg-muted px-4 py-4 text-sm text-muted-foreground">
+          {t("needs.signIn")}
+        </p>
+      ) : (
       <form
         className="mb-6 grid gap-3 border-y py-5 sm:grid-cols-2"
         onSubmit={async (e) => {
@@ -161,8 +166,8 @@ export function CommunityNeeds() {
             {err}
           </p>
         )}
-        {!userId && <p className="text-sm text-muted-foreground">{t("needs.signIn")}</p>}
       </form>
+      )}
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <div>
           <Label htmlFor="need-search">{t("needs.search")}</Label>
