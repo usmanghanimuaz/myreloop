@@ -5,7 +5,7 @@
 - [x] Add ownership checks and separate two-party verified metrics from self-reported records.
 - [x] Add curated reliable source-linked evidence inside existing pages.
 - [x] Run 15 rule tests and verify six public pages, filters, form controls and mobile sign-in dialog.
-- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account. (still needs a second real account)
+- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — not verified; requires real item workflow and authorized second-account QA
 - [x] Resolve application lint formatting without rewriting Cloud-managed generated files; lint exits 0 with eight existing refresh warnings.
 - [x] Recheck current tests, preview compilation and six-page public workflows: 20 tests pass, automatic build OK, six routes HTTP 200 and no browser page errors.
 - [x] Document verification and blockers; do not publish.
@@ -19,10 +19,10 @@
 - [x] Footer with Explore/Learn/About/Policies (20 real links).
 - [x] About Us: Neighborhood Hacks origin + Meet the Builder; no invented details.
 - [x] Sample data removed: 24 sample rows deleted from DB, seed state emptied, sample copy removed; impact only from real verified records.
-- [x] SEO: unique head()+canonical per route, WebSite/Article JSON-LD, robots.txt kept; sitemap deferred (no public URL).
+- [x] SEO: unique head()+canonical per route, WebSite/Article JSON-LD, robots.txt kept; sitemap now added (24 Oct) using confirmed public origin.
 - [x] Contact/report forms: zod validation (4 alerts verified), saved to contact_messages table (insert-only RLS).
 - [x] 38/38 tests pass, lint 0 errors, build OK, no broken images, no page errors.
-- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — blocked by no registered account. (still needs a second real account)
+- [ ] Verify authenticated uploads, refresh persistence, cross-user access and full two-party handovers — not verified; requires real item workflow and authorized second-account QA
 
 # Enhancement pass (23 Oct 2026, 07:27 brief)
 - [x] Fix Waste & Evidence "Awaiting validation" badges: field cards, aligned label/status row, neutral small badge, 2-col desktop / 1-col mobile, no 390px overlap.
@@ -31,7 +31,7 @@
 - [x] Material Guidance: expand to 18+ categories, quick tool w/ searchable item + units (kg/g/lb/items/litre) + action; hazardous items blocked from exchange.
 - [x] Verify /exchange & /needs real-data rendering + filters.
 - [x] New /stories page: official videos (UNEP/WHO/EPA/UN-Habitat links, attribution), user field evidence (photo/external video URL, consent, validation status, private until validated).
-- [x] Logo: circular reuse arrows + leaf SVG, favicon.
+- [x] Logo: three triangular reuse arrows + upward angled leaf SVG, favicon.
 - [x] QA: tests/lint/build + browser (badges, feed, impact, guidance, stories, RTL, 390px).
 
 ## Launch readiness (Oct 23)
@@ -45,14 +45,14 @@
 - [x] Owner admin role assigned
 - [x] Installable app (manifest + icons)
 - [ ] Email notifications — blocked: needs owner's email domain
-- [ ] Push notifications — needs Firebase connection decision
+- [ ] Push delivery — implemented connector/token/service-worker flow; real-device delivery unverified
 
 # 11:39 brief — signup/dashboard/moderation (no n8n)
 - [x] Signup first/last name + terms; trigger-created profiles for email and Google; optional private unverified phone.
 - [x] My ReLoop: profile, notification prefs, consent, restriction notice, handover history, manage links.
 - [x] Moderation: review notes, close item, restrict/unrestrict poster, audit log, DB-checked.
 - [x] Server checks: restricted / no-consent members cannot post.
-- [ ] Two-account end-to-end tests — blocked: needs a second real account.
+- [ ] Two-account end-to-end tests — blocked: second-account testing authorization and real handover input needed.
 - [ ] Phone verification — blocked: SMS service approval. Email alerts — blocked: sender domain.
 
 # 24 Oct marketplace and comprehensive admin
@@ -66,7 +66,7 @@
 - [x] Verify routes, CTAs, photo/fallback, all languages and desktop/390px; 61 tests pass, lint 0 errors/10 existing warnings, managed build OK.
 
 # Requirements reconciliation and mission popup
-- [ ] Reconcile actual history, source and live permissions; record requirement statuses.
-- [ ] Add seven-language first-visit/first-sign-in mission popup with persistent dismissal and accessible controls.
-- [ ] Fix clear gaps: remove n8n settings mention, correct storage policy disclosure, verify SEO sitemap.
-- [ ] Run tests/lint and desktop/mobile/RTL popup and admin checks; record evidence and blockers.
+- [x] Reconcile actual history, source and live permissions; record requirement statuses.
+- [x] Add seven-language first-visit/first-sign-in mission popup with persistent dismissal and accessible controls.
+- [x] Fix clear gaps: remove n8n settings mention, correct storage policy disclosure, verify SEO sitemap.
+- [x] Run tests/lint and desktop/mobile/RTL popup and admin checks; record evidence and blockers.
