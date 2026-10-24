@@ -9,13 +9,13 @@ export const Route = createFileRoute("/cookies")({
       {
         property: "og:description",
         content:
-          "ReLoop uses no tracking or advertising cookies — only the storage needed for sign-in and your language preference.",
+          "ReLoop uses no tracking or advertising cookies — functional storage for sign-in, language and mission-popup preferences.",
       },
       { title: "Cookie Policy — ReLoop" },
       {
         name: "description",
         content:
-          "ReLoop uses no tracking or advertising cookies — only the storage needed for sign-in and your language preference.",
+          "ReLoop uses no tracking or advertising cookies — functional storage for sign-in, language and mission-popup preferences.",
       },
       { property: "og:title", content: "Cookie Policy — ReLoop" },
     ],
@@ -35,9 +35,12 @@ function Cookies() {
       </PolicySection>
       <PolicySection title="What is stored in your browser">
         <p>
-          Two functional items only: your sign-in session (stored by the authentication service so
-          you stay signed in) and your chosen interface language (so the site remembers it between
-          visits). Neither is used to track you across other websites.
+          Functional preferences include your sign-in session (stored by the authentication service
+          so you stay signed in) and your chosen interface language (so the site remembers it
+          between visits), and your mission-popup dismissal. Guests store dismissal in this browser.
+          Signed-in accounts also save a private dismissal preference with the authentication
+          service to remember it across devices. These preferences are not used to track you across
+          other websites.
         </p>
       </PolicySection>
       <PolicySection title="Third-party content">

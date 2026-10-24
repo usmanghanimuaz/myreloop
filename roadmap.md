@@ -64,3 +64,9 @@
 # About Us correction
 - [x] Add translated photographic /about, visible navigation/footer links and homepage introduction; preserve evidence and existing story.
 - [x] Verify routes, CTAs, photo/fallback, all languages and desktop/390px; 61 tests pass, lint 0 errors/10 existing warnings, managed build OK.
+
+# Requirements reconciliation and mission popup
+- [ ] Reconcile actual history, source and live permissions; record requirement statuses.
+- [ ] Add seven-language first-visit/first-sign-in mission popup with persistent dismissal and accessible controls.
+- [ ] Fix clear gaps: remove n8n settings mention, correct storage policy disclosure, verify SEO sitemap.
+- [ ] Run tests/lint and desktop/mobile/RTL popup and admin checks; record evidence and blockers.

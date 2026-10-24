@@ -23,3 +23,5 @@
 - Stock photographs illustrate guidance, never user listings; downloaded media uses asset pointers and all new console copy uses the seven-language dictionary.
 
 - About Us lives at `/about`, with complete seven-language copy in `i18n-about`; Waste & Evidence lives at `/waste-evidence`, while `/about-us` preserves the supplied builder story, so informational purposes are not conflated.
+
+- Mission dismissal is a versioned private auth-metadata preference written through authenticated server functions, not a role or public profile field; per-identity browser storage and session memory avoid interruptions when account sync is unavailable.

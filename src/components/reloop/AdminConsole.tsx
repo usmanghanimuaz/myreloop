@@ -634,7 +634,7 @@ export function AdminConsole() {
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                {t("unsupported")}: n8n · {t("impact")} (traffic) · {t("support")} (email)
+                {t("unsupported")}: {t("impact")} (traffic) · {t("support")} (email)
               </p>
             </div>
           ) : (

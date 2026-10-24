@@ -20,6 +20,8 @@ import { useI18n } from "@/lib/i18n";
 import { hydrateStore, useStoreMeta } from "@/lib/reloop/store";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { MissionDialog } from "./MissionDialog";
+import { Button } from "@/components/ui/button";
 import { AccountButton } from "./AccountButton";
 import { LogoMark } from "./LogoMark";
 import { Footer, LanguageSwitcher } from "./Footer";
@@ -149,12 +151,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <LanguageSwitcher className="w-28" />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 aria-label={t("nav.open")}
                 className="grid size-10 place-items-center rounded-xl hover:bg-sidebar-accent"
               >
                 <Menu className="size-5" />
-              </button>
+              </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 border-0 bg-sidebar p-0">
               <SheetTitle className="sr-only">{t("nav.main")}</SheetTitle>
@@ -173,6 +177,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">{children}</div>
         </main>
         <Footer />
+        <MissionDialog />
       </div>
     </div>
   );
