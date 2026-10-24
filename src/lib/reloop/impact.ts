@@ -4,6 +4,7 @@ import {
   type AppState,
   type Category,
   type ImpactEntry,
+  type InterestRequest,
   type Origin,
   type Unit,
 } from "./types";
@@ -125,4 +126,16 @@ export function computeInsights(state: AppState): Insights {
       .map(([category, examples]) => ({ category, count: examples.length, examples }))
       .sort((a, b) => b.count - a.count),
   };
+}
+
+/** Public recent handovers must also have an immutable service-created impact entry. */
+export function confirmedInterests(interests: InterestRequest[], impact: ImpactEntry[]) {
+  const confirmed = new Set(
+    impact
+      .filter((e) => e.origin === "user" && e.source === "exchange" && e.completed && e.verified)
+      .map((e) => e.id),
+  );
+  return interests.filter(
+    (i) => i.origin === "user" && i.status === "completed" && confirmed.has(`handover-${i.id}`),
+  );
 }

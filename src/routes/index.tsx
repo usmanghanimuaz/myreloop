@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, LangNote, OriginBadge, formatDate } from "@/components/reloop/shared";
 import { useI18n } from "@/lib/i18n";
 import { CARDBOARD_SOURCE, HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
-import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
+import { confirmedInterests, formatTotals, summarizeImpact } from "@/lib/reloop/impact";
 import { useAppState, useStoreMeta } from "@/lib/reloop/store";
 import { CATEGORY_LABEL } from "@/lib/reloop/types";
 
@@ -101,14 +101,13 @@ function Home() {
   const openNeeds = state.needs.filter((n) => n.status === "open" && n.origin === "user");
   const completedExchanges = useMemo(
     () =>
-      state.interests
-        .filter((i) => i.status === "completed" && i.origin === "user")
+      confirmedInterests(state.interests, state.impact)
         .map((i) => ({
           interest: i,
           listing: state.listings.find((l) => l.id === i.listingId),
         }))
         .slice(0, 4),
-    [state.interests, state.listings],
+    [state.interests, state.listings, state.impact],
   );
   const suggested = useMemo(() => {
     const cats = new Set(activeListings.map((l) => l.category));

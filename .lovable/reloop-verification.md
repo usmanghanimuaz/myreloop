@@ -1,3 +1,7 @@
+# Latest reconciliation — 24 Oct 2026
+
+See requirements-checklist.md for current statuses and exact evidence; it supersedes historical counts and blockers below. 66 tests passed, lint 0 errors/10 existing warnings, managed build OK 04:22:58 UTC. Mission popup/owner-scoped persistence and 13 admin views verified; no deployment or role changes. Two profiles now exist, one admin unchanged, no domain/sample records. Sitemap is now implemented; delivery/legal/mutation checks remain limited as detailed there.
+
 # ReLoop verification — 23 Oct 2026
 
 ## Latest: 24 October 2026, marketplace/admin console

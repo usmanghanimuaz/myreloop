@@ -15,7 +15,8 @@ Server functions (requireSupabaseAuth)
  |- push.server: Firebase push honouring notify prefs [I; delivery B: real device]
 Database: profiles (owner RLS), user_roles (no client writes), reports, moderation_log (admin read),
           member_restrictions (own/admin read), push_tokens, contact_messages (validated insert), reloop_records
-Proposed [P]: in-app notification inbox, participant-only request messages, bookmarks, user blocks,
+Already present [I]: request-derived private attention/incoming/outgoing inbox.
+Proposed [P]: participant-only request messages, bookmarks, user blocks,
           account deletion request, email notifications [B: sender domain], phone verification [B: SMS service].
 ```
 
@@ -35,3 +36,7 @@ File map additions: `src/components/reloop/{AdminConsole,SitePhoto}.tsx`, `src/l
 Files: src/components/reloop/AccountButton.tsx, src/routes/account.tsx, src/routes/admin.tsx,
 src/lib/reloop/{account.functions,cloud.functions,moderation,push.server}.ts, src/lib/i18n-dash.ts,
 drizzle/migrations/0010_profiles_signup_moderation_log_restrictions.sql, src/test/signup-profile.test.ts
+
+## 24 Oct reconciliation
+- Mission popup mounts in shared shell after auth hydration; seven-language text. Private profile dismissal uses authenticated server functions and security-invoker RPC with existing owner RLS; local identity cache handles unavailable sync. No role/admin grants.
+- File map and current tested/blocked statuses: requirements-checklist.md. Sitemap added for known public origin; older no-URL blocker retired. Two real profiles exist; a second-user session has not been authorized/tested.

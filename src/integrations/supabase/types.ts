@@ -103,6 +103,7 @@ export type Database = {
           general_area: string
           id: string
           last_name: string
+          mission_dismissed: boolean
           notify_requests: boolean
           notify_updates: boolean
           phone: string
@@ -117,6 +118,7 @@ export type Database = {
           general_area?: string
           id: string
           last_name?: string
+          mission_dismissed?: boolean
           notify_requests?: boolean
           notify_updates?: boolean
           phone?: string
@@ -131,6 +133,7 @@ export type Database = {
           general_area?: string
           id?: string
           last_name?: string
+          mission_dismissed?: boolean
           notify_requests?: boolean
           notify_updates?: boolean
           phone?: string
@@ -285,6 +288,10 @@ export type Database = {
       reloop_commit: {
         Args: { actor: string; removals: Json; upserts: Json }
         Returns: undefined
+      }
+      reloop_mission_preference: {
+        Args: { dismiss?: boolean }
+        Returns: boolean
       }
       reloop_target_owner: {
         Args: { target_id: string; target_kind: string }
