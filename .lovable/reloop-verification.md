@@ -1,5 +1,30 @@
 # ReLoop verification — 23 Oct 2026
 
+## Latest: 24 October 2026, marketplace/admin console
+
+This section supersedes older contradictory notes below.
+
+**Implemented and tested**
+- Real-data 13-section admin console. Owner-signed-in browser opened every section; member search returned the one existing profile and its detail dialog opened. Counts: 1 member; 0 real domain records; 0 support messages. No fabricated rows.
+- Confirmation dialog opened for restriction and Confirm was disabled without a reason; cancelled without executing. Real close/restrict/report/evidence writes remain untested because there is no safe real target.
+- Full `bunx vitest run`: 60/60 tests, 6 files passed. `bun run lint`: exit 0, 0 errors/10 existing refresh warnings. Automatic preview compilation: newest inspected entry `build OK` at 03:55:13 UTC. No manual build/typecheck command was run (managed harness handles those); no independent typecheck result claimed.
+- Browser `/`, `/exchange`, `/needs`, `/admin`: HTTP 200; no page errors. After explicitly loading/decode-waiting all images: homepage 9, marketplace 1, needs 1 images; zero broken images. Earlier unloaded lazy image signal was checked again and resolved by loading.
+- Desktop 1280px and mobile 390px: no horizontal overflow on core pages. Owner admin checked all seven languages at both widths; Urdu/Arabic RTL, other languages LTR. Screenshots visually reviewed for homepage, console, Arabic mobile, marketplace mobile.
+- Homepage Share an item opens the actual listing form. Did not create any listing or accept terms for the owner.
+- Signed-out `/admin`: sign-in heading, no private tables. Unit tests deny false/missing/error role results. No real non-admin account available for end-to-end denial.
+- Live DB policy inventory inspected: owner-only profiles/roles, admin-only log, own/admin restrictions, validated evidence visibility. Role count remains one owner admin. No migration, role change or access-policy change.
+- Official OLIO listing guide fetched and confirms clear photos/accurate descriptions/categories/quantity/pickup. Supplied Unsplash cardboard page says Free to use under Unsplash License; photo downloaded, visually reviewed and asset-hosted. Pexels recycling video search fetched through website gateway (direct HEAD bot-blocked 403): real library link, not a claimed tested video player.
+- Every content route inspected for unique title/description/OG; nine missing leaf OG descriptions/Twitter cards completed. No publication.
+
+**Remaining / limitations**
+- No actual second-user/non-admin session, new signup delivery, uploads or two-party handover was tested this turn.
+- No real record moderation executed and no fake records seeded. Evidence review outcome uses existing RPC; review notes for evidence are unsupported (no false note control).
+- Admin loads at most 1,000 profiles/reports, 2,000 domain rows, 200 support messages, 100 audit rows. Cap warning displays when relevant; global counts exact, activity analytics limited to loaded rows. Not claimed production-scale pagination.
+- Photos stay private for owners/accepted handover participants; public browsing uses honest category placeholders, not substituted stock listing photos.
+- Existing long-form English content remains fallback; new console controls translated, stored statuses/reasons remain actual record values.
+- No hide/restore actions, global settings editor, email support replies, case assignment, separate dispute system, traffic tracking or n8n integration added.
+- Push/email delivery not retested; email sender domain, second-account QA, sitemap public URL and legal review remain blockers. No deployment.
+
 ## Done (checked this turn)
 - Badges on Waste & Evidence: screenshots at 1280px and 390px. Every "Awaiting validation" badge lines up with its label (0px offset) and nothing overlaps. Pages are 390px wide with no sideways scroll.
 - New database parts: `profiles` (only the owner can read or edit), `app_role` + `user_roles` + `has_role()` (users can read only their own role; nobody can write roles from the app), and `reports` (signed-in users can file reports; only the reporter and admins can read them).

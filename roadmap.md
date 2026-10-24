@@ -56,7 +56,7 @@
 - [ ] Phone verification — blocked: SMS service approval. Email alerts — blocked: sender domain.
 
 # 24 Oct marketplace and comprehensive admin
-- [ ] Polish photographic homepage and marketplace without fake listings.
-- [ ] Add admin navigation, real member/record/support views, counts and protected member controls.
-- [ ] Translate new controls in seven languages and check desktop/mobile/RTL.
-- [ ] Run tests/lint and update architecture/file map/verification notes.
+- [x] Polish photographic homepage and marketplace without fake listings.
+- [x] Add admin navigation, real member/record/support views, counts and protected member controls.
+- [x] Translate new controls in seven languages and check desktop/mobile/RTL.
+- [x] Run tests/lint and update architecture/file map/verification notes.
