@@ -592,7 +592,7 @@ export function AdminConsole() {
                         <Button
                           disabled={!e.consent}
                           onClick={() =>
-                            ask(() => validate({ data: { key: e.key, approve: true } }))
+                            ask(() => validate({ data: { key: e.key, approve: true } }), false)
                           }
                         >
                           {d("mod.approve")}
@@ -600,7 +600,7 @@ export function AdminConsole() {
                         <Button
                           variant="outline"
                           onClick={() =>
-                            ask(() => validate({ data: { key: e.key, approve: false } }))
+                            ask(() => validate({ data: { key: e.key, approve: false } }), false)
                           }
                         >
                           {d("mod.reject")}
@@ -685,18 +685,18 @@ export function AdminConsole() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("confirm")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("confirmText")}</AlertDialogDescription>
+            <AlertDialogDescription>{needsNote ? t("confirmText") : d("mod.desc")}</AlertDialogDescription>
           </AlertDialogHeader>
-          <Input
+          {needsNote && <Input
             aria-label={t("reason")}
             placeholder={t("reason")}
             maxLength={300}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-          />
+          />}
           <AlertDialogFooter>
             <AlertDialogCancel disabled={busy}>{d("cancelReq")}</AlertDialogCancel>
-            <Button disabled={busy || note.trim().length < 3} onClick={() => void execute()}>
+            <Button disabled={busy || (needsNote && note.trim().length < 3)} onClick={() => void execute()}>
               {busy ? d("saving") : t("confirm")}
             </Button>
           </AlertDialogFooter>
