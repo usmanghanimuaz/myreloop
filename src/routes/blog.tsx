@@ -4,7 +4,7 @@ import { PageHeader, UNSPLASH_NOTE } from "@/components/reloop/shared";
 import { ARTICLES } from "@/lib/reloop/articles";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({
+  head: ({ matches }) => ({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -20,7 +20,9 @@ export const Route = createFileRoute("/blog")({
         content: "Practical, source-linked environmental education from the ReLoop project.",
       },
     ],
-    links: [{ rel: "canonical", href: "/blog" }],
+    links: matches.some((match) => match.pathname.startsWith("/blog/"))
+      ? []
+      : [{ rel: "canonical", href: "https://myreloop.lovable.app/blog" }],
   }),
   component: Blog,
 });

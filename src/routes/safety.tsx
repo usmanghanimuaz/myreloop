@@ -19,7 +19,7 @@ export const Route = createFileRoute("/safety")({
       },
       { property: "og:title", content: "Safety & Exchange Policy — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/safety" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/safety" }],
   }),
   component: Safety,
 });

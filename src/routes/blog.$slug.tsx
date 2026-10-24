@@ -17,9 +17,9 @@ export const Route = createFileRoute("/blog/$slug")({
       { name: "description", content: loaderData?.description ?? "" },
       { property: "og:title", content: loaderData?.title ?? "ReLoop Blog" },
       { property: "og:description", content: loaderData?.description ?? "" },
-      { property: "og:url", content: `/blog/${params.slug}` },
+      { property: "og:url", content: `https://myreloop.lovable.app/blog/${params.slug}` },
     ],
-    links: [{ rel: "canonical", href: `/blog/${params.slug}` }],
+    links: [{ rel: "canonical", href: `https://myreloop.lovable.app/blog/${params.slug}` }],
     scripts: loaderData
       ? [
           {

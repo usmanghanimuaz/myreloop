@@ -19,7 +19,7 @@ export const Route = createFileRoute("/disclaimer")({
       },
       { property: "og:title", content: "Content Disclaimer — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/disclaimer" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/disclaimer" }],
   }),
   component: Disclaimer,
 });

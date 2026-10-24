@@ -22,7 +22,7 @@ export const Route = createFileRoute("/needs")({
         content: "Reuse before buying new: post a need and let someone's surplus become your find.",
       },
     ],
-    links: [{ rel: "canonical", href: "/needs" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/needs" }],
   }),
   component: NeedsPage,
 });

@@ -20,7 +20,7 @@ export const Route = createFileRoute("/contact")({
       },
       { property: "og:title", content: "Contact Us — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/contact" }],
   }),
   component: Contact,
 });

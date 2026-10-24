@@ -32,7 +32,7 @@ export const Route = createFileRoute("/stories")({
           "Official videos on waste and plastic pollution, plus privacy-safe community field evidence.",
       },
     ],
-    links: [{ rel: "canonical", href: "/stories" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/stories" }],
   }),
   component: Stories,
 });

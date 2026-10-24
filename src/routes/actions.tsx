@@ -46,7 +46,7 @@ export const Route = createFileRoute("/actions")({
         content: "Real activity, safe handovers, and only confirmed completions count.",
       },
     ],
-    links: [{ rel: "canonical", href: "/actions" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/actions" }],
   }),
   component: Actions,
 });

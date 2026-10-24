@@ -22,7 +22,7 @@ export const Route = createFileRoute("/mission")({
           "Reuse first, recycle right, dispose safely — and keep useful things out of bins, drains and dumps.",
       },
     ],
-    links: [{ rel: "canonical", href: "/mission" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/mission" }],
   }),
   component: Mission,
 });

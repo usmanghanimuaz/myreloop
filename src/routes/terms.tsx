@@ -19,7 +19,7 @@ export const Route = createFileRoute("/terms")({
       },
       { property: "og:title", content: "Terms & Conditions — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/terms" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/terms" }],
   }),
   component: Terms,
 });

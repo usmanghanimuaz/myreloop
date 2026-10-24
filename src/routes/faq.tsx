@@ -19,7 +19,7 @@ export const Route = createFileRoute("/faq")({
       },
       { property: "og:title", content: "FAQ — ReLoop" },
     ],
-    links: [{ rel: "canonical", href: "/faq" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/faq" }],
   }),
   component: Faq,
 });
