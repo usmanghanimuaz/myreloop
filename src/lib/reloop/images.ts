@@ -5,6 +5,8 @@
  * evidence. Credit: photographers via Unsplash (https://unsplash.com).
  */
 
+import cardboardAsset from "@/assets/reuse-cardboard.jpg.asset.json";
+
 function unsplash(id: string, w = 1200, h?: number) {
   const base = `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
   return h ? `${base}&h=${h}` : base;
@@ -16,6 +18,10 @@ export interface SiteImage {
 }
 
 export const IMAGES = {
+  cardboardSorting: {
+    src: cardboardAsset.url,
+    alt: "Flattened cardboard sorted into stacks on a wooden floor (illustrative photograph)",
+  },
   /** Volunteers sorting donated cardboard boxes at a community drive */
   communitySorting: {
     src: unsplash("1593113598332-cd288d649433", 1600),
@@ -53,7 +59,7 @@ export const IMAGES = {
   },
   furniture: {
     src: unsplash("1555041469-a586c61ea9bc", 900),
-    alt: "A second-hand sofa that can be rehomed instead of discarded",
+    alt: "A green sofa in a living room, illustrating furniture that could be rehomed",
   },
   woodFurniture: {
     src: unsplash("1595428774223-ef52624120d2", 900),
@@ -109,3 +115,6 @@ export const UNSPLASH_CREDIT = {
   label: "Illustrative photo via Unsplash",
   url: "https://unsplash.com",
 } as const;
+
+export const CARDBOARD_SOURCE =
+  "https://unsplash.com/photos/a-pile-of-cardboard-sitting-on-top-of-a-wooden-floor-quTvuVu0ghQ";

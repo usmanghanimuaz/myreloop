@@ -6,6 +6,12 @@ export const Route = createFileRoute("/report")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:description",
+        content:
+          "Report unsafe listings, misuse, or technical problems on ReLoop so the community stays trustworthy.",
+      },
       { title: "Report a Problem — ReLoop" },
       {
         name: "description",

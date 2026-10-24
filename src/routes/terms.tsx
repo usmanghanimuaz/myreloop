@@ -5,6 +5,12 @@ export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:description",
+        content:
+          "The terms for using ReLoop: free and exchange-only listings, honest descriptions, safe handovers and acceptable use.",
+      },
       { title: "Terms & Conditions — ReLoop" },
       {
         name: "description",

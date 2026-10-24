@@ -5,6 +5,12 @@ export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:description",
+        content:
+          "What data ReLoop stores: account sign-in, your listings, needs, offers, photos and evidence notes — and what it does not collect.",
+      },
       { title: "Privacy Policy — ReLoop" },
       {
         name: "description",
@@ -23,10 +29,19 @@ function Privacy() {
     <PolicyPage eyebrow="Policies" title="Privacy Policy" updated="23 October 2026">
       <PolicySection title="What we store">
         <p>
-          If you sign in (via Google or Lovable), we store your account identity to keep your
+          If you sign in with email/password or Google, we store your account identity to keep your
           records yours. We store the listings, needs, offers, handover confirmations, impact
           records and evidence notes you create. Listing photos you upload are stored privately and
           are visible only to you and authorized handover participants.
+        </p>
+      </PolicySection>
+      <PolicySection title="Administration and support">
+        <p>
+          Authorized administrators can review display names, general areas, listings, needs,
+          requests, handover states, safety reports and submitted evidence for moderation. The
+          administration console does not display member email addresses or private phone numbers.
+          Contact-form names and message content can be read by authorized administrators; do not
+          include sensitive information or exact addresses in a support message.
         </p>
       </PolicySection>
       <PolicySection title="What is public">

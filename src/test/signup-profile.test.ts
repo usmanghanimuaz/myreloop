@@ -45,7 +45,9 @@ describe("account profile", () => {
     expect(AccountInputSchema.safeParse({ ...ok, displayName: "a@b.com" }).success).toBe(false);
   });
   it("blocks exact street addresses in general area", () => {
-    expect(AccountInputSchema.safeParse({ ...ok, generalArea: "12 Mall Road" }).success).toBe(false);
+    expect(AccountInputSchema.safeParse({ ...ok, generalArea: "12 Mall Road" }).success).toBe(
+      false,
+    );
   });
   it("accepts a valid profile", () => expect(AccountInputSchema.safeParse(ok).success).toBe(true));
 });

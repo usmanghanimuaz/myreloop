@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ReportButton } from "@/components/reloop/ReportButton";
-import { MapPin, Pencil, Plus, Search, Send, Trash2, PackageOpen } from "lucide-react";
+import { MapPin, Pencil, Plus, Search, Send, Trash2, PackageOpen, ImageIcon } from "lucide-react";
+import { SitePhoto } from "@/components/reloop/SitePhoto";
+import { useConsoleT } from "@/lib/i18n-console";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -76,6 +78,7 @@ function Exchange() {
   const state = useAppState();
   const meta = useStoreMeta();
   const { t } = useI18n();
+  const c = useConsoleT();
   const [mode, setMode] = useState("all");
   const [condition, setCondition] = useState("all");
   const [area, setArea] = useState("");
@@ -115,8 +118,8 @@ function Exchange() {
     <div className="animate-rise">
       <PageHeader
         eyebrow="Available Items — I Have"
-        title="Available items near you"
-        description="Usable things neighbours are giving away for FREE or offering in EXCHANGE. Scroll down for Community Needs — what people are looking for."
+        title={c("marketplace")}
+        description={c("marketText")}
       >
         <Button
           onClick={() => {
@@ -124,17 +127,12 @@ function Exchange() {
             setFormOpen(true);
           }}
         >
-          <Plus /> I Have — List an item
+          <Plus /> {t("home.ctaShare")}
         </Button>
       </PageHeader>
 
-      <section className="mb-8 grid overflow-hidden rounded-2xl border bg-card shadow-card md:grid-cols-3">
-        <img
-          src={IMAGES.communitySorting.src}
-          alt={IMAGES.communitySorting.alt}
-          loading="lazy"
-          className="h-44 w-full object-cover md:h-full"
-        />
+      <section className="mb-8 grid overflow-hidden border-y md:grid-cols-3">
+        <SitePhoto image={IMAGES.cardboard} className="h-48 w-full object-cover md:h-full" />
         <div className="p-6 md:col-span-2">
           <h2 className="text-xl font-semibold">What belongs here?</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
@@ -259,11 +257,12 @@ function Exchange() {
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((l) => (
             <li key={l.id}>
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setViewId(l.id)}
-                className="group h-full w-full rounded-2xl border bg-card p-5 text-left shadow-card transition hover:-translate-y-0.5 hover:border-primary/40"
+                className="group block h-full w-full overflow-hidden whitespace-normal rounded-lg border bg-card p-0 text-start transition hover:border-primary/40"
               >
-                <div className="mb-3 flex items-center justify-between gap-2">
+                <div className="px-4 pt-4 mb-3 flex items-center justify-between gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-primary">
                     {CATEGORY_LABEL[l.category]}
                   </span>
@@ -278,21 +277,39 @@ function Exchange() {
                         i.ownerId === meta.userId &&
                         ["accepted", "handover", "completed"].includes(i.status ?? "pending"),
                     )) && <ListingPhoto path={l.photos[0]} title={l.title} />}
-                <p className="text-xs font-semibold text-primary">{l.mode ?? "FREE"}</p>
-                <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}
-                </p>
-                <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="size-3.5" /> {l.area}
-                </p>
-                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                  <OriginBadge origin={l.origin} />
-                  <span>
-                    {interestCount.get(l.id) ?? 0} interested · {formatDate(l.createdAt)}
-                  </span>
+                {(!l.photos?.[0] ||
+                  !meta.userId ||
+                  !(
+                    l.ownerId === meta.userId ||
+                    state.interests.some(
+                      (i) =>
+                        i.listingId === l.id &&
+                        i.ownerId === meta.userId &&
+                        ["accepted", "handover", "completed"].includes(i.status ?? "pending"),
+                    )
+                  )) && (
+                  <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 bg-secondary text-primary">
+                    <ImageIcon className="size-10" aria-hidden />
+                    <span className="text-xs">{CATEGORY_LABEL[l.category]}</span>
+                  </div>
+                )}
+                <div className="p-4">
+                  <p className="mb-2 text-xs font-semibold text-primary">{l.mode ?? "FREE"}</p>
+                  <h3 className="text-lg font-semibold group-hover:text-primary">{l.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {l.quantity} {l.unit} · {CONDITION_LABEL[l.condition]}
+                  </p>
+                  <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin className="size-3.5" /> {l.area}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                    <OriginBadge origin={l.origin} />
+                    <span>
+                      {interestCount.get(l.id) ?? 0} interested · {formatDate(l.createdAt)}
+                    </span>
+                  </div>
                 </div>
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

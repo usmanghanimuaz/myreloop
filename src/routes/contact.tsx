@@ -6,6 +6,12 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:description",
+        content:
+          "Questions, feedback or partnership ideas for ReLoop — send a message through the contact form.",
+      },
       { title: "Contact Us — ReLoop" },
       {
         name: "description",

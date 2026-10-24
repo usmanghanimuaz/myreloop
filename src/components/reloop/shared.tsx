@@ -76,7 +76,7 @@ export function StatusBadge({ status }: { status: ListingStatus }) {
 
 export function Card({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("rounded-2xl border bg-card p-5 shadow-card", className)} {...rest}>
+    <div className={cn("rounded-lg border bg-card p-5 shadow-card", className)} {...rest}>
       {children}
     </div>
   );
