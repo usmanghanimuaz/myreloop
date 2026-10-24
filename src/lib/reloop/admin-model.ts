@@ -7,11 +7,31 @@ import type { AppState } from "./types";
 export interface AdminRecordDTO {
   listings: Pick<
     AppState["listings"][number],
-    "id" | "title" | "description" | "category" | "quantity" | "unit" | "mode" | "area" | "status" | "createdAt" | "ownerId"
+    | "id"
+    | "title"
+    | "description"
+    | "category"
+    | "quantity"
+    | "unit"
+    | "mode"
+    | "area"
+    | "status"
+    | "createdAt"
+    | "ownerId"
   >[];
   needs: Pick<
     AppState["needs"][number],
-    "id" | "title" | "description" | "category" | "quantity" | "unit" | "mode" | "area" | "status" | "createdAt" | "ownerId"
+    | "id"
+    | "title"
+    | "description"
+    | "category"
+    | "quantity"
+    | "unit"
+    | "mode"
+    | "area"
+    | "status"
+    | "createdAt"
+    | "ownerId"
   >[];
   interests: Pick<
     AppState["interests"][number],
@@ -49,7 +69,11 @@ export function adminRecordSummary(records: CloudRecord[]) {
       unit: row.unit,
     })),
   };
-  return { state: adminState, verifiedExchanges: impact.verifiedExchanges, verified: impact.verified };
+  return {
+    state: adminState,
+    verifiedExchanges: impact.verifiedExchanges,
+    verified: impact.verified,
+  };
 }
 
 export function isAdminAllowed(roleResult: { data: unknown; error: unknown }) {
