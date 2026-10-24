@@ -98,6 +98,7 @@ export function AdminConsole() {
   const [selected, setSelected] = useState<Row | null>(null);
   const [pending, setPending] = useState<((note: string) => Promise<unknown>) | null>(null);
   const [note, setNote] = useState("");
+  const [needsNote, setNeedsNote] = useState(true);
   const [busy, setBusy] = useState(false);
   const q = useQuery({ queryKey: ["reloop-account", "admin-console"], queryFn: () => load() });
   const queue = useQuery({
@@ -111,7 +112,8 @@ export function AdminConsole() {
     setStatus("all");
     setPage(0);
   };
-  const ask = (action: (reason: string) => Promise<unknown>) => {
+  const ask = (action: (reason: string) => Promise<unknown>, requireNote = true) => {
+    setNeedsNote(requireNote);
     setNote("");
     setPending(() => action);
   };
@@ -119,7 +121,7 @@ export function AdminConsole() {
     await qc.invalidateQueries({ queryKey: ["reloop-account"] });
   };
   const execute = async () => {
-    if (!pending || note.trim().length < 3) return;
+    if (!pending || (needsNote && note.trim().length < 3)) return;
     setBusy(true);
     try {
       await pending(note.trim());
