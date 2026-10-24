@@ -68,7 +68,7 @@ export function adminRecordSummary(records: CloudRecord[]) {
       mode: row.mode,
       area: row.area,
     })),
-    needs: state.needs.map(item),
+    needs: state.needs.map((row) => ({ ...item(row), status: row.status })),
     interests: state.interests.map((row) => ({
       id: row.id,
       listingId: row.listingId,
