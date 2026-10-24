@@ -4,7 +4,7 @@ import {
   type AppState,
   type Category,
   type ImpactEntry,
-  type Interest,
+  type InterestRequest,
   type Origin,
   type Unit,
 } from "./types";
@@ -129,7 +129,7 @@ export function computeInsights(state: AppState): Insights {
 }
 
 /** Public recent handovers must also have an immutable service-created impact entry. */
-export function confirmedInterests(interests: Interest[], impact: ImpactEntry[]) {
+export function confirmedInterests(interests: InterestRequest[], impact: ImpactEntry[]) {
   const confirmed = new Set(
     impact
       .filter((e) => e.origin === "user" && e.source === "exchange" && e.completed && e.verified)
