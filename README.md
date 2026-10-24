@@ -1,54 +1,62 @@
 # ReLoop — Turn Local Waste Into Local Resources
 
-Built for the Environment & Sustainability track of Neighborhood Hacks 2026. ReLoop is a frontend-only app that helps communities reuse household materials through a local exchange board, practical waste guidance, community actions and transparent impact tracking.
+ReLoop is a community reuse platform built for the Environment & Sustainability track of **Neighborhood Hacks 2026**. It helps neighbours keep usable household materials out of landfill by matching people who **have** items with people who **need** them — for **free or exchange only**. There are no payments, no sales, and no commercial listings.
+
+Live demo: https://myreloop.lovable.app
+
+## What it does
+
+- **I Have (marketplace)** — post items you no longer need, with photos, quantity, condition and a general area (exact addresses stay private).
+- **I Need (community requests)** — post what you're looking for; owners of matching items can respond.
+- **Handovers** — an exchange only counts as completed when **both participants confirm** it. Nothing is auto-completed.
+- **Material Guidance** — practical reuse, repair, recycling and safe-disposal guidance for 21+ material categories, including hazardous items that are blocked from casual exchange.
+- **Waste & Evidence** — source-linked education on littering, dumping, burning and plastic pollution, plus a private evidence submission flow reviewed by moderators before anything becomes public.
+- **Impact** — honest, data-derived impact: only two-party-confirmed handovers count. No invented CO₂ numbers, no fake testimonials, no sample records shown as real.
+- **Moderation console** — an admin-only area with overview, members, listings, needs/requests, trust & safety (reports, evidence, restrictions), handovers, verified impact, support messages and an append-only audit log.
+
+## Principles
+
+- **Reuse first**, then repair, then recycle, then safe disposal.
+- **Free or exchange only** — no paid transactions, ever.
+- **Honest data** — no fabricated users, listings, impact figures or testimonials.
+- **Privacy by default** — exact addresses, private notes, plans and unvalidated evidence are never public.
+- **Safe handovers** — hazardous materials get safety guidance, not exchange listings.
+
+## Tech stack
+
+- **TanStack Start v1 + React 19 + TypeScript + Tailwind CSS v4** (Vite 7, edge/worker runtime)
+- **Lovable Cloud** backend (Supabase): Postgres with row-level security on every table, email/password + Google auth, private photo storage
+- **Server functions** (`createServerFn`) for all authenticated writes; revision-checked updates; moderation only through admin-checked database functions
+- **i18n** in seven languages (English default) with Urdu and Arabic RTL support
+- **PWA** manifest + install icons; optional push notifications via Firebase Cloud Messaging
+
+## Project layout
+
+```
+src/
+  routes/            # TanStack Router file routes (public pages + /account + /admin)
+  lib/reloop/        # domain types, schemas, guidance, impact rules, server functions
+  components/reloop/ # feature UI
+  components/ui/     # shadcn primitives
+  integrations/      # generated backend clients (do not edit)
+supabase/migrations/ # database schema, RLS policies, moderation functions
+```
 
 ## Run, test, build
+
 ```bash
 bun install        # or npm install
 bun run dev        # http://localhost:8080
-bunx vitest run    # unit tests for impact rules and safety guidance
+bun run test       # vitest suite (rules, authz, i18n, models)
 bun run build      # production build
 ```
 
-## Architecture
-- **TanStack Start + React 19 + TypeScript + Tailwind v4.** Each page lives in `src/routes/` (`index`, `finder`, `exchange`, `actions`, `impact`, `about`).
-- **Data layer** in `src/lib/reloop/`:
-  - `types.ts` – domain types · `schema.ts` – zod schemas, form validation and a contact-detail check
-  - `seed.ts` – fictional demo dataset (every record is `origin: "sample"`)
-  - `guidance.ts` – editable local guidance dataset and recommendation rules
-  - `impact.ts` – impact summary and insights (never adds different units together; de-duplicates per source record)
-  - `store.ts` – a small external store kept in LocalStorage, with schema validation, recovery from bad data and reset
-- **UI** in `src/components/reloop/` plus shadcn primitives in `src/components/ui/`.
+## Security notes
 
-## Features
-- Overview with metrics split into your records and sample records, recent activity, suggested actions, and a "Find a Better Use" button.
-- Waste-to-Value Finder with reuse and recycling paths shown separately; hazardous or damaged electronics get safety advice only.
-- Reuse Exchange: create, edit, delete (your own listings), search, filter, view details, send simulated interest, mark reserved/exchanged.
-- Community Actions with explicit confirmation before completion, optional quantity, and undo.
-- Impact Tracker: totals per unit, by category, reuse vs recycling, a chart, an activity log, planned entries kept separate from recorded ones.
-- Community Insights calculated from local records, with a form to post reuse needs.
-- About page with an evidence template (empty fields show "Awaiting validation") and a pilot plan.
-- Reset Demo Data (sidebar) with a confirmation dialog.
+- All application tables have RLS enabled; anonymous and ordinary authenticated users cannot execute moderation or privileged RPCs.
+- Roles live in a protected `user_roles` table and are never derived from user-editable metadata. New signups are always normal users.
+- `.env` files and internal planning notes are git-ignored; no secrets belong in this repository.
 
-## Known limitations
-- Data lives only in one browser. There is no syncing between users, and interest requests contact no one.
-- Guidance is general advice, not live local recycling rules. There is no image recognition.
-- No CO₂ or landfill estimates.
+## License
 
-## Manual QA checklist
-1. Clear site data → reload → sample records appear with "Sample data" labels.
-2. Exchange → List an item → it appears right away; check that invalid input shows errors.
-3. Search and filter by category and availability; check the empty state.
-4. Open your listing → edit → mark exchanged → Impact totals go up once; set to reserved → totals go back down.
-5. Delete your listing (a confirmation appears).
-6. Send interest on a listing → interest count goes up.
-7. Actions → Record completion (requires the confirm box) → shows as completed; Undo removes its impact.
-8. Finder → Save as plan → shows as "Planned — unverified"; Mark done → counted.
-9. Reload → everything is still there. Reset demo data → back to the starting state.
-10. Check mobile (menu button), tablet and desktop; check Tab navigation and visible focus.
-
-## Publish to GitHub
-In Lovable: **GitHub → Connect** to push this code to a new public repository. Or, from a local copy: `git init && git add . && git commit -m "ReLoop" && git remote add origin <url> && git push -u origin main`.
-
-## Deploy
-Click **Publish** in Lovable for a hosted URL. To host it yourself, run `bun run build` and deploy the output to a host that supports TanStack Start (for example Cloudflare Workers via the included Vite config).
+Built as a hackathon project. Reuse the code, credit the sources cited in the app's Waste & Evidence section, and keep the honesty principles intact.
