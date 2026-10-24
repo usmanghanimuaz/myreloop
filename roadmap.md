@@ -62,5 +62,5 @@
 - [x] Run tests/lint and update architecture/file map/verification notes.
 
 # About Us correction
-- [ ] Add translated photographic /about, visible navigation/footer links and homepage introduction; preserve evidence and existing story.
-- [ ] Verify routes, CTAs, photo/fallback, all languages and desktop/390px; run tests/lint and inspect managed build.
+- [x] Add translated photographic /about, visible navigation/footer links and homepage introduction; preserve evidence and existing story.
+- [x] Verify routes, CTAs, photo/fallback, all languages and desktop/390px; 61 tests pass, lint 0 errors/10 existing warnings, managed build OK.
