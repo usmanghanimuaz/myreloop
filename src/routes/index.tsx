@@ -13,6 +13,7 @@ import {
 import { useMemo, useState } from "react";
 import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
 import { SitePhoto } from "@/components/reloop/SitePhoto";
+import { useAboutT } from "@/lib/i18n-about";
 import { useConsoleT } from "@/lib/i18n-console";
 import { Button } from "@/components/ui/button";
 import { Card, LangNote, OriginBadge, formatDate } from "@/components/reloop/shared";
@@ -91,6 +92,7 @@ function Home() {
   const { userId } = useStoreMeta();
   const { t } = useI18n();
   const c = useConsoleT();
+  const about = useAboutT();
   const [postOpen, setPostOpen] = useState(false);
   const impact = useMemo(() => summarizeImpact(state), [state]);
   const activeListings = state.listings.filter(
@@ -260,6 +262,20 @@ function Home() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="mb-12 border-y py-10" aria-labelledby="home-about-reloop">
+        <p className="mb-2 text-sm font-semibold text-primary">ReLoop</p>
+        <h2 id="home-about-reloop" className="text-3xl font-semibold">
+          {about("homeTitle")}
+        </h2>
+        <p className="mt-4 max-w-3xl leading-relaxed text-muted-foreground">{about("intro")}</p>
+        <Button asChild variant="outline" className="mt-5">
+          <Link to="/about">
+            {about("more")}
+            <ArrowRight className="rtl:rotate-180" />
+          </Link>
+        </Button>
       </section>
 
       {/* 5 — Live community sections (secondary) */}

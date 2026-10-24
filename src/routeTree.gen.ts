@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as ActionsRouteImport } from './routes/actions'
@@ -33,16 +32,12 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as WasteEvidenceRouteImport } from './routes/waste-evidence'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutUsRoute = AboutUsRouteImport.update({
@@ -155,6 +150,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WasteEvidenceRoute = WasteEvidenceRouteImport.update({
+  id: '/waste-evidence',
+  path: '/waste-evidence',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -163,7 +163,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/account': typeof AccountRoute
   '/actions': typeof ActionsRoute
@@ -186,11 +185,11 @@ export interface FileRoutesByFullPath {
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
+  '/waste-evidence': typeof WasteEvidenceRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/account': typeof AccountRoute
   '/actions': typeof ActionsRoute
@@ -213,12 +212,12 @@ export interface FileRoutesByTo {
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
+  '/waste-evidence': typeof WasteEvidenceRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/about-us': typeof AboutUsRoute
   '/account': typeof AccountRoute
   '/actions': typeof ActionsRoute
@@ -241,13 +240,13 @@ export interface FileRoutesById {
   '/safety': typeof SafetyRoute
   '/stories': typeof StoriesRoute
   '/terms': typeof TermsRoute
+  '/waste-evidence': typeof WasteEvidenceRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/about-us'
     | '/account'
     | '/actions'
@@ -270,11 +269,11 @@ export interface FileRouteTypes {
     | '/safety'
     | '/stories'
     | '/terms'
+    | '/waste-evidence'
     | '/blog/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/about-us'
     | '/account'
     | '/actions'
@@ -297,11 +296,11 @@ export interface FileRouteTypes {
     | '/safety'
     | '/stories'
     | '/terms'
+    | '/waste-evidence'
     | '/blog/$slug'
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/about-us'
     | '/account'
     | '/actions'
@@ -324,12 +323,12 @@ export interface FileRouteTypes {
     | '/safety'
     | '/stories'
     | '/terms'
+    | '/waste-evidence'
     | '/blog/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   AboutUsRoute: typeof AboutUsRoute
   AccountRoute: typeof AccountRoute
   ActionsRoute: typeof ActionsRoute
@@ -352,6 +351,7 @@ export interface RootRouteChildren {
   SafetyRoute: typeof SafetyRoute
   StoriesRoute: typeof StoriesRoute
   TermsRoute: typeof TermsRoute
+  WasteEvidenceRoute: typeof WasteEvidenceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -361,13 +361,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about-us': {
@@ -524,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/waste-evidence': {
+      id: '/waste-evidence'
+      path: '/waste-evidence'
+      fullPath: '/waste-evidence'
+      preLoaderRoute: typeof WasteEvidenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -546,7 +546,6 @@ const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   AboutUsRoute: AboutUsRoute,
   AccountRoute: AccountRoute,
   ActionsRoute: ActionsRoute,
@@ -569,6 +568,7 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyRoute: SafetyRoute,
   StoriesRoute: StoriesRoute,
   TermsRoute: TermsRoute,
+  WasteEvidenceRoute: WasteEvidenceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
