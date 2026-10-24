@@ -15,10 +15,7 @@ export function LogoMark({ className }: { className?: string }) {
     >
       {[0, 120, 240].map((angle) => (
         <g key={angle} transform={`rotate(${angle} 32 34)`}>
-          <path
-            d="M35 8 L51 36 L57 32 L57 49 L42 43 L47 40 L30 12 Z"
-            fill="currentColor"
-          />
+          <path d="M35 8 L51 36 L57 32 L57 49 L42 43 L47 40 L30 12 Z" fill="currentColor" />
         </g>
       ))}
       <g transform="rotate(45 32 34)" fill="currentColor">
