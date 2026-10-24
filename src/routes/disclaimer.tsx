@@ -37,7 +37,7 @@ function Disclaimer() {
       <PolicySection title="External research">
         <p>
           The{" "}
-          <Link to="/about" className="text-primary underline underline-offset-4">
+          <Link to="/waste-evidence" className="text-primary underline underline-offset-4">
             Waste & Evidence
           </Link>{" "}
           page links to published research from public environmental bodies. That material belongs

@@ -12,7 +12,7 @@ import { wasteSources, sourceRetrievalDate } from "@/lib/reloop/sources";
 import { IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import type { Evidence } from "@/lib/reloop/types";
 
-export const Route = createFileRoute("/about")({
+export const Route = createFileRoute("/waste-evidence")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/about")({
           "Published environmental research kept separate from personal observations and ReLoop impact.",
       },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: "https://myreloop.lovable.app/waste-evidence" }],
   }),
   component: About,
 });

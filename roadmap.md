@@ -60,3 +60,7 @@
 - [x] Add admin navigation, real member/record/support views, counts and protected member controls.
 - [x] Translate new controls in seven languages and check desktop/mobile/RTL.
 - [x] Run tests/lint and update architecture/file map/verification notes.
+
+# About Us correction
+- [ ] Add translated photographic /about, visible navigation/footer links and homepage introduction; preserve evidence and existing story.
+- [ ] Verify routes, CTAs, photo/fallback, all languages and desktop/390px; run tests/lint and inspect managed build.
