@@ -15,7 +15,7 @@ import { ListingFormDialog } from "@/components/reloop/ListingFormDialog";
 import { SitePhoto } from "@/components/reloop/SitePhoto";
 import { useConsoleT } from "@/lib/i18n-console";
 import { Button } from "@/components/ui/button";
-import { Card, OriginBadge, formatDate } from "@/components/reloop/shared";
+import { Card, LangNote, OriginBadge, formatDate } from "@/components/reloop/shared";
 import { useI18n } from "@/lib/i18n";
 import { CARDBOARD_SOURCE, HERO_OG_IMAGE, IMAGES, UNSPLASH_CREDIT } from "@/lib/reloop/images";
 import { formatTotals, summarizeImpact } from "@/lib/reloop/impact";
@@ -174,6 +174,7 @@ function Home() {
 
       {/* 3 — Everyday materials, image-led */}
       <section className="mb-12">
+        <LangNote />
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-2xl font-semibold md:text-3xl">{c("examples")}</h2>
@@ -245,10 +246,8 @@ function Home() {
           <p className="mt-2 text-muted-foreground">
             Small, concrete habits that keep pollution out of the air, soil and water.
           </p>
-          <img
-            src={IMAGES.sortingBins.src}
-            alt={IMAGES.sortingBins.alt}
-            loading="lazy"
+          <SitePhoto
+            image={IMAGES.sortingBins}
             className="mt-6 rounded-2xl object-cover"
           />
           <p className="mt-2 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
@@ -433,10 +432,8 @@ function Home() {
 
       {/* 6 — Closing CTA */}
       <section className="relative overflow-hidden rounded-3xl">
-        <img
-          src={IMAGES.beachCleanup.src}
-          alt={IMAGES.beachCleanup.alt}
-          loading="lazy"
+        <SitePhoto
+          image={IMAGES.beachCleanup}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-sidebar/95 via-sidebar/70 to-sidebar/20" />

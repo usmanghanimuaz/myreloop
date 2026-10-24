@@ -59,7 +59,7 @@ export const IMAGES = {
   },
   furniture: {
     src: unsplash("1555041469-a586c61ea9bc", 900),
-    alt: "A second-hand sofa that can be rehomed instead of discarded",
+    alt: "A green sofa in a living room, illustrating furniture that could be rehomed",
   },
   woodFurniture: {
     src: unsplash("1595428774223-ef52624120d2", 900),
