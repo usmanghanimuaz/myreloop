@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Three circular reuse arrows with a small leaf tilted 45 degrees.
+ * Three angular recycling arrows forming a triangle, with an upward leaf.
  * Keep the favicon and installation icons derived from this same mark.
  */
 export function LogoMark({ className }: { className?: string }) {
@@ -14,19 +14,16 @@ export function LogoMark({ className }: { className?: string }) {
       fill="none"
     >
       {[0, 120, 240].map((angle) => (
-        <g key={angle} transform={`rotate(${angle} 32 32)`}>
+        <g key={angle} transform={`rotate(${angle} 32 34)`}>
           <path
-            d="M18 14 A23 23 0 0 1 51 19"
-            stroke="currentColor"
-            strokeWidth="6"
-            strokeLinecap="round"
+            d="M35 8 L51 36 L57 32 L57 49 L42 43 L47 40 L30 12 Z"
+            fill="currentColor"
           />
-          <path d="M55 11 L55 26 L41 22 Z" fill="currentColor" />
         </g>
       ))}
-      <g transform="rotate(45 32 32)" fill="currentColor">
-        <path d="M32 21 C22 26 22 36 30.5 41 L30.5 31 L32 28 L33.5 31 L33.5 41 C42 36 42 26 32 21 Z" />
-        <path d="M30.5 39 H33.5 V45 H30.5 Z" />
+      <g transform="rotate(45 32 34)" fill="currentColor">
+        <path d="M32 24 C24 28 24 36 30.8 40 L30.8 32 L32 29 L33.2 32 L33.2 40 C40 36 40 28 32 24 Z" />
+        <path d="M30.8 38 H33.2 V43 H30.8 Z" />
       </g>
     </svg>
   );
