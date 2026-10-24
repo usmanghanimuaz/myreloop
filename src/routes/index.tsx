@@ -246,10 +246,7 @@ function Home() {
           <p className="mt-2 text-muted-foreground">
             Small, concrete habits that keep pollution out of the air, soil and water.
           </p>
-          <SitePhoto
-            image={IMAGES.sortingBins}
-            className="mt-6 rounded-2xl object-cover"
-          />
+          <SitePhoto image={IMAGES.sortingBins} className="mt-6 rounded-2xl object-cover" />
           <p className="mt-2 text-xs text-muted-foreground">{UNSPLASH_CREDIT.label}</p>
         </div>
         <ul className="space-y-3 self-center">
