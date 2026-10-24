@@ -86,7 +86,7 @@ function Exchange() {
   const [cat, setCat] = useState<Category | "all">("all");
   const [status, setStatus] = useState<ListingStatus | "all">("all");
   const [formOpen, setFormOpen] = useState(false);
-  const { userId } = useStoreMeta();
+  const { userId } = meta;
   const [editing, setEditing] = useState<Listing | undefined>();
   const [viewId, setViewId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<Listing | null>(null);
@@ -477,7 +477,9 @@ function ListingDetail({
               </div>
             )}
 
-            {listing.status === "available" && !own && listing.origin !== "sample" ? (
+            {!userId && listing.status === "available" && !own ? (
+              <Notice>Sign in to send interest in this item.</Notice>
+            ) : listing.status === "available" && !own && listing.origin !== "sample" ? (
               <form
                 className="space-y-2"
                 onSubmit={async (e) => {
