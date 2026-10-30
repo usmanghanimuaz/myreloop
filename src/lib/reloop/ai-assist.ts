@@ -65,10 +65,10 @@ export function eligibleAiListings(listings: Listing[]) {
 /** Only public item text is sent, never photos, location, identity, notes or plans. */
 export function aiItemProjection(item: {
   id: string;
-  title?: string;
+  title?: string | undefined;
   description: string;
   category: string;
-  mode?: string;
+  mode?: string | undefined;
 }) {
   return {
     id: item.id,
