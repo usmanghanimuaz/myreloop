@@ -1,9 +1,10 @@
 # ReLoop confirmed model
 
 ## Four optional AI assistants (30 Oct)
-- [ ] Add opt-in real-listing matching, curated-source material help, read-only listing translation and admin-only safety review in existing screens.
-- [ ] Preserve deterministic matching/impact, private records, seven languages, About Us, and shared persistent AI access pause; no automatic publishing or moderation.
-- [ ] Run focused/full tests, lint and authenticated browser checks; record live AI results and blockers without deployment.
+- [x] Add opt-in real-listing matching, curated-source material help, read-only listing translation and admin-only safety review in existing screens.
+- [x] Preserve deterministic matching/impact, private records, seven languages, About Us, and shared persistent AI access pause; no automatic publishing or moderation.
+- [x] Verification: 8 focused/89 full tests pass; lint 0 errors/10 existing warnings; managed build OK. Signed-in real-item matching, translation, curated-source help and admin safety review displayed successfully; live Urdu translation passed. Seven-language controls at 390px have correct LTR/RTL and no page overflow; guest AI controls absent. About/logo/schema/roles unchanged; no deployment.
+- [ ] Fresh second-member denial/AI isolation checks — requires authorized second-account session. Need-specific matching awaits an actual open need; existing real-item search flow verified. Detailed local disposal answers are limited to curated source summaries, not live local rules.
 
 ## Photo listing draft (30 Oct)
 - [x] Add authenticated, opt-in photo analysis with seven-language review/apply controls; never auto-publish or infer transaction details.
