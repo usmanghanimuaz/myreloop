@@ -54,6 +54,7 @@ import { formatTotals } from "@/lib/reloop/impact";
 import { CATEGORY_LABEL } from "@/lib/reloop/types";
 import { LanguageSwitcher } from "./Footer";
 import { cn } from "@/lib/utils";
+import { AiAssistControl } from "./AiAssistControl";
 
 const MODULES = [
   ["overview", LayoutDashboard],
@@ -219,6 +220,7 @@ export function AdminConsole() {
       body: (
         <div className="space-y-3">
           <p>{r.description}</p>
+          <AiAssistControl task="safety" id={r.id} kind={r.kind} />
           <p>
             {CATEGORY_LABEL[r.category]} · {r.quantity ?? "—"} {r.unit ?? ""} · {r.mode ?? "FREE"}
           </p>

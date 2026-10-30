@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ReportButton } from "./ReportButton";
+import { AiAssistControl } from "./AiAssistControl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -226,6 +227,7 @@ export function CommunityNeeds() {
               </p>
             )}
             {userId !== n.ownerId && <ReportButton targetKind="needs" targetId={n.id} />}
+            {userId === n.ownerId && n.status === "open" && <AiAssistControl task="match" initialQuery={`${n.title ?? ""} ${n.description}`} />}
             {userId === n.ownerId && n.status === "open" && (
               <Button
                 className="mt-3"

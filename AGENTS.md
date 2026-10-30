@@ -16,6 +16,7 @@
 - Keep recommendation rules and impact calculations client-safe and deterministic; no external AI or paid services are required.
 - Optional photo listing drafts use authenticated server functions and server-only Lovable AI Responses helpers; only owner-scoped photo bytes are analysed, and reviewed title/category/description never publish automatically or alter deterministic recommendations/impact.
 - Photo-draft AI access pauses persist as a reserved system-owned object in private photo storage after gateway credit/access denials; only an owner-authorized recovery after access restoration may clear it, preventing automatic billed retries across restarts.
+- Optional text assistants fetch allowlisted real public item text server-side, use curated summaries for sourced help, and share the persistent photo AI pause; safety reviews require a default-deny admin check and never perform moderation, while translations/matches never write records or alter deterministic impact.
 - Derive handover verification from service-created record keys, not editable payload flags; preserve those keys in patches so ordinary edits cannot recreate completion records.
 - Curated environmental source metadata lives separately from private observation notes; source media is linked rather than copied without confirmed reuse rights.
 - Keep correctness linting on Cloud-managed integrations but exclude their generated formatting from Prettier enforcement, because regeneration owns those files.

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ReportButton } from "@/components/reloop/ReportButton";
+import { AiAssistControl } from "@/components/reloop/AiAssistControl";
 import { MapPin, Pencil, Plus, Search, Send, Trash2, PackageOpen, ImageIcon } from "lucide-react";
 import { SitePhoto } from "@/components/reloop/SitePhoto";
 import { useConsoleT } from "@/lib/i18n-console";
@@ -248,6 +249,7 @@ function Exchange() {
       <p className="mb-3 text-sm text-muted-foreground" aria-live="polite">
         {filtered.length} listing{filtered.length === 1 ? "" : "s"}
       </p>
+      <AiAssistControl task="match" />
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -432,6 +434,7 @@ function ListingDetail({
                 <p>Requested in exchange: {listing.exchangePreference}</p>
               )}
               {listing.description && <p>{listing.description}</p>}
+              <AiAssistControl key={listing.id} task="translate" id={listing.id} />
               <p className="flex items-center gap-1 text-muted-foreground">
                 <MapPin className="size-4" /> {listing.area}
               </p>
