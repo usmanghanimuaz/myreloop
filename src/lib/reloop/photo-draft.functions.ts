@@ -1,11 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  PhotoDraftInputSchema,
-  ownsDraftPhoto,
-  photoBytesMatch,
-} from "./photo-draft";
+import { PhotoDraftInputSchema, ownsDraftPhoto, photoBytesMatch } from "./photo-draft";
 import { TERMS_VERSION } from "./moderation";
 
 export const draftListingFromPhoto = createServerFn({ method: "POST" })
