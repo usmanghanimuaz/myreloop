@@ -14,6 +14,7 @@
 - Store typed domain records in Cloud with row-level ownership; public listings and reuse needs are shared, while plans, evidence, completions and interest notes remain scoped to participants.
 - Execute writes through authenticated server functions and a transactional, revision-checked database patch; this prevents partial impact updates and lost concurrent edits.
 - Keep recommendation rules and impact calculations client-safe and deterministic; no external AI or paid services are required.
+- Optional photo listing drafts use authenticated server functions and server-only Lovable AI Responses helpers; only owner-scoped photo bytes are analysed, and reviewed title/category/description never publish automatically or alter deterministic recommendations/impact.
 - Derive handover verification from service-created record keys, not editable payload flags; preserve those keys in patches so ordinary edits cannot recreate completion records.
 - Curated environmental source metadata lives separately from private observation notes; source media is linked rather than copied without confirmed reuse rights.
 - Keep correctness linting on Cloud-managed integrations but exclude their generated formatting from Prettier enforcement, because regeneration owns those files.

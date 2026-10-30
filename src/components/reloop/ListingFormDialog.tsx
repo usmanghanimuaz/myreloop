@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { PhotoDraftControl } from "./PhotoDraftControl";
 import { ListingInputSchema, type ListingInput } from "@/lib/reloop/schema";
 import { actions, useStoreMeta } from "@/lib/reloop/store";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +57,7 @@ export function ListingFormDialog({
   const { userId } = useStoreMeta();
   const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [aiBusy, setAiBusy] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export function ListingFormDialog({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (busy) return;
+    if (busy || aiBusy) return;
     const res = ListingInputSchema.safeParse({ ...draft, photos });
     if (!res.success) {
       const errs: Partial<Record<keyof Draft, string>> = {};
@@ -228,7 +230,7 @@ export function ListingFormDialog({
               type="file"
               accept="image/jpeg,image/png,image/webp"
               multiple
-              disabled={busy || !userId}
+              disabled={busy || aiBusy || !userId}
               onChange={async (e) => {
                 const files = Array.from(e.target.files ?? []);
                 if (!userId) return;
@@ -285,7 +287,7 @@ export function ListingFormDialog({
                   type="button"
                   size="sm"
                   variant="ghost"
-                  disabled={busy}
+                  disabled={busy || aiBusy}
                   onClick={async () => {
                     if (!listing?.photos?.includes(path)) {
                       const { error } = await supabase.storage.from("reloop-photos").remove([path]);
@@ -301,6 +303,15 @@ export function ListingFormDialog({
                 </Button>
               </div>
             ))}
+            {userId && photos[0] && (
+              <PhotoDraftControl
+                key={photos[0]}
+                path={photos[0]}
+                disabled={busy}
+                onBusy={setAiBusy}
+                onApply={(suggestion) => setDraft((d) => ({ ...d, ...suggestion }))}
+              />
+            )}
           </div>
           {draft.mode === "EXCHANGE" && (
             <div className="grid gap-1.5">
@@ -337,7 +348,7 @@ export function ListingFormDialog({
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={busy || !userId}>
+            <Button type="submit" disabled={busy || aiBusy || !userId}>
               {busy ? "Saving…" : listing ? "Save changes" : "Publish listing"}
             </Button>
           </DialogFooter>
