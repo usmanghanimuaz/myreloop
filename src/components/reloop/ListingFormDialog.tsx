@@ -340,7 +340,10 @@ export function ListingFormDialog({
             {err("description")}
           </div>
           {!userId && (
-            <p role="status" className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+            <p
+              role="status"
+              className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground"
+            >
               Please sign in to publish a listing. Use the Sign in button in the menu.
             </p>
           )}
