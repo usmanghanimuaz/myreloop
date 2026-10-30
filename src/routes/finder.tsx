@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { saved } from "@/components/reloop/CommunityNeeds";
+import { AiAssistControl } from "@/components/reloop/AiAssistControl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -126,6 +127,7 @@ function Finder() {
         description="A practical library for everyday materials — reuse, repair, recycle or dispose safely. Below the library, a quick tool gives tailored suggestions for an item you have. General advice only; local collection rules vary."
       />
       <MaterialLibrary />
+      <AiAssistControl key={category} task="guidance" category={category} />
       <h2 className="mb-4 mt-12 text-2xl font-semibold">Quick tool: find a better use</h2>
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
