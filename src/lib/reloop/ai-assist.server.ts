@@ -74,7 +74,8 @@ export async function runAiAssist(
     });
     const output = normalizeAiAssist(await result.output, allowedIds, allowEmptyText);
     return output ? { output } : { error: "unavailable" as const };
-  } catch {
+  } catch (error) {
+    console.error("AI assistant failed", error instanceof Error ? error.name : "Unknown error");
     return safeError
       ? { error: "gateway" as const, message: safeError }
       : { error: "unavailable" as const };
