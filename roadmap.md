@@ -1,5 +1,9 @@
 # ReLoop confirmed model
 
+## Photo listing draft (30 Oct)
+- [ ] Add authenticated, opt-in photo analysis with seven-language review/apply controls; never auto-publish or infer transaction details.
+- [ ] Test draft safety/ownership, run existing tests, and verify the signed-in photo-to-draft flow without publishing.
+
 - [x] Fix known code errors and connect existing Cloud provider/sign-in controls.
 - [x] Add FREE/EXCHANGE forms, photos, needs and participant handover controls.
 - [x] Add ownership checks and separate two-party verified metrics from self-reported records.
