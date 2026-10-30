@@ -11,6 +11,7 @@ export async function runAiAssist(
   instructions: string,
   input: unknown,
   allowedIds: string[],
+  allowEmptyText = false,
 ) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const bucket = supabaseAdmin.storage.from("reloop-photos");
@@ -71,7 +72,7 @@ export async function runAiAssist(
         },
       },
     });
-    const output = normalizeAiAssist(await result.output, allowedIds);
+    const output = normalizeAiAssist(await result.output, allowedIds, allowEmptyText);
     return output ? { output } : { error: "unavailable" as const };
   } catch {
     return safeError

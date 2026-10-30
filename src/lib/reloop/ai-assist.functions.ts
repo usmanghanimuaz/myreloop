@@ -92,5 +92,6 @@ export const askReLoopAi = createServerFn({ method: "POST" })
         : "Review ONLY supplied public item text for possible hazardous material, sales, misleading claims or contact sharing. title is a review heading and text is a concise advisory flag explanation or no obvious text issue. ids is empty. State that this is not a safety guarantee and a human must review. Do not moderate, ban, validate evidence or change any data. Never repeat contact data.",
       { lang: data.lang, item: aiItemProjection(item) },
       [],
+      data.task === "translate" && !safeAiText(item.description),
     );
   });
