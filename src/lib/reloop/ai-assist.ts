@@ -79,7 +79,11 @@ export function aiItemProjection(item: {
   };
 }
 
-export function normalizeAiAssist(value: unknown, allowedIds: string[], allowEmptyText = false): AiAssistOutput | null {
+export function normalizeAiAssist(
+  value: unknown,
+  allowedIds: string[],
+  allowEmptyText = false,
+): AiAssistOutput | null {
   const parsed = AiAssistOutputSchema.safeParse(value);
   if (!parsed.success) return null;
   const title = safeAiText(parsed.data.title, 120);
