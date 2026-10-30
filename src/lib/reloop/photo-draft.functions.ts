@@ -3,7 +3,6 @@ import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   PhotoDraftInputSchema,
-  normalizePhotoDraft,
   ownsDraftPhoto,
   photoBytesMatch,
 } from "./photo-draft";

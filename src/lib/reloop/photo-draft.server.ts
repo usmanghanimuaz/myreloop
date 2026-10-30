@@ -19,7 +19,7 @@ export async function analyzeListingPhoto(
   const bucket = supabaseAdmin.storage.from("reloop-photos");
   const paused = await bucket.download(PAUSE_PATH);
   if (paused.data) {
-    const state = (await paused.data.json()) as { message?: string };
+    const state = JSON.parse(await paused.data.text()) as { message?: string };
     return {
       error: "gateway" as const,
       message:
