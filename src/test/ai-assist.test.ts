@@ -80,6 +80,10 @@ describe("optional AI boundaries", () => {
       normalizeAiAssist({ title: "Contact", text: "Email test@example.com", ids: [] }, []),
     ).toBeNull();
   });
+  it("allows an empty source description in read-only translation without inventing text", () => {
+    expect(normalizeAiAssist({ title: "Glass jar", text: "", ids: [] }, [], true)).toEqual({ title: "Glass jar", text: "", ids: [] });
+    expect(normalizeAiAssist({ title: "Glass jar", text: "Email test@example.com", ids: [] }, [], true)).toBeNull();
+  });
   it("rejects personal contact input", () => {
     expect(
       AiAssistInputSchema.safeParse({
