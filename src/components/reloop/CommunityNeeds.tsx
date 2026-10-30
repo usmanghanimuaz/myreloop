@@ -55,119 +55,121 @@ export function CommunityNeeds() {
           {t("needs.signIn")}
         </p>
       ) : (
-      <form
-        className="mb-6 grid gap-3 border-y py-5 sm:grid-cols-2"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const parsed = NeedInputSchema.safeParse({ ...draft, exchangePreference });
-          if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? "Check the form");
-          if (
-            await saved(
-              () =>
-                editing ? actions.updateNeed(editing, parsed.data) : actions.postNeed(parsed.data),
-              editing ? "Need updated" : "Need posted",
-            )
-          ) {
-            setDraft((d) => ({ ...d, title: "", description: "" }));
-            setExchangePreference("");
-            setEditing(null);
-            setErr("");
-          }
-        }}
-      >
-        {(["title", "description", "quantity", "area"] as const).map((k) => (
-          <div key={k} className="grid gap-1.5">
-            <Label htmlFor={`need-${k}`}>
-              {k === "area"
-                ? t("needs.area")
-                : k === "title"
-                  ? t("needs.title")
-                  : k === "quantity"
-                    ? t("needs.quantity")
-                    : t("needs.description")}
-            </Label>
-            <Input
-              id={`need-${k}`}
-              type={k === "quantity" ? "number" : "text"}
-              min={k === "quantity" ? 1 : undefined}
-              value={draft[k]}
-              onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
-            />
-          </div>
-        ))}
-        <div>
-          <Label htmlFor="need-category">{t("needs.category")}</Label>
-          <select
-            id="need-category"
-            className="field"
-            value={draft.category}
-            onChange={(e) => setDraft((d) => ({ ...d, category: e.target.value }))}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {CATEGORY_LABEL[c]}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <Label htmlFor="need-unit">{t("needs.unit")}</Label>
-          <select
-            id="need-unit"
-            className="field"
-            value={draft.unit}
-            onChange={(e) => setDraft((d) => ({ ...d, unit: e.target.value }))}
-          >
-            {UNITS.map((u) => (
-              <option key={u}>{u}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <Label htmlFor="need-mode">{t("needs.preference")}</Label>
-          <select
-            id="need-mode"
-            className="field"
-            value={draft.mode}
-            onChange={(e) => setDraft((d) => ({ ...d, mode: e.target.value }))}
-          >
-            <option>FREE</option>
-            <option>EXCHANGE</option>
-          </select>
-        </div>
-        {draft.mode === "EXCHANGE" && (
-          <div>
-            <Label htmlFor="need-exchange">{t("needs.exchangeOffer")}</Label>
-            <Input
-              id="need-exchange"
-              value={exchangePreference}
-              onChange={(e) => setExchangePreference(e.target.value)}
-              maxLength={200}
-            />
-          </div>
-        )}
-        <Button type="submit" disabled={!userId || busy}>
-          {editing ? t("needs.save") : t("needs.post")}
-        </Button>
-        {editing && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setEditing(null);
+        <form
+          className="mb-6 grid gap-3 border-y py-5 sm:grid-cols-2"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const parsed = NeedInputSchema.safeParse({ ...draft, exchangePreference });
+            if (!parsed.success) return setErr(parsed.error.issues[0]?.message ?? "Check the form");
+            if (
+              await saved(
+                () =>
+                  editing
+                    ? actions.updateNeed(editing, parsed.data)
+                    : actions.postNeed(parsed.data),
+                editing ? "Need updated" : "Need posted",
+              )
+            ) {
               setDraft((d) => ({ ...d, title: "", description: "" }));
               setExchangePreference("");
-            }}
-          >
-            {t("needs.cancelEdit")}
+              setEditing(null);
+              setErr("");
+            }
+          }}
+        >
+          {(["title", "description", "quantity", "area"] as const).map((k) => (
+            <div key={k} className="grid gap-1.5">
+              <Label htmlFor={`need-${k}`}>
+                {k === "area"
+                  ? t("needs.area")
+                  : k === "title"
+                    ? t("needs.title")
+                    : k === "quantity"
+                      ? t("needs.quantity")
+                      : t("needs.description")}
+              </Label>
+              <Input
+                id={`need-${k}`}
+                type={k === "quantity" ? "number" : "text"}
+                min={k === "quantity" ? 1 : undefined}
+                value={draft[k]}
+                onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
+              />
+            </div>
+          ))}
+          <div>
+            <Label htmlFor="need-category">{t("needs.category")}</Label>
+            <select
+              id="need-category"
+              className="field"
+              value={draft.category}
+              onChange={(e) => setDraft((d) => ({ ...d, category: e.target.value }))}
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {CATEGORY_LABEL[c]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="need-unit">{t("needs.unit")}</Label>
+            <select
+              id="need-unit"
+              className="field"
+              value={draft.unit}
+              onChange={(e) => setDraft((d) => ({ ...d, unit: e.target.value }))}
+            >
+              {UNITS.map((u) => (
+                <option key={u}>{u}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="need-mode">{t("needs.preference")}</Label>
+            <select
+              id="need-mode"
+              className="field"
+              value={draft.mode}
+              onChange={(e) => setDraft((d) => ({ ...d, mode: e.target.value }))}
+            >
+              <option>FREE</option>
+              <option>EXCHANGE</option>
+            </select>
+          </div>
+          {draft.mode === "EXCHANGE" && (
+            <div>
+              <Label htmlFor="need-exchange">{t("needs.exchangeOffer")}</Label>
+              <Input
+                id="need-exchange"
+                value={exchangePreference}
+                onChange={(e) => setExchangePreference(e.target.value)}
+                maxLength={200}
+              />
+            </div>
+          )}
+          <Button type="submit" disabled={!userId || busy}>
+            {editing ? t("needs.save") : t("needs.post")}
           </Button>
-        )}
-        {err && (
-          <p role="alert" className="text-sm text-destructive">
-            {err}
-          </p>
-        )}
-      </form>
+          {editing && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setEditing(null);
+                setDraft((d) => ({ ...d, title: "", description: "" }));
+                setExchangePreference("");
+              }}
+            >
+              {t("needs.cancelEdit")}
+            </Button>
+          )}
+          {err && (
+            <p role="alert" className="text-sm text-destructive">
+              {err}
+            </p>
+          )}
+        </form>
       )}
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <div>
@@ -227,7 +229,9 @@ export function CommunityNeeds() {
               </p>
             )}
             {userId !== n.ownerId && <ReportButton targetKind="needs" targetId={n.id} />}
-            {userId === n.ownerId && n.status === "open" && <AiAssistControl task="match" initialQuery={`${n.title ?? ""} ${n.description}`} />}
+            {userId === n.ownerId && n.status === "open" && (
+              <AiAssistControl task="match" initialQuery={`${n.title ?? ""} ${n.description}`} />
+            )}
             {userId === n.ownerId && n.status === "open" && (
               <Button
                 className="mt-3"
