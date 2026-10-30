@@ -46,7 +46,9 @@ export function AiAssistControl(props: Props) {
         ? { ...base, task: "match", query }
         : props.task === "guidance"
           ? { ...base, task: "guidance", category: props.category, query }
-          : { ...base, ...props };
+          : props.task === "translate"
+            ? { ...base, task: "translate", id: props.id }
+            : { ...base, task: "safety", id: props.id, kind: props.kind };
     try {
       const result = await ask({ data });
       if ("output" in result && result.output) setOutput(result.output);
